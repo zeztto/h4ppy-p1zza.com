@@ -18,6 +18,11 @@
     <meta name="author" content="h4ppy p1zza" />
     <link rel="canonical" href="https://h4ppy-p1zza.com/" />
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://h4ppy-p1zza.com/" />
@@ -26,6 +31,10 @@
       property="og:description"
       content="React, TypeScript를 활용한 웹 애플리케이션 개발자의 포트폴리오. 16개 프로젝트와 기술 블로그."
     />
+    <meta property="og:image" content="https://h4ppy-p1zza.com/og-image.svg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="h4ppy p1zza - 웹 개발자 포트폴리오" />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:site_name" content="h4ppy p1zza Portfolio" />
 
@@ -37,6 +46,8 @@
       name="twitter:description"
       content="React, TypeScript를 활용한 웹 애플리케이션 개발자의 포트폴리오"
     />
+    <meta name="twitter:image" content="https://h4ppy-p1zza.com/og-image.svg" />
+    <meta name="twitter:image:alt" content="h4ppy p1zza - 웹 개발자 포트폴리오" />
 
     <!-- Additional SEO -->
     <meta name="robots" content="index, follow" />
@@ -46,6 +57,58 @@
     <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://vercel.app" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "h4ppy p1zza",
+        "url": "https://h4ppy-p1zza.com",
+        "image": "https://h4ppy-p1zza.com/og-image.svg",
+        "jobTitle": "웹 개발자",
+        "description": "React, TypeScript를 활용한 웹 애플리케이션 개발자",
+        "sameAs": [
+          "https://github.com/zeztto",
+          "https://instagram.com/h4ppy_p1zza"
+        ],
+        "knowsAbout": [
+          "React",
+          "TypeScript",
+          "JavaScript",
+          "Web Development",
+          "Frontend Development",
+          "Vite",
+          "Tailwind CSS"
+        ],
+        "workExample": [
+          {
+            "@type": "CreativeWork",
+            "name": "포픽",
+            "description": "사진 관련 기능을 제공하는 웹 애플리케이션",
+            "url": "https://ws-08-phopic-sgoz.vercel.app/"
+          },
+          {
+            "@type": "CreativeWork",
+            "name": "비밀번호 생성기",
+            "description": "안전한 비밀번호를 생성해주는 도구",
+            "url": "https://ws-07-password-generator.vercel.app/"
+          },
+          {
+            "@type": "CreativeWork",
+            "name": "실시간 환율",
+            "description": "실시간 환율 정보를 확인할 수 있는 서비스",
+            "url": "https://ws-06-realtime-exchange.vercel.app/"
+          },
+          {
+            "@type": "CreativeWork",
+            "name": "메모모미",
+            "description": "간단하고 빠른 메모 작성 애플리케이션",
+            "url": "https://ws-05-memomome.vercel.app/"
+          }
+        ]
+      }
+    </script>
   </head>
 
   <body>

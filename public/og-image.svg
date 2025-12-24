@@ -1,0 +1,48 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <rect width="1200" height="630" fill="url(#gradient)"/>
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="1200" y2="630">
+      <stop offset="0%" style="stop-color:#030213;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Pizza icon -->
+  <circle cx="200" cy="315" r="120" fill="#FF6B6B" opacity="0.2"/>
+  <path d="M200 220 L290 410 L110 410 Z" fill="#FF6B6B" stroke="#FFD93D" stroke-width="4"/>
+  <circle cx="200" cy="320" r="15" fill="#C92A2A"/>
+  <circle cx="170" cy="360" r="12" fill="#C92A2A"/>
+  <circle cx="230" cy="360" r="12" fill="#C92A2A"/>
+
+  <!-- Main text -->
+  <text x="380" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="#ffffff">
+    h4ppy p1zza
+  </text>
+
+  <!-- Subtitle -->
+  <text x="380" y="350" font-family="system-ui, -apple-system, sans-serif" font-size="36" fill="#a0a0a0">
+    웹 개발자 포트폴리오
+  </text>
+
+  <!-- Tech stack badges -->
+  <rect x="380" y="400" width="120" height="40" rx="20" fill="#61DAFB" opacity="0.2"/>
+  <text x="440" y="428" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="600" fill="#61DAFB" text-anchor="middle">
+    React
+  </text>
+
+  <rect x="520" y="400" width="150" height="40" rx="20" fill="#3178C6" opacity="0.2"/>
+  <text x="595" y="428" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="600" fill="#3178C6" text-anchor="middle">
+    TypeScript
+  </text>
+
+  <rect x="690" y="400" width="100" height="40" rx="20" fill="#646CFF" opacity="0.2"/>
+  <text x="740" y="428" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="600" fill="#646CFF" text-anchor="middle">
+    Vite
+  </text>
+
+  <!-- Bottom text -->
+  <text x="380" y="520" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#666">
+    16 Projects • Blog • Portfolio
+  </text>
+</svg>

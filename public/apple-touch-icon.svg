@@ -1,0 +1,19 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="180" height="180" rx="40" fill="#030213"/>
+
+  <!-- Pizza slice shape -->
+  <path d="M90 50 L140 140 L40 140 Z" fill="#FF6B6B" stroke="#FFD93D" stroke-width="6"/>
+
+  <!-- Pepperoni spots -->
+  <circle cx="90" cy="100" r="10" fill="#C92A2A"/>
+  <circle cx="70" cy="120" r="8" fill="#C92A2A"/>
+  <circle cx="110" cy="120" r="8" fill="#C92A2A"/>
+  <circle cx="75" cy="95" r="6" fill="#C92A2A"/>
+  <circle cx="105" cy="95" r="6" fill="#C92A2A"/>
+
+  <!-- Happy face -->
+  <circle cx="80" cy="90" r="4" fill="#030213"/>
+  <circle cx="100" cy="90" r="4" fill="#030213"/>
+  <path d="M75 105 Q90 115 105 105" stroke="#030213" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
