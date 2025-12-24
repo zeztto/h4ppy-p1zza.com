@@ -126,72 +126,85 @@ const blogPosts: BlogPost[] = [
 
 export function BlogPage() {
   return (
-    <div className="container px-4 py-16 max-w-6xl mx-auto">
-      {/* Header */}
-      <div className="mb-16">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted mb-6">
-          <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-          <span className="text-muted-foreground">블로그</span>
-        </div>
-        
-        <h1 className="mb-6 text-4xl sm:text-5xl lg:text-6xl tracking-tight">
-          생각과{" "}
-          <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            기록
-          </span>
-        </h1>
-        
-        <p className="text-muted-foreground text-lg max-w-3xl">
-          개발하면서 배운 것들과 경험을 공유합니다. 
-          웹 개발, 디자인, 그리고 기술에 대한 생각들을 기록합니다.
-        </p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <div className="container px-4 py-12 sm:py-16 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted mb-6">
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-sm text-muted-foreground">블로그</span>
+          </div>
 
-      {/* Blog Posts */}
-      <div className="space-y-6">
-        {blogPosts.map((post) => (
-          <Card 
-            key={post.id}
-            className="group cursor-pointer transition-all hover:shadow-lg hover:border-primary/50"
-          >
-            <CardHeader>
-              <div className="flex flex-wrap items-center gap-3 mb-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  {new Date(post.date).toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
+          <h1 className="mb-4 sm:mb-6 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+            생각과{" "}
+            <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              기록
+            </span>
+          </h1>
+
+          <p className="text-muted-foreground text-base sm:text-lg max-w-3xl">
+            개발하면서 배운 것들과 경험을 공유합니다.
+            웹 개발, 디자인, 그리고 기술에 대한 생각들을 기록합니다.
+          </p>
+        </div>
+
+        {/* Blog Posts Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          {blogPosts.map((post) => (
+            <Card
+              key={post.id}
+              className="group cursor-pointer transition-all hover:shadow-lg hover:border-primary/50 flex flex-col h-full"
+            >
+              <CardHeader className="flex-none">
+                <div className="flex flex-wrap items-center gap-3 mb-3 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span className="text-xs">
+                      {new Date(post.date).toLocaleDateString('ko-KR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5" />
+                    <span className="text-xs">{post.readTime}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" />
-                  {post.readTime}
+                <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-2">
+                  {post.title}
+                </CardTitle>
+                <CardDescription className="text-sm line-clamp-2">
+                  {post.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-1 flex flex-col justify-between">
+                <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
+                  {post.content}
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {post.tags.slice(0, 3).map((tag) => (
+                    <Badge key={tag} variant="secondary" className="text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
+                  {post.tags.length > 3 && (
+                    <Badge variant="secondary" className="text-xs">
+                      +{post.tags.length - 3}
+                    </Badge>
+                  )}
                 </div>
-              </div>
-              <CardTitle className="group-hover:text-primary transition-colors">
-                {post.title}
-              </CardTitle>
-              <CardDescription className="text-base">
-                {post.description}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4 line-clamp-2">
-                {post.content}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div className="border-t pt-12">
+          <Footer />
+        </div>
       </div>
-      <Footer />
     </div>
   );
 }
