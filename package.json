@@ -62,6 +62,7 @@
     "globals": "^16.5.0",
     "prettier": "^3.7.4",
     "tailwindcss": "4.1.12",
+    "terser": "^5.44.1",
     "typescript-eslint": "^8.50.1",
     "vite": "6.4.1"
   },
