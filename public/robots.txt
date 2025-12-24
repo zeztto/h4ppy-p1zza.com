@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Sitemap: https://h4ppy-p1zza.com/sitemap.xml
+
+User-agent: *
+Disallow: /api/
+Disallow: /*.json$
