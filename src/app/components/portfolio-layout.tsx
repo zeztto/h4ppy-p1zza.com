@@ -332,33 +332,20 @@ export function PortfolioLayout() {
     setSelectedProject(null);
   };
 
-  // Load iframe content dynamically to hide URL
+  // Cleanup iframe on project change
   useEffect(() => {
-    if (selectedProject && iframeRef.current) {
-      const iframe = iframeRef.current;
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-      
-      if (iframeDoc) {
-        iframeDoc.open();
-        iframeDoc.write(`
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <title>${selectedProject.name}</title>
-              <style>
-                body { margin: 0; padding: 0; overflow: hidden; }
-                iframe { width: 100vw; height: 100vh; border: 0; }
-              </style>
-            </head>
-            <body>
-              <iframe src="${selectedProject.url}" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"></iframe>
-            </body>
-          </html>
-        `);
-        iframeDoc.close();
+    if (!selectedProject) return;
+
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    // Cleanup function
+    return () => {
+      if (iframe.contentWindow) {
+        iframe.src = 'about:blank';
       }
-    }
-  }, [selectedProject]);
+    };
+  }, [selectedProject?.id]);
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -588,7 +575,10 @@ export function PortfolioLayout() {
                 className="w-full border-0"
                 style={{ height: 'calc(100vh - 12rem)' }}
                 title={selectedProject.name}
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allow="accelerometer 'none'; camera 'none'; geolocation 'none'; microphone 'none'"
               />
             </div>
 
