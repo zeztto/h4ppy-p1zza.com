@@ -65,6 +65,25 @@ const projects: Project[] = [
     techStack: ["React", "TypeScript", "Crypto API"]
   },
   {
+    id: "lotto-generator",
+    name: "로또 번호 생성기",
+    description: "대한민국 로또 6/45 번호를 12가지 알고리즘으로 생성합니다.",
+    url: "https://ws-09-lotto-gen.vercel.app/",
+    tags: ["Utility", "Algorithm"],
+    category: "Tools",
+    year: "2025",
+    longDescription: "12가지 다양한 알고리즘으로 로또 번호를 생성하는 웹 애플리케이션입니다. 완전 무작위부터 홀짝 균형, 피보나치 수열, 황금비 기반까지 다양한 방식으로 번호를 생성할 수 있습니다.",
+    features: [
+      "12가지 다양한 번호 생성 알고리즘",
+      "최대 50개까지 동시 생성",
+      "중복 번호 자동 제거",
+      "텍스트 파일로 내보내기",
+      "접근성(a11y) WCAG 2.1 AA 준수",
+      "반응형 디자인 및 모바일 최적화"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "SHA-256", "LCG Algorithm"]
+  },
+  {
     id: "realtime-exchange",
     name: "실시간 환율",
     description: "실시간 환율 정보를 확인할 수 있는 서비스입니다.",
