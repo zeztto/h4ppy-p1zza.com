@@ -666,7 +666,7 @@ function LandingPage({
       description: "사용자 중심의 직관적인 인터페이스를 설계합니다."
     },
     {
-      icon: BookOpen,
+      icon: Lightbulb,
       title: "지속적인 학습",
       description: "새로운 기술을 배우고 성장하는 것을 즐깁니다."
     },
