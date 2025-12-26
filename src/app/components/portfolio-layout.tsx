@@ -10,8 +10,7 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "./ui/dropdown-menu";
-import { ArrowRight, ChevronDown, Code2, ExternalLink, Grid3x3, X, Instagram, Home, BookOpen, Rocket, Zap, Target, Github, Palette, Lightbulb, MessageCircle, Wrench, Video, Check, Star } from "lucide-react";
-import { BlogPage } from "./blog-page";
+import { ArrowRight, ChevronDown, Code2, ExternalLink, Grid3x3, X, Instagram, Home, Rocket, Zap, Target, Github, Palette, Lightbulb, MessageCircle, Wrench, Video, Check, Star } from "lucide-react";
 import { Footer } from "./footer";
 
 interface Project {
@@ -402,14 +401,6 @@ export function PortfolioLayout() {
                 <Grid3x3 className="h-4 w-4 mr-2" />
                 포트폴리오
               </Button>
-              <Button
-                variant={currentPage === 'blog' ? 'secondary' : 'ghost'}
-                size="sm"
-                onClick={() => handleNavigation('blog')}
-              >
-                <BookOpen className="h-4 w-4 mr-2" />
-                블로그
-              </Button>
             </nav>
           </div>
 
@@ -560,14 +551,6 @@ export function PortfolioLayout() {
               <Grid3x3 className="h-4 w-4 mr-1" />
               포트폴리오
             </Button>
-            <Button
-              variant={currentPage === 'blog' ? 'secondary' : 'ghost'}
-              size="sm"
-              onClick={() => handleNavigation('blog')}
-            >
-              <BookOpen className="h-4 w-4 mr-1" />
-              블로그
-            </Button>
           </div>
         </div>
       </header>
@@ -606,8 +589,6 @@ export function PortfolioLayout() {
               <Footer />
             </div>
           </div>
-        ) : currentPage === 'blog' ? (
-          <BlogPage />
         ) : currentPage === 'portfolio' ? (
           <PortfolioPage projects={projects} onSelectProject={setSelectedProject} />
         ) : (
