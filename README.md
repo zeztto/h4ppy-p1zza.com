@@ -9,13 +9,13 @@
 
 ## 📖 Overview | 개요
 
-React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 17개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기와 블로그 섹션을 포함합니다.
+React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 18개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기와 블로그 섹션을 포함합니다.
 
-A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 17 web application projects with interactive iframe previews and a blog section.
+A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 18 web application projects with interactive iframe previews and a blog section.
 
 ## ✨ Features | 주요 기능
 
-- 🎨 **Interactive Portfolio** - 17개 프로젝트의 라이브 iframe 미리보기
+- 🎨 **Interactive Portfolio** - 18개 프로젝트의 라이브 iframe 미리보기
 - 📱 **Responsive Design** - 모바일부터 데스크톱까지 완벽한 반응형
 - 🎯 **Category Filtering** - 카테고리별 프로젝트 필터링
 - 📝 **Blog Section** - 기술 블로그 포스트 모음
@@ -32,6 +32,7 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 17
 ### Tools | 도구
 - **비밀번호 생성기** - 안전한 비밀번호 생성 도구
 - **로또 번호 생성기** - 12가지 알고리즘으로 로또 번호 생성
+- **색상 팔레트** - HEX, RGB, HSL, CMYK 색상 선택 및 변환 도구
 - **다국어 로렘 입숨** - 다국어 지원 더미 텍스트 생성기
 - **텍스트 분석기** - 텍스트 통계 및 분석 도구
 - **이미지·문서 파일 변환기** - 다양한 파일 형식 변환 도구

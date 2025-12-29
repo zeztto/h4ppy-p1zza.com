@@ -83,6 +83,26 @@ const projects: Project[] = [
     techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "SHA-256", "LCG Algorithm"]
   },
   {
+    id: "color-palette",
+    name: "색상 팔레트",
+    description: "간단하고 직관적인 색상 선택 및 변환 도구입니다.",
+    url: "https://ws-10-color-palette.vercel.app/",
+    tags: ["Design", "Utility"],
+    category: "Tools",
+    year: "2025",
+    longDescription: "디자이너와 개발자를 위한 종합 색상 도구입니다. 20단계 그레이스케일과 20가지 색조에서 400가지 색상을 선택하고, HEX, RGB, HSL, CMYK 형식으로 변환할 수 있습니다.",
+    features: [
+      "20단계 그레이스케일 및 20가지 색조",
+      "색조별 400색 (채도 × 명도 조합)",
+      "HEX, RGB, HSL, CMYK 형식 변환",
+      "원클릭 클립보드 복사",
+      "즐겨찾기 저장 (최대 50개)",
+      "최근 사용 히스토리 (최대 20개)",
+      "URL 공유 및 CSS/JSON/Figma 내보내기"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "Tailwind CSS", "Sonner"]
+  },
+  {
     id: "realtime-exchange",
     name: "실시간 환율",
     description: "실시간 환율 정보를 확인할 수 있는 서비스입니다.",
