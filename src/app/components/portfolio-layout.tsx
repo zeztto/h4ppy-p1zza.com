@@ -10,8 +10,9 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "./ui/dropdown-menu";
-import { ArrowRight, ChevronDown, Code2, ExternalLink, Grid3x3, X, Instagram, Home, Rocket, Zap, Target, Github, Palette, Lightbulb, MessageCircle, Wrench, Video, Check, Star } from "lucide-react";
+import { ArrowRight, ChevronDown, Code2, ExternalLink, Grid3x3, X, Instagram, Home, Rocket, Zap, Target, Github, Palette, Lightbulb, MessageCircle, Wrench, Video, Check, Star, User } from "lucide-react";
 import { Footer } from "./footer";
+import { ProfilePage } from "./profile-page";
 
 interface Project {
   id: string;
@@ -468,12 +469,12 @@ const projects: Project[] = [
 
 export function PortfolioLayout() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [currentPage, setCurrentPage] = useState<'home' | 'portfolio' | 'blog'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'portfolio' | 'profile'>('home');
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const categories = [...new Set(projects.map(p => p.category))];
 
-  const handleNavigation = (page: 'home' | 'portfolio' | 'blog') => {
+  const handleNavigation = (page: 'home' | 'portfolio' | 'profile') => {
     setCurrentPage(page);
     setSelectedProject(null);
   };
@@ -528,6 +529,14 @@ export function PortfolioLayout() {
               >
                 <Grid3x3 className="h-4 w-4 mr-2" />
                 포트폴리오
+              </Button>
+              <Button
+                variant={currentPage === 'profile' ? 'secondary' : 'ghost'}
+                size="sm"
+                onClick={() => handleNavigation('profile')}
+              >
+                <User className="h-4 w-4 mr-2" />
+                프로필
               </Button>
             </nav>
           </div>
@@ -679,6 +688,14 @@ export function PortfolioLayout() {
               <Grid3x3 className="h-4 w-4 mr-1" />
               포트폴리오
             </Button>
+            <Button
+              variant={currentPage === 'profile' ? 'secondary' : 'ghost'}
+              size="sm"
+              onClick={() => handleNavigation('profile')}
+            >
+              <User className="h-4 w-4 mr-1" />
+              프로필
+            </Button>
           </div>
         </div>
       </header>
@@ -719,6 +736,8 @@ export function PortfolioLayout() {
           </div>
         ) : currentPage === 'portfolio' ? (
           <PortfolioPage projects={projects} onSelectProject={setSelectedProject} />
+        ) : currentPage === 'profile' ? (
+          <ProfilePage />
         ) : (
           <LandingPage projects={projects} onSelectProject={setSelectedProject} />
         )}
