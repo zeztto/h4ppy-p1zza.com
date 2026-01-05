@@ -317,20 +317,21 @@ const projects: Project[] = [
   {
     id: "qr-ing",
     name: "큐알잉",
-    description: "QR 코드를 생성하고 관리할 수 있는 도구입니다.",
+    description: "빠르고 간편한 무료 한국어 QR코드 생성기입니다.",
     url: "https://qr-ing.vercel.app/",
     tags: ["QR", "Utility"],
     category: "Archive",
     year: "2025",
-    longDescription: "다양한 용도의 QR 코드를 쉽게 생성하고 관리할 수 있는 도구입니다. URL, 텍스트, 연락처 등 여러 형식을 지원합니다.",
+    longDescription: "7가지 타입의 QR 코드를 간편하게 생성할 수 있는 한국어 QR 코드 생성기입니다. URL, 텍스트, 연락처, 이메일, 전화, 문자, WiFi 정보를 QR 코드로 변환하며, 크기, 오류 수정 레벨, 여백 등을 커스터마이징할 수 있습니다.",
     features: [
-      "URL, 텍스트, 이메일, 연락처 QR 코드 생성",
-      "커스텀 색상 및 로고 추가",
-      "고해상도 다운로드",
-      "QR 코드 스캔 기능",
-      "생성 이력 관리"
+      "7가지 QR 타입 (URL, 텍스트, 연락처, 이메일, 전화, 문자, WiFi)",
+      "QR 코드 크기 조절 (128px ~ 512px)",
+      "오류 수정 레벨 설정 (L/M/Q/H)",
+      "URL 자동 HTTPS 변환",
+      "실시간 QR 코드 미리보기",
+      "PNG 다운로드"
     ],
-    techStack: ["React", "TypeScript", "QR Code Library"]
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "qrcode", "shadcn/ui", "Noto Sans KR"]
   },
   {
     id: "keyframe-generator",
@@ -353,20 +354,21 @@ const projects: Project[] = [
   {
     id: "endless-blood",
     name: "Endless Blood",
-    description: "엔드리스 블러드 게임 프로젝트입니다.",
+    description: "Metroidvania와 Vampire Survivors 스타일의 웹 액션 로그라이크 게임입니다.",
     url: "https://endless-blood.vercel.app/",
-    tags: ["Game", "Entertainment"],
+    tags: ["Game", "Roguelike"],
     category: "Archive",
     year: "2025",
-    longDescription: "Phaser 3 엔진을 활용한 웹 기반 액션 게임입니다. 끝없이 몰려오는 적을 물리치며 최고 점수에 도전하세요.",
+    longDescription: "Phaser 3 엔진으로 제작한 2D 액션 로그라이크 게임입니다. Metroidvania 플랫포밍과 Vampire Survivors 스타일 파밍 액션이 결합되어 있으며, 시간에 따라 난이도가 증가하고 6가지 적과 2개의 보스가 등장합니다.",
     features: [
-      "부드러운 60FPS 게임플레이",
-      "다양한 무기와 파워업",
-      "점수 시스템 및 리더보드",
-      "반응형 터치 컨트롤",
-      "픽셀 아트 스타일"
+      "6가지 적 타입 (좀비, 해골, 아머, 위처, 뱀퍼, 박쥐)",
+      "2개 보스 (3:30 초월 키메라, 7:00 슈퍼 샤먼)",
+      "자동 타겟팅 발사 시스템",
+      "레벨업 시 6가지 업그레이드 (데미지, 연사, 사거리, 속도, 체력, 멀티샷)",
+      "보물상자 4가지 아이템 (체력, 자석, 쉴드, 경험치)",
+      "Normal/Coward 난이도, 무작위 맵, 디버그 모드"
     ],
-    techStack: ["Phaser 3", "TypeScript", "Canvas API"]
+    techStack: ["Phaser 3", "Vite", "JavaScript", "Arcade Physics", "Canvas API"]
   },
   {
     id: "dopameme",
@@ -445,20 +447,22 @@ const projects: Project[] = [
   {
     id: "eazy-youtube-share",
     name: "이지 유튜브 쉐어",
-    description: "유튜브 영상을 쉽게 공유할 수 있는 도구입니다.",
+    description: "YouTube 영상을 소셜 미디어에 공유하는 플랫폼입니다.",
     url: "https://eazy-youtube-share.vercel.app/",
-    tags: ["Youtube", "Share"],
+    tags: ["Social", "YouTube"],
     category: "Archive",
     year: "2025",
-    longDescription: "유튜브 영상 공유를 더욱 편리하게 만드는 도구입니다. 특정 시간대, 플레이리스트 등 다양한 공유 옵션을 제공합니다.",
+    longDescription: "Instagram 스타일의 UI로 YouTube 영상을 공유하는 소셜 미디어 플랫폼입니다. Supabase Auth를 활용한 사용자 인증, 댓글 시스템, 좋아요, 북마크 기능을 제공하며, 가로/세로 영상을 자동으로 감지하여 적절한 피드에 표시합니다.",
     features: [
-      "특정 시간대부터 재생 링크 생성",
-      "임베드 코드 생성",
-      "썸네일 다운로드",
-      "플레이리스트 공유",
-      "소셜 미디어 최적화"
+      "Instagram 스타일 UI (피드, 릴스)",
+      "Supabase Auth 사용자 인증",
+      "가로/세로 영상 자동 감지 및 분류",
+      "댓글 및 대댓글 시스템",
+      "좋아요 및 북마크 기능",
+      "YouTube URL 파싱 및 검색",
+      "Binance 컬러 다크 테마"
     ],
-    techStack: ["React", "TypeScript", "YouTube API"]
+    techStack: ["Next.js", "TypeScript", "Supabase", "Tailwind CSS", "YouTube API", "shadcn/ui"]
   }
 ];
 
