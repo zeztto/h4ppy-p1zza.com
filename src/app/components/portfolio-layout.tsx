@@ -30,38 +30,40 @@ const projects: Project[] = [
   {
     id: "phopic",
     name: "포픽",
-    description: "사진 관련 기능을 제공하는 웹 애플리케이션입니다.",
+    description: "브라우저에서 작동하는 무료 온라인 이미지 편집 도구입니다.",
     url: "https://ws-08-phopic-sgoz.vercel.app/",
-    tags: ["Image", "Media"],
+    tags: ["Image", "Editor"],
     category: "Media",
     year: "2025",
-    longDescription: "사진 편집과 관리를 위한 올인원 웹 애플리케이션입니다. 브라우저에서 직접 사진을 편집하고 최적화할 수 있습니다.",
+    longDescription: "서버 업로드 없이 브라우저에서 완전히 작동하는 무료 온라인 이미지 편집 도구입니다. 크롭, 회전, 반전, 리사이즈, 14가지 필터 등 다양한 편집 기능을 제공하며, 모든 처리가 클라이언트 측에서 이루어져 개인정보가 완전히 보호됩니다.",
     features: [
-      "이미지 크기 조절 및 압축",
-      "필터 및 효과 적용",
-      "일괄 처리 기능",
-      "다양한 형식으로 내보내기",
-      "메타데이터 편집"
+      "크롭, 회전, 좌우/상하 반전, 리사이즈",
+      "14가지 필터 (흑백, 세피아, 빈티지, 블러 등)",
+      "밝기, 대비, 채도, RGB, Hue 조정",
+      "Undo/Redo 기능 (최대 50단계)",
+      "PNG, JPG, WebP 저장",
+      "완전한 클라이언트 사이드 처리 (서버 업로드 없음)"
     ],
-    techStack: ["React", "TypeScript", "Canvas API", "File API"]
+    techStack: ["React", "TypeScript", "Vite", "Canvas API", "shadcn/ui", "Sonner"]
   },
   {
     id: "password-generator",
     name: "비밀번호 생성기",
-    description: "안전한 비밀번호를 생성해주는 도구입니다.",
+    description: "Web Crypto API로 암호학적으로 안전한 비밀번호를 생성합니다.",
     url: "https://ws-07-password-generator.vercel.app/",
     tags: ["Security", "Utility"],
     category: "Tools",
     year: "2025",
-    longDescription: "보안을 중요시하는 사용자를 위한 강력한 비밀번호 생성 도구입니다. 다양한 옵션을 통해 목적에 맞는 안전한 비밀번호를 생성할 수 있습니다.",
+    longDescription: "Math.random() 대신 Web Crypto API를 사용하여 암호학적으로 안전한 비밀번호를 생성합니다. 최대 100개까지 동시 생성 가능하며, 대문자, 소문자, 숫자, 특수문자를 개별적으로 선택할 수 있습니다.",
     features: [
-      "사용자 정의 길이 및 복잡도 설정",
-      "대소문자, 숫자, 특수문자 옵션",
-      "비밀번호 강도 표시",
-      "일괄 생성 기능",
-      "원클릭 복사"
+      "Web Crypto API (crypto.getRandomValues) 사용",
+      "1-128자 길이 설정",
+      "최대 100개 동시 생성",
+      "개별 문자 타입 선택 (대소문자, 숫자, 특수문자)",
+      "실시간 강도 평가기",
+      "TXT 파일로 일괄 내보내기"
     ],
-    techStack: ["React", "TypeScript", "Crypto API"]
+    techStack: ["React", "TypeScript", "Vite", "Web Crypto API", "shadcn/ui", "Lucide"]
   },
   {
     id: "lotto-generator",
@@ -71,16 +73,16 @@ const projects: Project[] = [
     tags: ["Utility", "Algorithm"],
     category: "Tools",
     year: "2025",
-    longDescription: "12가지 다양한 알고리즘으로 로또 번호를 생성하는 웹 애플리케이션입니다. 완전 무작위부터 홀짝 균형, 피보나치 수열, 황금비 기반까지 다양한 방식으로 번호를 생성할 수 있습니다.",
+    longDescription: "12가지 다양한 알고리즘으로 로또 번호를 생성하는 웹 애플리케이션입니다. 완전 무작위, 홀짝 균형, 고저 균형, 연속번호 제한, 분산형, 패턴 회피, SHA-256 해시, 시간 기반, 피보나치, 소수, 황금비, LCG 방식을 지원합니다.",
     features: [
-      "12가지 다양한 번호 생성 알고리즘",
+      "12가지 다양한 알고리즘 (무작위, 홀짝, 피보나치, 황금비 등)",
       "최대 50개까지 동시 생성",
       "중복 번호 자동 제거",
-      "텍스트 파일로 내보내기",
-      "접근성(a11y) WCAG 2.1 AA 준수",
-      "반응형 디자인 및 모바일 최적화"
+      "TXT, CSV, JSON 형식 내보내기",
+      "고유 파일명 생성 (해시 기반)",
+      "WCAG 2.1 AA 접근성 준수"
     ],
-    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "SHA-256", "LCG Algorithm"]
+    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "SHA-256", "LCG", "Sonner"]
   },
   {
     id: "color-palette",
@@ -201,110 +203,116 @@ const projects: Project[] = [
   {
     id: "realtime-exchange",
     name: "실시간 환율",
-    description: "실시간 환율 정보를 확인할 수 있는 서비스입니다.",
+    description: "실시간 환율 조회 및 통화 변환 서비스입니다.",
     url: "https://ws-06-realtime-exchange.vercel.app/",
     tags: ["Finance", "API"],
     category: "Finance",
     year: "2025",
-    longDescription: "전 세계 주요 통화의 실시간 환율 정보를 제공하는 서비스입니다. 여행, 해외 송금, 투자 등 다양한 목적으로 활용할 수 있습니다.",
+    longDescription: "무료 API를 활용한 실시간 환율 조회 및 통화 변환 서비스입니다. 50개 이상의 주요 통화 환율을 실시간으로 제공하며, 30일 환율 차트와 여행지 물가 계산기를 포함합니다.",
     features: [
-      "150개 이상 통화 지원",
-      "실시간 환율 업데이트",
-      "환율 추이 차트",
-      "즐겨찾기 통화 설정",
-      "환율 변동 알림"
+      "50개 이상 주요 통화 실시간 환율",
+      "양방향 통화 변환 (KRW ↔ 외화)",
+      "30일 환율 추이 차트 (Recharts)",
+      "여행지 물가 계산기",
+      "통화 관리 (드래그앤드롭 정렬, 최대 18개)",
+      "Context API로 API 호출 67% 감소"
     ],
-    techStack: ["React", "TypeScript", "Exchange Rate API", "Recharts"]
+    techStack: ["React", "TypeScript", "Vite", "ExchangeRate-API", "Frankfurter API", "Recharts", "shadcn/ui"]
   },
   {
     id: "memomome",
     name: "메모모미",
-    description: "간단하고 빠른 메모 작성 애플리케이션입니다.",
+    description: "모든 데이터가 로컬에만 저장되는 프라이버시 중심 웹 메모장입니다.",
     url: "https://ws-05-memomome.vercel.app/",
     tags: ["Productivity", "Notes"],
     category: "Productivity",
     year: "2025",
-    longDescription: "미니멀하고 직관적인 메모 애플리케이션입니다. 빠른 메모 작성과 효율적인 정리를 통해 생산성을 높일 수 있습니다.",
+    longDescription: "완전한 프라이버시를 보장하는 웹 메모장 애플리케이션입니다. 모든 데이터가 브라우저의 localStorage에만 저장되어 서버로 전송되지 않습니다. Undo/Redo, 찾기/바꾸기, 실시간 통계 등 강력한 기능을 제공합니다.",
     features: [
-      "실시간 자동 저장",
-      "마크다운 지원",
-      "태그 기반 분류 시스템",
-      "강력한 검색 기능",
-      "로컬 스토리지 활용으로 데이터 보안"
+      "자동 저장 (타이핑 1초 후)",
+      "Undo/Redo (최대 20단계, Ctrl+Z/Y)",
+      "찾기/바꾸기 (대소문자 무시)",
+      "메모 저장 관리 (최대 100개)",
+      "실시간 통계 (문자, 단어, 줄 수)",
+      "다양한 형식 내보내기 (TXT, MD, HTML, JSON, CSV)"
     ],
-    techStack: ["React", "TypeScript", "Local Storage", "Markdown Parser"]
+    techStack: ["React", "TypeScript", "Vite", "localStorage", "shadcn/ui", "Sonner"]
   },
   {
     id: "lorem-ipsum",
     name: "다국어 로렘 입숨 생성기",
-    description: "디자인 작업을 위한 Lorem Ipsum 텍스트를 생성합니다.",
+    description: "11개 언어를 지원하는 현대적인 로렘 입숨 텍스트 생성기입니다.",
     url: "https://ws-04-lorem-ipsum-generator.vercel.app/",
     tags: ["Text", "Design"],
     category: "Tools",
     year: "2025",
-    longDescription: "디자이너와 개발자를 위한 더미 텍스트 생성 도구입니다. 다양한 길이와 형식의 Lorem Ipsum 텍스트를 손쉽게 생성하여 레이아웃 작업에 활용할 수 있습니다.",
+    longDescription: "11개 언어(한국어, 영어, 스페인어, 프랑스어, 독일어, 라틴어, 러시아어, 일본어, 중국어, 태국어)를 지원하는 로렘 입숨 생성기입니다. 4가지 텍스트 스타일(산문, 시, 카피, 리드)과 세밀한 커스터마이징 옵션을 제공합니다.",
     features: [
-      "단어/문장/문단 단위 생성",
-      "사용자 정의 길이 설정",
-      "HTML 형식 지원",
-      "원클릭 복사 기능",
-      "다양한 텍스트 스타일 옵션"
+      "11개 언어 지원 (한국어, 영어, 일본어, 중국어 등)",
+      "4가지 텍스트 스타일 (산문, 시, 카피, 리드)",
+      "세밀한 조정 (문단 1-20, 문장 1-15, 단어 3-30, 글자 0-5000)",
+      "클립보드 복사 및 TXT 파일 다운로드",
+      "실시간 글자 수 카운터",
+      "번들 크기 93% 감소 최적화 (90KB gzip)"
     ],
-    techStack: ["React", "TypeScript", "Tailwind CSS"]
+    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "Sonner"]
   },
   {
     id: "text-counter",
     name: "텍스트 분석기",
-    description: "텍스트의 글자 수, 단어 수, 문장 수를 세는 유틸리티입니다.",
+    description: "TXT, PDF, DOCX 파일의 텍스트를 분석하는 도구입니다.",
     url: "https://ws-03-text-counter.vercel.app/",
     tags: ["Text", "Utility"],
     category: "Tools",
     year: "2025",
-    longDescription: "작가, 학생, 콘텐츠 크리에이터를 위한 필수 도구입니다. 실시간으로 텍스트를 분석하여 글자 수, 단어 수, 문장 수 등 다양한 통계를 제공합니다.",
+    longDescription: "한국어 및 영어 텍스트를 분석하여 상세한 통계를 제공하는 웹 애플리케이션입니다. TXT, MD, PDF, DOCX 파일을 지원하며, 드래그앤드롭으로 간편하게 업로드할 수 있습니다.",
     features: [
-      "실시간 글자/단어/문장 수 카운팅",
-      "한글, 영어 등 다국어 지원",
-      "공백 포함/제외 옵션",
-      "평균 읽기 시간 예측",
-      "텍스트 통계 분석"
+      "4가지 파일 형식 지원 (TXT, MD, PDF, DOCX)",
+      "드래그앤드롭 파일 업로드 (최대 10MB)",
+      "기본 통계 (글자, 단어, 문장, 문단 수)",
+      "빈도 분석 (Top 10 단어, Top 10 문자)",
+      "평균 통계 (평균 단어 길이, 평균 문장 길이)",
+      "예상 읽기 시간 (200단어/분 기준)"
     ],
-    techStack: ["React", "TypeScript", "Vite"]
+    techStack: ["React", "TypeScript", "Vite", "PDF.js", "Mammoth.js", "shadcn/ui"]
   },
   {
     id: "finance-converter",
     name: "대출 이자 계산기",
-    description: "금융 관련 단위 변환 및 계산을 도와주는 서비스입니다.",
+    description: "4가지 상환 방식의 대출 이자를 계산하고 Excel/PDF로 내보냅니다.",
     url: "https://ws-02-finance-converter-bci6.vercel.app/",
     tags: ["Finance", "Calculator"],
     category: "Finance",
     year: "2025",
-    longDescription: "금융 전문가와 일반 사용자 모두를 위한 포괄적인 금융 계산 도구입니다. 환율, 이자, 투자 수익률 등 다양한 금융 계산을 간편하게 수행할 수 있습니다.",
+    longDescription: "대출 금액, 연 이자율, 대출 기간을 입력하여 다양한 상환 방식에 따른 이자와 상환 계획을 계산합니다. 원리금균등, 원금균등, 만기일시, 체증식 상환을 지원하며, Excel과 PDF로 상세한 상환 일정표를 내보낼 수 있습니다.",
     features: [
-      "실시간 환율 정보 기반 통화 변환",
-      "복리 이자 계산기",
-      "투자 수익률(ROI) 계산",
-      "대출 상환 계획 시뮬레이션",
-      "직관적인 UI로 쉬운 사용"
+      "4가지 상환 방식 (원리금균등, 원금균등, 만기일시, 체증식)",
+      "거치 기간 설정 가능",
+      "다양한 단위 지원 (만원/천원, 년/개월/일)",
+      "월별 상환 일정표 (상환금액, 원금, 이자, 잔액)",
+      "Excel 내보내기 (.xls, 한글 완벽 지원)",
+      "PDF 내보내기 (NanumGothic 폰트 내장)"
     ],
-    techStack: ["React", "TypeScript", "REST API", "Tailwind CSS"]
+    techStack: ["React", "TypeScript", "Vite", "xlsx", "jsPDF", "jspdf-autotable", "shadcn/ui", "Sonner"]
   },
   {
     id: "file-converter",
     name: "이미지·문서 파일 변환기",
-    description: "다양한 파일 형식을 간편하게 변환할 수 있는 도구입니다.",
+    description: "브라우저에서 이미지와 문서를 실시간 변환하는 도구입니다.",
     url: "https://ws-01-file-converter.vercel.app/",
-    tags: ["Utility", "File Management"],
+    tags: ["Utility", "Converter"],
     category: "Tools",
     year: "2025",
-    longDescription: "브라우저 기반의 강력한 파일 변환 도구로, 다양한 형식의 파일을 빠르고 안전하게 변환할 수 있습니다. 모든 변환 작업은 클라이언트 사이드에서 처리되어 파일 보안이 보장됩니다.",
+    longDescription: "서버 업로드 없이 브라우저에서 직접 파일을 변환하는 도구입니다. 이미지(JPG, PNG, WebP, GIF, BMP)와 문서(PDF, TXT, MD, HTML) 간 자유로운 변환을 지원하며, 일괄 변환 시 ZIP 파일로 다운로드됩니다.",
     features: [
-      "이미지, 문서, 비디오 등 다양한 형식 지원",
-      "드래그 앤 드롭으로 간편한 파일 업로드",
-      "일괄 변환 기능으로 여러 파일 동시 처리",
-      "변환 전 미리보기 기능",
-      "클라이언트 사이드 처리로 보안 강화"
+      "이미지 변환 (JPG, PNG, WebP, GIF, BMP ↔ PDF)",
+      "문서 변환 (PDF, TXT, MD, HTML 상호 변환)",
+      "드래그앤드롭 파일 업로드",
+      "일괄 변환 및 ZIP 다운로드",
+      "Canvas API 실시간 변환",
+      "완전한 클라이언트 사이드 처리 (서버 업로드 없음)"
     ],
-    techStack: ["React", "TypeScript", "File API", "Canvas API"]
+    techStack: ["React", "TypeScript", "Vite", "Canvas API", "html2pdf.js", "PDF.js", "JSZip", "shadcn/ui"]
   },
   {
     id: "qr-ing",
