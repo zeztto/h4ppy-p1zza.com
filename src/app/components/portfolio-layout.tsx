@@ -150,7 +150,7 @@ const projects: Project[] = [
     url: "https://ws-13-super-normalizer.vercel.app/",
     tags: ["Audio", "Utility"],
     category: "Media",
-    year: "2025",
+    year: "2026",
     longDescription: "웹 브라우저에서 서버 업로드 없이 완전히 작동하는 오디오 노멀라이저입니다. Peak, RMS, LUFS 세 가지 방식의 노멀라이제이션을 지원하며, 실시간 파형 시각화와 다양한 포맷 출력을 제공합니다.",
     features: [
       "3가지 노멀라이제이션 방식 (Peak, RMS, LUFS)",
@@ -169,7 +169,7 @@ const projects: Project[] = [
     url: "https://ws-14-unit-converter.vercel.app/",
     tags: ["Utility", "Calculator"],
     category: "Tools",
-    year: "2025",
+    year: "2026",
     longDescription: "웹 브라우저에서 서버리스로 작동하는 단위 변환기입니다. 길이, 무게, 온도, 부피 등 4가지 카테고리의 다양한 단위를 간편하게 변환할 수 있으며, 양방향 변환을 지원합니다.",
     features: [
       "4가지 카테고리 (길이, 무게, 온도, 부피)",
@@ -188,7 +188,7 @@ const projects: Project[] = [
     url: "https://ws-15-short-generator.vercel.app/",
     tags: ["Video", "Utility"],
     category: "Media",
-    year: "2025",
+    year: "2026",
     longDescription: "브라우저에서 가로 영상을 세로 숏폼 형식(9:16)으로 변환하는 서버리스 웹 애플리케이션입니다. YouTube Shorts, TikTok, Instagram Reels에 최적화된 영상을 만들 수 있습니다.",
     features: [
       "가로 영상을 9:16 세로 비율로 자동 변환",
