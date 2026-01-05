@@ -1,12 +1,10 @@
-import { Badge } from "./ui/badge";
-import { Card, CardContent } from "./ui/card";
 import { Github, Instagram } from "lucide-react";
 import { Footer } from "./footer";
 
 export function ProfilePage() {
   return (
     <div className="min-h-screen bg-background">
-      <div className="container px-4 py-12 sm:py-16 max-w-4xl mx-auto">
+      <div className="container px-4 py-12 sm:py-16 max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted mb-6">
@@ -15,421 +13,321 @@ export function ProfilePage() {
           </div>
 
           {/* Profile Image & Name */}
-          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center sm:items-start mb-12">
-            <div className="flex-shrink-0">
-              <div className="relative">
-                <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-primary/20">
-                  <img
-                    src="/profile.jpg"
-                    alt="h4ppy p1zza"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+          <div className="flex flex-col items-center text-center mb-12">
+            <div className="mb-6">
+              <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-primary/20">
+                <img
+                  src="/profile.jpg"
+                  alt="h4ppy p1zza"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
 
-            <div className="text-center sm:text-left">
-              <h1 className="mb-3 text-3xl sm:text-4xl font-bold tracking-tight">
-                h4ppy p1zza
-              </h1>
-              <p className="text-lg sm:text-xl text-muted-foreground mb-4">
-                Full-stack Web Developer
-              </p>
+            <h1 className="mb-3 text-3xl sm:text-4xl font-bold tracking-tight">
+              h4ppy p1zza
+            </h1>
+            <p className="text-lg sm:text-xl text-muted-foreground mb-6">
+              Full-stack Web Developer
+            </p>
 
-              {/* Social Links */}
-              <div className="flex gap-3 justify-center sm:justify-start">
-                <a
-                  href="https://github.com/zeztto"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-muted hover:bg-muted/80 transition-colors text-sm"
-                >
-                  <Github className="h-4 w-4" />
-                  <span>GitHub</span>
-                </a>
-                <a
-                  href="https://instagram.com/h4ppy_p1zza"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-muted hover:bg-muted/80 transition-colors text-sm"
-                >
-                  <Instagram className="h-4 w-4" />
-                  <span>Instagram</span>
-                </a>
-              </div>
+            {/* Social Links */}
+            <div className="flex gap-3">
+              <a
+                href="https://github.com/zeztto"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-muted hover:bg-muted/80 transition-colors text-sm"
+              >
+                <Github className="h-4 w-4" />
+                <span>GitHub</span>
+              </a>
+              <a
+                href="https://instagram.com/h4ppy_p1zza"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-muted hover:bg-muted/80 transition-colors text-sm"
+              >
+                <Instagram className="h-4 w-4" />
+                <span>Instagram</span>
+              </a>
             </div>
           </div>
         </div>
 
         {/* Essay Content */}
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <Card className="border-none shadow-none bg-transparent">
-            <CardContent className="space-y-8 text-base sm:text-lg leading-relaxed text-muted-foreground p-0">
+        <article className="space-y-8 text-base sm:text-lg leading-relaxed text-muted-foreground">
 
-              <section className="space-y-4">
-                <p className="first-letter:text-5xl first-letter:font-bold first-letter:text-primary first-letter:mr-1 first-letter:float-left">
-                  코드는 언어이고, 프로그래밍은 글쓰기입니다.
-                  저는 이 문장을 믿으며 지난 수년간 웹이라는 캔버스에 생각을 코드로 풀어왔습니다.
-                  40대에 접어든 지금, 여전히 매일 아침 VS Code를 열며 설레는 마음을 느낍니다.
-                </p>
+          <section className="space-y-4">
+            <p className="first-letter:text-5xl first-letter:font-bold first-letter:text-primary first-letter:mr-1 first-letter:float-left">
+              매일 아침 컴퓨터 앞에 앉을 때마다 설렙니다.
+              오늘은 무엇을 만들까, 어떤 문제를 해결할까 하는 기대감으로 하루를 시작합니다.
+              40대에 접어든 지금도 그 설렘은 여전합니다.
+            </p>
 
-                <p>
-                  누군가는 이 나이에 새로운 것을 배우는 게 늦었다고 말할지 모릅니다.
-                  하지만 저는 오히려 지금이 가장 좋은 시기라고 생각합니다.
-                  젊은 시절의 급한 마음은 사라지고, 대신 깊이 있는 이해와 인내심이 자리 잡았습니다.
-                  기술은 수단일 뿐이고, 진짜 중요한 것은 그 기술로 무엇을 만들어내느냐는 것을 알게 되었습니다.
-                </p>
-              </section>
+            <p>
+              누군가는 이 나이에 새로운 것을 배우는 게 늦었다고 말할지 모릅니다.
+              하지만 저는 오히려 지금이 가장 좋은 시기라고 생각합니다.
+              젊은 시절의 조급함은 사라지고, 대신 여유와 인내가 생겼습니다.
+              무엇이 정말 중요한지 알게 되었고, 불필요한 것들을 걸러낼 수 있게 되었습니다.
+            </p>
+          </section>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">여러 세계를 거쳐온 여정</h2>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">여러 세계를 거쳐온 길</h2>
 
-                <p>
-                  개발자가 되기까지의 길은 직선이 아니었습니다.
-                  20대에는 <strong className="text-foreground">저널리스트</strong>로 세상을 관찰하고 기록했습니다.
-                  펜으로 세상의 이야기를 전하며, 정보를 구조화하고 맥락을 이해하는 법을 배웠습니다.
-                  그때는 몰랐지만, 좋은 글을 쓰기 위해 필요했던 논리적 사고와 명확한 전달력은
-                  훗날 코드를 작성하는 데 그대로 적용되었습니다.
-                </p>
+            <p>
+              제 이력은 일직선이 아닙니다.
+              20대에는 기자로 일했습니다.
+              세상의 이야기를 듣고 기록하며, 복잡한 것을 단순하게 설명하는 법을 배웠습니다.
+              좋은 글은 명확하고 간결해야 한다는 것, 핵심을 찌를 수 있어야 한다는 것을 그때 알았습니다.
+            </p>
 
-                <p>
-                  이후 <strong className="text-foreground">콘텐츠 기획자이자 작가</strong>로 전환하며
-                  스토리텔링의 힘을 깨달았습니다.
-                  단순히 정보를 나열하는 것이 아니라, 사람들의 마음을 움직이는 서사를 구성하는 법을 익혔습니다.
-                  이는 지금 제가 만드는 웹 서비스의 UX를 설계할 때,
-                  사용자 여정(User Journey)을 구상하는 능력으로 이어졌습니다.
-                  좋은 앱은 기능의 집합이 아니라 <em>하나의 이야기</em>라는 것을 그때 배웠습니다.
-                </p>
+            <p>
+              이후 콘텐츠를 만드는 사람이 되었습니다.
+              글을 쓰고, 기획하고, 사람들이 왜 어떤 이야기에 끌리는지 연구했습니다.
+              정보를 전달하는 것을 넘어 감정을 움직이는 법을 익혔습니다.
+              지금 무언가를 만들 때도 항상 묻습니다—
+              이것이 누군가의 마음에 닿을 수 있을까?
+            </p>
 
-                <p>
-                  <strong className="text-foreground">퍼포먼스 마케터</strong>로서는 데이터와 마주했습니다.
-                  A/B 테스팅, 전환율 최적화, 사용자 행동 분석—
-                  숫자 뒤에 숨은 사람들의 욕구를 읽는 법을 배웠습니다.
-                  클릭 하나, 스크롤 하나에도 의미가 있다는 것,
-                  데이터는 과거를 설명할 뿐 아니라 미래를 예측할 수 있다는 것을 깨달았습니다.
-                  이 경험은 지금 제가 성능 지표를 분석하고, 사용자 경험을 최적화하는 데 직접적으로 활용됩니다.
-                </p>
+            <p>
+              마케터가 되어서는 숫자와 마주했습니다.
+              사람들이 클릭하는 이유, 머무는 이유, 떠나는 이유를 데이터로 읽었습니다.
+              숫자는 거짓말을 하지 않지만, 해석은 사람의 몫입니다.
+              데이터 뒤에 숨은 사람을 보는 법을 배웠습니다.
+            </p>
 
-                <p>
-                  그리고 <strong className="text-foreground">금융 공학</strong>이라는 예상치 못한 세계로 들어갔습니다.
-                  LMSR 알고리즘을 연구하고, 시장 메커니즘을 설계하며,
-                  수학과 경제학의 교차점에서 복잡계를 이해하기 시작했습니다.
-                  대출 이자 계산기나 도파밈 예측 플랫폼을 만들 수 있었던 것은
-                  이때의 경험 덕분입니다.
-                  금융 공학은 저에게 <em>정밀함</em>과 <em>논리적 엄밀함</em>의 중요성을 가르쳐주었습니다.
-                </p>
-              </section>
+            <p>
+              그리고 금융의 세계로 들어갔습니다.
+              시장 메커니즘을 설계하고, 복잡한 계산을 하며,
+              정밀함의 중요성을 배웠습니다.
+              숫자 하나, 공식 하나가 얼마나 큰 차이를 만드는지 깨달았습니다.
+            </p>
+          </section>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">모든 길은 코드로 통한다</h2>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">모든 경험이 하나로</h2>
 
-                <p>
-                  돌이켜보면 각 단계가 다음 단계를 위한 준비였습니다.
-                  저널리즘은 <em>명확한 사고</em>를,
-                  콘텐츠 기획은 <em>스토리텔링</em>을,
-                  마케팅은 <em>데이터 분석</em>을,
-                  금융 공학은 <em>수학적 사고</em>를 가르쳐주었습니다.
-                  그리고 이 모든 것이 개발자로서 제 무기가 되었습니다.
-                </p>
+            <p>
+              그리고 결국 개발자가 되었습니다.
+              돌아보면 각 경험이 다음 단계를 위한 준비였습니다.
+              기자로서의 명확한 사고, 작가로서의 감수성,
+              마케터로서의 데이터 감각, 금융인으로서의 정밀함—
+              이 모든 것이 제가 만드는 것들 안에 녹아있습니다.
+            </p>
 
-                <p>
-                  개발자가 된 것은 우연이 아닌 <strong className="text-foreground">필연</strong>이었습니다.
-                  인공지능의 시대, 결국 컴퓨터와 소통할 수 있는 사람이 미래에 생존할 것이라는 확신이 있었습니다.
-                  AI가 코드를 생성할 수 있다 해도,
-                  <em>무엇을 만들어야 하는지</em>, <em>왜 만들어야 하는지</em>를 아는 것은 여전히 인간의 몫입니다.
-                  그리고 그 질문에 답하기 위해서는 기술 이상의 것—
-                  인간에 대한 이해, 사회에 대한 통찰, 윤리적 판단—이 필요합니다.
-                </p>
+            <p>
+              개발자가 된 것은 우연이 아니었습니다.
+              인공지능의 시대가 오고 있었고, 저는 확신했습니다.
+              결국 기계와 대화할 수 있는 사람이 살아남을 것이라고.
+              하지만 기계와 대화한다는 것은 단순히 명령어를 외우는 것이 아닙니다.
+              무엇을 만들어야 하는지, 왜 만들어야 하는지 아는 것—
+              그것은 여전히 인간만이 할 수 있는 일입니다.
+            </p>
 
-                <p>
-                  40대에 개발자가 된 것이 늦은 것이 아니라 <strong className="text-foreground">적기</strong>였습니다.
-                  저는 단순히 코드를 작성하는 개발자가 아닙니다.
-                  저널리스트의 시선으로 사용자를 관찰하고,
-                  작가의 감수성으로 경험을 설계하며,
-                  마케터의 데이터 감각으로 성과를 측정하고,
-                  금융 공학자의 정밀함으로 알고리즘을 구현하는—
-                  <em>모든 경험이 융합된</em> 개발자입니다.
-                </p>
-              </section>
+            <p>
+              40대에 이 일을 시작한 것이 늦은 게 아니라 딱 맞는 때였습니다.
+              저는 단지 코드를 쓰는 사람이 아닙니다.
+              사람을 이해하고, 이야기를 만들고, 데이터를 읽고, 정밀하게 계산하는—
+              모든 것을 할 수 있는 사람입니다.
+            </p>
+          </section>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">컴퓨터 과학에 대한 철학</h2>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">만드는 것에 대하여</h2>
 
-                <p>
-                  저에게 컴퓨터 과학은 단순한 기술이 아닌 <strong className="text-foreground">인간의 사고를 확장하는 도구</strong>입니다.
-                  알고리즘은 우리의 논리적 사고를 정제하고, 데이터 구조는 세상을 바라보는 새로운 렌즈를 제공합니다.
-                  코드를 작성한다는 것은 단순히 컴퓨터에게 명령을 내리는 것이 아니라,
-                  복잡한 문제를 작은 조각으로 나누고, 각 조각의 본질을 이해하며,
-                  다시 아름답게 조합하는 <em>사색의 과정</em>입니다.
-                </p>
+            <p>
+              저는 만드는 것을 좋아합니다.
+              아이디어가 실제로 작동하는 무언가가 되는 순간,
+              누군가 그것을 사용하고 도움을 받는 모습을 볼 때,
+              그것이 제게 가장 큰 보람입니다.
+            </p>
 
-                <p>
-                  특히 웹 기술은 매혹적입니다. 브라우저라는 제한된 환경 안에서도
-                  Canvas API로 이미지를 편집하고, Web Audio API로 소리를 다루며,
-                  Web Crypto API로 메시지를 암호화할 수 있습니다.
-                  이 모든 것이 사용자의 컴퓨터에서, 서버의 개입 없이 일어납니다.
-                  이것이 바로 <strong className="text-foreground">분산 컴퓨팅의 아름다움</strong>이며,
-                  사용자의 프라이버시를 존중하는 윤리적 개발의 시작점입니다.
-                </p>
-              </section>
+            <p>
+              23개가 넘는 것들을 만들었습니다.
+              어떤 것은 단순한 도구지만, 어떤 것은 복잡한 시스템입니다.
+              하지만 모두에게 공통점이 있습니다—
+              실제로 사람들이 사용할 수 있어야 한다는 것입니다.
+              아무리 멋진 아이디어도 실제로 쓸모가 없다면 의미가 없습니다.
+            </p>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">만드는 것에 대하여</h2>
+            <p>
+              비밀번호를 만드는 도구를 만들 때는 보안을 생각했고,
+              메모장을 만들 때는 개인정보 보호를 최우선으로 했습니다.
+              파일을 변환하는 도구는 사용자의 파일이 서버로 전송되지 않도록 설계했습니다.
+              이것이 제가 생각하는 개발자의 책임입니다.
+            </p>
+          </section>
 
-                <p>
-                  23개가 넘는 프로젝트를 만들며 배운 것이 있습니다.
-                  좋은 소프트웨어는 <strong className="text-foreground">문제 해결</strong>에서 시작하지만,
-                  훌륭한 소프트웨어는 <strong className="text-foreground">사용자에 대한 공감</strong>에서 완성된다는 것입니다.
-                </p>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">한계를 넘어서</h2>
 
-                <p>
-                  비밀번호 생성기를 만들 때, 단순히 난수를 생성하는 것이 아니라
-                  <code className="text-sm bg-muted px-1.5 py-0.5 rounded">Math.random()</code>의 한계를 이해하고
-                  <code className="text-sm bg-muted px-1.5 py-0.5 rounded">Web Crypto API</code>를 선택한 이유를 고민했습니다.
-                  로또 번호 생성기에 12가지 알고리즘을 넣은 것은 단순한 기능의 나열이 아니라,
-                  '무작위성'이라는 개념 자체에 대한 탐구였습니다.
-                  피보나치 수열, 황금비, 소수... 이 모든 것이 자연의 패턴이자 동시에
-                  인간이 만들어낸 추상의 산물입니다.
-                </p>
+            <p>
+              웹 브라우저는 제한된 환경입니다.
+              하지만 그 안에서도 놀라운 것들을 할 수 있습니다.
+              사진을 편집하고, 영상을 변환하고, 소리를 다루고, 게임을 만들 수 있습니다.
+              불과 몇 년 전만 해도 불가능하다고 여겨졌던 일들입니다.
+            </p>
 
-                <p>
-                  P2P 익명 게시판 Anonymo를 만들며
-                  <strong className="text-foreground">탈중앙화</strong>와 <strong className="text-foreground">프라이버시</strong>에 대해 깊이 생각했습니다.
-                  Gun.js로 구현한 서버리스 아키텍처는 단순히 기술적 선택이 아니라,
-                  중앙 권력 없이도 사람들이 소통할 수 있다는 믿음의 구현체입니다.
-                  E2EE로 암호화된 메시지는 기술적으로는 AES-GCM 알고리즘이지만,
-                  철학적으로는 개인의 사생활을 보호하겠다는 약속입니다.
-                </p>
-              </section>
+            <p>
+              장애물을 만날 때마다 배웁니다.
+              막히면 돌아가고, 안 되면 다른 방법을 찾습니다.
+              때로는 좌절하지만, 결국 해결책을 찾습니다.
+              그 과정에서 더 나은 방법을 알게 되고, 더 많은 것을 배웁니다.
+            </p>
+          </section>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">경계에서의 실험</h2>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">완성이 아닌 과정</h2>
 
-                <p>
-                  저는 항상 경계에 매료되어 왔습니다.
-                  브라우저가 할 수 있는 것과 없는 것 사이의 경계,
-                  프론트엔드와 백엔드의 경계,
-                  기술과 예술의 경계.
-                </p>
+            <p>
+              23개를 만들었지만 사실 하나도 완성되지 않았다고 생각합니다.
+              만드는 것은 끝이 없습니다.
+              오늘 좋아 보이는 것도 내일이면 더 나아질 수 있습니다.
+              항상 개선할 부분이 보입니다.
+            </p>
 
-                <p>
-                  FFmpeg.wasm으로 브라우저에서 비디오를 변환하고,
-                  Web Audio API로 오디오를 노멀라이즈하며,
-                  Canvas API로 이미지를 실시간으로 편집하는 것—
-                  이 모든 것이 불과 몇 년 전만 해도 불가능하다고 여겨졌던 일들입니다.
-                  기술의 발전은 우리가 '불가능'이라고 생각했던 경계를 계속해서 허물어왔습니다.
-                </p>
+            <p>
+              완벽을 추구하지만 완벽주의자는 아닙니다.
+              일단 작동하는 것을 만들고, 그 다음 더 좋게 만듭니다.
+              처음부터 완벽하려다 아무것도 못 만드는 것보다,
+              부족해도 일단 세상에 내놓고 개선하는 것이 낫습니다.
+            </p>
+          </section>
 
-                <p>
-                  C++과 JUCE로 VST 플러그인을 만들며 저수준 오디오 처리의 세계를 경험했고,
-                  Phaser 3로 게임을 만들며 물리 엔진과 게임 루프의 우아함을 배웠습니다.
-                  각각의 프로젝트는 단순한 결과물이 아닌,
-                  <strong className="text-foreground">새로운 세계로 들어가는 문</strong>이었습니다.
-                </p>
-              </section>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">단순함의 가치</h2>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">성능과 보안, 그리고 윤리</h2>
+            <p>
+              복잡한 것을 만드는 것은 쉽습니다.
+              정말 어려운 것은 복잡한 것을 단순하게 만드는 것입니다.
+              사용자는 내부가 어떻게 돌아가는지 알 필요가 없습니다.
+              그저 원하는 것을 쉽게 할 수 있으면 됩니다.
+            </p>
 
-                <p>
-                  번들 크기를 60% 줄이고, 105개의 미사용 의존성을 제거하는 것은
-                  단순한 최적화가 아닙니다.
-                  그것은 사용자의 시간과 데이터를 존중하는 행위입니다.
-                  느린 인터넷을 사용하는 누군가에게 몇 초의 로딩 시간 단축은
-                  더 나은 경험을 의미합니다.
-                </p>
+            <p>
+              가장 좋은 도구는 존재감이 없는 도구입니다.
+              사용자가 도구를 의식하지 않고 자신의 일에 집중할 수 있을 때,
+              그것이 진짜 좋은 도구입니다.
+              저는 그런 것들을 만들고 싶습니다.
+            </p>
+          </section>
 
-                <p>
-                  Content Security Policy를 설정하고,
-                  TypeScript strict mode를 활성화하며,
-                  모든 입력값을 sanitize하는 것—
-                  이것은 사용자를 보호하겠다는 개발자의 책임입니다.
-                  보안은 기능이 아닌 <strong className="text-foreground">태도</strong>입니다.
-                </p>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">사람을 위한 기술</h2>
 
-                <p>
-                  모든 이미지와 문서 처리를 클라이언트 사이드에서 진행하는 것도 같은 맥락입니다.
-                  서버로 파일을 전송하지 않는다는 것은 기술적 편의가 아닌,
-                  사용자의 데이터 주권을 인정하는 <strong className="text-foreground">윤리적 선택</strong>입니다.
-                </p>
-              </section>
+            <p>
+              기술은 결국 사람을 위한 것입니다.
+              아무리 혁신적인 기술도 사람의 삶을 나아지게 하지 못한다면
+              의미가 없습니다.
+            </p>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">배움의 여정</h2>
+            <p>
+              누군가의 시간을 절약해주고,
+              복잡한 일을 간단하게 만들어주고,
+              불가능해 보이던 것을 가능하게 만들어주는 것—
+              그것이 제가 하는 일의 의미입니다.
+            </p>
 
-                <p>
-                  40대라는 나이는 때로 핸디캡처럼 느껴질 수 있습니다.
-                  하지만 저는 이것을 <strong className="text-foreground">강점</strong>으로 전환했습니다.
-                  젊은 개발자들의 빠른 학습 속도는 부럽지만,
-                  저는 그들이 아직 갖지 못한 것을 가지고 있습니다—
-                  <em>맥락을 이해하는 능력</em>, <em>큰 그림을 보는 시야</em>,
-                  그리고 <em>실패로부터 배우는 겸손함</em>입니다.
-                </p>
+            <p>
+              성능을 최적화하는 것은 사용자의 시간을 존중하는 것입니다.
+              보안을 신경 쓰는 것은 사용자의 안전을 지키는 것입니다.
+              개인정보를 수집하지 않는 것은 사용자의 권리를 인정하는 것입니다.
+              이런 것들이 개발자로서 지켜야 할 최소한의 예의라고 생각합니다.
+            </p>
+          </section>
 
-                <p>
-                  매일 새로운 것을 배웁니다.
-                  어제는 FFmpeg.wasm의 메모리 관리를 공부했고,
-                  오늘은 Gun.js의 P2P 동기화 메커니즘을 탐구했으며,
-                  내일은 아마도 WebGPU나 WebAssembly의 새로운 가능성을 실험할 것입니다.
-                  이 끝없는 학습의 여정이 저를 살아있게 만듭니다.
-                </p>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">배움은 끝이 없습니다</h2>
 
-                <p>
-                  때로는 좌절합니다.
-                  YouTube의 ytdl 차단, CORS 오류, 브라우저 호환성 문제...
-                  하지만 이 모든 장애물은 결국 더 나은 해결책으로 이어졌습니다.
-                  ytdl이 막히자 오라클 클라우드에 yt-dlp 서버를 구축했고,
-                  CORS 문제는 서버리스 아키텍처로의 전환을 촉발했습니다.
-                  <strong className="text-foreground">제약은 창의성의 어머니</strong>입니다.
-                </p>
-              </section>
+            <p>
+              매일 새로운 것을 배웁니다.
+              어제 몰랐던 것을 오늘 알게 되고,
+              오늘 배운 것으로 내일 더 나은 것을 만듭니다.
+              이 과정이 반복되는 것이 즐겁습니다.
+            </p>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">도구를 넘어, 표현으로</h2>
+            <p>
+              40대라는 나이가 때로는 부담이 될 수 있습니다.
+              하지만 저는 이것을 강점으로 만들었습니다.
+              젊은이들의 빠른 속도는 부럽지만,
+              저는 그들이 아직 갖지 못한 것을 가지고 있습니다—
+              맥락을 이해하는 능력, 큰 그림을 보는 시야,
+              그리고 실패로부터 배우는 겸손함입니다.
+            </p>
 
-                <p>
-                  프로그래밍은 저에게 <strong className="text-foreground">표현의 수단</strong>입니다.
-                  작가가 언어로 세계를 그려내듯,
-                  화가가 붓으로 감정을 표현하듯,
-                  저는 코드로 생각을 구현합니다.
-                </p>
+            <p>
+              실패를 많이 했습니다.
+              작동하지 않는 것들, 예상과 다른 결과들.
+              하지만 모든 실패는 다음 시도를 위한 교훈이 되었습니다.
+              실패를 두려워하지 않게 되었고, 오히려 실패에서 배우는 것을 즐기게 되었습니다.
+            </p>
+          </section>
 
-                <p>
-                  색상 팔레트 도구를 만들 때,
-                  단순히 HEX를 RGB로 변환하는 계산기가 아닌,
-                  디자이너가 색의 조화를 탐구할 수 있는 <em>놀이터</em>를 만들고 싶었습니다.
-                  메모장 앱에 Undo/Redo를 넣은 것은 기능 명세가 아니라,
-                  글쓰기의 과정—고치고, 되돌리고, 다시 시도하는—을 존중하고 싶었기 때문입니다.
-                </p>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">변화하는 세상에서</h2>
 
-                <p>
-                  각 프로젝트는 질문으로 시작됩니다.
-                  "브라우저에서 정말로 오디오를 노멀라이즈할 수 있을까?"
-                  "P2P만으로 익명 소통이 가능할까?"
-                  "암호학적으로 안전한 난수를 어떻게 생성할까?"
-                  이 질문들에 답하는 과정이 곧 코드가 되고,
-                  코드는 다시 새로운 질문을 낳습니다.
-                </p>
-              </section>
+            <p>
+              인공지능이 많은 것을 바꾸고 있습니다.
+              코드를 작성하는 일조차도 기계가 대신할 수 있게 되었습니다.
+              그렇다면 사람의 역할은 무엇일까요?
+            </p>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">완성이 아닌 과정</h2>
+            <p>
+              저는 믿습니다.
+              아무리 기술이 발전해도, 무엇을 만들어야 하는지,
+              왜 만들어야 하는지를 결정하는 것은 사람의 몫이라고.
+              기술은 도구일 뿐이고, 그 도구를 어떻게 사용할지는
+              여전히 인간이 결정합니다.
+            </p>
 
-                <p>
-                  23개의 프로젝트를 완성했지만,
-                  사실 하나도 '완성'되지 않았다고 생각합니다.
-                  소프트웨어는 살아있는 유기체와 같아서 계속 진화합니다.
-                  오늘 완벽해 보이는 코드도 내일이면 개선할 점이 보입니다.
-                </p>
+            <p>
+              그래서 저는 계속 배웁니다.
+              도구가 바뀌어도, 본질은 변하지 않습니다.
+              사람을 이해하고, 문제를 파악하고, 해결책을 찾는 능력—
+              이것은 어떤 시대에도 필요한 능력입니다.
+            </p>
+          </section>
 
-                <p>
-                  이 포트폴리오 사이트 자체가 그 예입니다.
-                  처음에는 단순한 프로젝트 목록이었지만,
-                  점차 성능을 최적화하고(번들 크기 60% 감소),
-                  보안을 강화하며(CSP, TypeScript strict mode),
-                  접근성을 개선해왔습니다.
-                  각각의 개선은 <strong className="text-foreground">"더 나은 것을 향한 끝없는 여정"</strong>의 한 걸음입니다.
-                </p>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">앞으로 나아가며</h2>
 
-                <p>
-                  완벽을 추구하지만 완벽주의자는 아닙니다.
-                  Ship early, iterate often.
-                  작동하는 것을 먼저 만들고, 그 다음 더 좋게 만듭니다.
-                  MVP부터 시작해 점진적으로 개선하는 것이
-                  처음부터 완벽을 추구하다 아무것도 출시하지 못하는 것보다 낫다는 것을 압니다.
-                </p>
-              </section>
+            <p>
+              40대 개발자로서 제 앞에는 아직 긴 여정이 남아있습니다.
+              나이는 숫자일 뿐입니다.
+              중요한 것은 매일 조금씩 나아지려는 마음입니다.
+            </p>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">기술 너머의 가치</h2>
+            <p>
+              다음에는 무엇을 만들까요?
+              아직 모릅니다.
+              하지만 확실한 것은 계속 만들 것이고,
+              계속 배울 것이며,
+              계속 성장할 것이라는 점입니다.
+            </p>
 
-                <p>
-                  React, TypeScript, Next.js—
-                  이것들은 제가 사용하는 도구입니다.
-                  하지만 도구가 목적이 되어서는 안 됩니다.
-                  최신 프레임워크를 쫓는 것보다 중요한 것은
-                  <strong className="text-foreground">문제의 본질을 이해하고 적절한 해결책을 선택하는 판단력</strong>입니다.
-                </p>
+            <p>
+              이 포트폴리오는 지나온 길의 기록입니다.
+              동시에 앞으로 갈 길의 약속이기도 합니다.
+              하나하나가 제가 세상에 던진 질문이고,
+              여러분이 사용하는 순간,
+              그 질문에 대한 대화가 시작됩니다.
+            </p>
 
-                <p>
-                  때로는 가장 단순한 해결책이 최선입니다.
-                  거대한 상태 관리 라이브러리 대신 useState로 충분할 때가 많고,
-                  복잡한 빌드 설정 대신 Vite의 기본값이 더 나을 수 있습니다.
-                  오버엔지니어링을 피하고 <em>필요한 만큼만</em> 만드는 것,
-                  이것이 성숙한 개발자의 덕목입니다.
-                </p>
+            <p className="text-foreground italic pt-6 border-t">
+              만드는 것은 결국 사람을 위한 일입니다.
+              기계를 위한 것이 아니라,
+              그것을 사용할 사람을 위한 것입니다.
+              이것이 제가 가장 소중히 여기는 믿음입니다.
+            </p>
 
-                <p>
-                  동시에, 새로운 기술에 대한 호기심은 잃지 않았습니다.
-                  Web Components, WebGPU, WebAssembly—
-                  이 기술들이 주류가 되기 전부터 실험하고 학습합니다.
-                  트렌드를 좇는 것이 아니라 트렌드를 이해하고,
-                  그것이 진짜 문제를 해결하는지 판단할 수 있어야 합니다.
-                </p>
-              </section>
+            <p className="text-sm pt-8">
+              — 2026년 1월
+            </p>
+          </section>
 
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">앞으로의 여정</h2>
-
-                <p>
-                  40대 개발자로서 제 앞에는 아직 수십 년의 여정이 남아있습니다.
-                  나이는 숫자일 뿐, 진짜 중요한 것은
-                  <strong className="text-foreground">매일 조금씩 더 나아지려는 의지</strong>입니다.
-                </p>
-
-                <p>
-                  다음에는 무엇을 만들까요?
-                  어쩌면 WebRTC로 실시간 협업 도구를,
-                  또는 WebGPU로 3D 시각화를,
-                  아니면 전혀 새로운 분야에 도전할지도 모릅니다.
-                  확실한 것은 계속 만들고, 계속 배우며, 계속 성장할 것이라는 점입니다.
-                </p>
-
-                <p>
-                  이 포트폴리오는 지나온 길의 기록이자 동시에
-                  앞으로 나아갈 방향의 나침반입니다.
-                  각 프로젝트는 제가 던진 질문이고,
-                  코드는 그 질문에 대한 답변이며,
-                  여러분이 이것을 사용하는 순간,
-                  그 대화는 계속됩니다.
-                </p>
-
-                <p className="text-foreground italic pt-4">
-                  코드는 결국 사람을 위한 것입니다.
-                  컴퓨터를 위한 것이 아니라,
-                  그것을 사용할 인간을 위한 것입니다.
-                  이것이 제가 개발자로서 가장 소중히 여기는 신념입니다.
-                </p>
-
-                <p className="text-sm text-muted-foreground pt-8">
-                  — 2026년 1월, 코드를 쓰며
-                </p>
-              </section>
-
-              {/* Technical Stack Badge Cloud */}
-              <section className="pt-8 border-t">
-                <div className="flex flex-wrap gap-2 justify-center">
-                  <Badge variant="secondary">React</Badge>
-                  <Badge variant="secondary">TypeScript</Badge>
-                  <Badge variant="secondary">Next.js</Badge>
-                  <Badge variant="secondary">Vite</Badge>
-                  <Badge variant="secondary">Supabase</Badge>
-                  <Badge variant="secondary">Canvas API</Badge>
-                  <Badge variant="secondary">Web Audio API</Badge>
-                  <Badge variant="secondary">FFmpeg</Badge>
-                  <Badge variant="secondary">Gun.js</Badge>
-                  <Badge variant="secondary">Web Crypto</Badge>
-                  <Badge variant="secondary">E2EE</Badge>
-                  <Badge variant="secondary">P2P</Badge>
-                  <Badge variant="secondary">C++</Badge>
-                  <Badge variant="secondary">JUCE</Badge>
-                  <Badge variant="secondary">Phaser 3</Badge>
-                  <Badge variant="secondary">shadcn/ui</Badge>
-                </div>
-              </section>
-            </CardContent>
-          </Card>
-        </div>
+        </article>
 
         {/* Footer */}
         <div className="border-t pt-12 mt-16">
