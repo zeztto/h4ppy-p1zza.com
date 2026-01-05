@@ -9,13 +9,13 @@
 
 ## 📖 Overview | 개요
 
-React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 18개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기와 블로그 섹션을 포함합니다.
+React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 23개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기와 블로그 섹션을 포함합니다.
 
-A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 18 web application projects with interactive iframe previews and a blog section.
+A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 23 web application projects with interactive iframe previews and a blog section.
 
 ## ✨ Features | 주요 기능
 
-- 🎨 **Interactive Portfolio** - 18개 프로젝트의 라이브 iframe 미리보기
+- 🎨 **Interactive Portfolio** - 23개 프로젝트의 라이브 iframe 미리보기
 - 📱 **Responsive Design** - 모바일부터 데스크톱까지 완벽한 반응형
 - 🎯 **Category Filtering** - 카테고리별 프로젝트 필터링
 - 📝 **Blog Section** - 기술 블로그 포스트 모음
@@ -26,23 +26,28 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 18
 
 ## 🎯 Showcased Projects | 프로젝트 소개
 
-### Media | 미디어
+### Media | 미디어 (4개)
 - **포픽 (Phopic)** - 사진 편집 및 관리 웹 애플리케이션
+- **YouTube 다운로더** - YouTube 영상/오디오 다운로드 도구
+- **슈퍼 노멀라이저** - 오디오 노멀라이제이션 도구 (Peak/RMS/LUFS)
+- **숏폼 비디오 변환기** - 가로 영상을 세로 숏폼(9:16)으로 변환
 
-### Tools | 도구
+### Tools | 도구 (7개)
 - **비밀번호 생성기** - 안전한 비밀번호 생성 도구
 - **로또 번호 생성기** - 12가지 알고리즘으로 로또 번호 생성
-- **색상 팔레트** - HEX, RGB, HSL, CMYK 색상 선택 및 변환 도구
+- **색상 팔레트** - HEX, RGB, HSL, CMYK 색상 선택 및 변환
+- **단위 변환기** - 길이, 무게, 온도, 부피 변환 도구
 - **다국어 로렘 입숨** - 다국어 지원 더미 텍스트 생성기
 - **텍스트 분석기** - 텍스트 통계 및 분석 도구
 - **이미지·문서 파일 변환기** - 다양한 파일 형식 변환 도구
 
-### Finance | 금융
+### Finance | 금융 (2개)
 - **실시간 환율** - 실시간 환율 정보 서비스
 - **대출 이자 계산기** - 대출 이자 계산 도구
 
-### Productivity | 생산성
+### Productivity | 생산성 (2개)
 - **메모모미 (Memomome)** - 간단하고 빠른 메모 애플리케이션
+- **Anonymo** - P2P 익명 게시판 및 E2EE 채팅
 
 ### Archive | 아카이브
 - **큐알잉 (QR-ing)** - QR 코드 생성 도구
