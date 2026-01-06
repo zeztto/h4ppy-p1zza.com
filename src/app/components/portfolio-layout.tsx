@@ -28,179 +28,7 @@ interface Project {
 }
 
 const projects: Project[] = [
-  {
-    id: "phopic",
-    name: "포픽",
-    description: "브라우저에서 작동하는 무료 온라인 이미지 편집 도구입니다.",
-    url: "https://ws-08-phopic-sgoz.vercel.app/",
-    tags: ["Image", "Editor"],
-    category: "Media",
-    year: "2025",
-    longDescription: "서버 업로드 없이 브라우저에서 완전히 작동하는 무료 온라인 이미지 편집 도구입니다. 크롭, 회전, 반전, 리사이즈, 14가지 필터 등 다양한 편집 기능을 제공하며, 모든 처리가 클라이언트 측에서 이루어져 개인정보가 완전히 보호됩니다.",
-    features: [
-      "크롭, 회전, 좌우/상하 반전, 리사이즈",
-      "14가지 필터 (흑백, 세피아, 빈티지, 블러 등)",
-      "밝기, 대비, 채도, RGB, Hue 조정",
-      "Undo/Redo 기능 (최대 50단계)",
-      "PNG, JPG, WebP 저장",
-      "완전한 클라이언트 사이드 처리 (서버 업로드 없음)"
-    ],
-    techStack: ["React", "TypeScript", "Vite", "Canvas API", "shadcn/ui", "Sonner"]
-  },
-  {
-    id: "password-generator",
-    name: "비밀번호 생성기",
-    description: "Web Crypto API로 암호학적으로 안전한 비밀번호를 생성합니다.",
-    url: "https://ws-07-password-generator.vercel.app/",
-    tags: ["Security", "Utility"],
-    category: "Tools",
-    year: "2025",
-    longDescription: "Math.random() 대신 Web Crypto API를 사용하여 암호학적으로 안전한 비밀번호를 생성합니다. 최대 100개까지 동시 생성 가능하며, 대문자, 소문자, 숫자, 특수문자를 개별적으로 선택할 수 있습니다.",
-    features: [
-      "Web Crypto API (crypto.getRandomValues) 사용",
-      "1-128자 길이 설정",
-      "최대 100개 동시 생성",
-      "개별 문자 타입 선택 (대소문자, 숫자, 특수문자)",
-      "실시간 강도 평가기",
-      "TXT 파일로 일괄 내보내기"
-    ],
-    techStack: ["React", "TypeScript", "Vite", "Web Crypto API", "shadcn/ui", "Lucide"]
-  },
-  {
-    id: "lotto-generator",
-    name: "로또 번호 생성기",
-    description: "대한민국 로또 6/45 번호를 12가지 알고리즘으로 생성합니다.",
-    url: "https://ws-09-lotto-gen.vercel.app/",
-    tags: ["Utility", "Algorithm"],
-    category: "Tools",
-    year: "2025",
-    longDescription: "12가지 다양한 알고리즘으로 로또 번호를 생성하는 웹 애플리케이션입니다. 완전 무작위, 홀짝 균형, 고저 균형, 연속번호 제한, 분산형, 패턴 회피, SHA-256 해시, 시간 기반, 피보나치, 소수, 황금비, LCG 방식을 지원합니다.",
-    features: [
-      "12가지 다양한 알고리즘 (무작위, 홀짝, 피보나치, 황금비 등)",
-      "최대 50개까지 동시 생성",
-      "중복 번호 자동 제거",
-      "TXT, CSV, JSON 형식 내보내기",
-      "고유 파일명 생성 (해시 기반)",
-      "WCAG 2.1 AA 접근성 준수"
-    ],
-    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "SHA-256", "LCG", "Sonner"]
-  },
-  {
-    id: "color-palette",
-    name: "색상 팔레트",
-    description: "간단하고 직관적인 색상 선택 및 변환 도구입니다.",
-    url: "https://ws-10-color-palette.vercel.app/",
-    tags: ["Design", "Utility"],
-    category: "Tools",
-    year: "2025",
-    longDescription: "디자이너와 개발자를 위한 종합 색상 도구입니다. 20단계 그레이스케일과 20가지 색조에서 400가지 색상을 선택하고, HEX, RGB, HSL, CMYK 형식으로 변환할 수 있습니다.",
-    features: [
-      "20단계 그레이스케일 및 20가지 색조",
-      "색조별 400색 (채도 × 명도 조합)",
-      "HEX, RGB, HSL, CMYK 형식 변환",
-      "원클릭 클립보드 복사",
-      "즐겨찾기 저장 (최대 50개)",
-      "최근 사용 히스토리 (최대 20개)",
-      "URL 공유 및 CSS/JSON/Figma 내보내기"
-    ],
-    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "Tailwind CSS", "Sonner"]
-  },
-  {
-    id: "youtube-downloader",
-    name: "YouTube 다운로더",
-    description: "YouTube 영상을 다양한 형식으로 다운로드할 수 있습니다.",
-    url: "https://ws-11-yt-downloader.vercel.app/",
-    tags: ["Media", "Utility"],
-    category: "Media",
-    year: "2025",
-    longDescription: "YouTube 영상과 오디오를 다양한 형식으로 다운로드하는 웹 애플리케이션입니다. MP4, WebM, MP3 등 여러 포맷과 해상도를 지원하며, 썸네일과 자막도 다운로드할 수 있습니다.",
-    features: [
-      "영상 다운로드 (MP4, WebM, 1080p/720p/480p/360p)",
-      "오디오 추출 (MP3, AAC, M4A, OPUS)",
-      "썸네일 다운로드 (최대/고화질/중간/기본)",
-      "자막 다운로드 (SRT, VTT, TXT)",
-      "실시간 영상 정보 조회 (YouTube Data API)",
-      "반응형 디자인 및 다크 모드 지원"
-    ],
-    techStack: ["React", "TypeScript", "Vercel Functions", "@distube/ytdl-core", "FFmpeg", "shadcn/ui"]
-  },
-  {
-    id: "anonymo",
-    name: "Anonymo",
-    description: "완전한 익명성을 보장하는 P2P 게시판 및 E2EE 채팅입니다.",
-    url: "https://www.anonymo.live/",
-    tags: ["Social", "P2P", "Security"],
-    category: "Productivity",
-    year: "2025",
-    longDescription: "서버 없이 완전한 익명성을 보장하는 P2P 게시판 및 종단간 암호화(E2EE) 채팅 애플리케이션입니다. Gun.js를 활용한 분산 데이터베이스로 개인정보 수집 없이 실시간 소통이 가능합니다.",
-    features: [
-      "서버리스 P2P 아키텍처 (Gun.js)",
-      "익명 랜덤 닉네임 자동 생성",
-      "E2EE 1:1 채팅 (AES-GCM 암호화)",
-      "실시간 게시판 및 댓글 동기화",
-      "이미지/파일 전송 (256KB 청크)",
-      "오프라인 우선 전략 (localStorage 캐싱)",
-      "XSS 방지 및 Rate Limiting"
-    ],
-    techStack: ["React", "TypeScript", "Gun.js", "Gun SEA", "DOMPurify", "Web Crypto API", "shadcn/ui"]
-  },
-  {
-    id: "super-normalizer",
-    name: "슈퍼 노멀라이저",
-    description: "브라우저에서 작동하는 고성능 오디오 노멀라이제이션 도구입니다.",
-    url: "https://ws-13-super-normalizer.vercel.app/",
-    tags: ["Audio", "Utility"],
-    category: "Media",
-    year: "2026",
-    longDescription: "웹 브라우저에서 서버 업로드 없이 완전히 작동하는 오디오 노멀라이저입니다. Peak, RMS, LUFS 세 가지 방식의 노멀라이제이션을 지원하며, 실시간 파형 시각화와 다양한 포맷 출력을 제공합니다.",
-    features: [
-      "3가지 노멀라이제이션 방식 (Peak, RMS, LUFS)",
-      "실시간 파형 시각화 및 비교",
-      "다양한 입력 형식 (MP3, WAV, OGG, M4A)",
-      "다양한 출력 형식 (WAV 16/24bit, FLAC, MP3, OGG)",
-      "완전한 클라이언트 사이드 처리",
-      "Canvas API 고해상도 렌더링"
-    ],
-    techStack: ["React", "TypeScript", "Vite", "Web Audio API", "Canvas API", "shadcn/ui"]
-  },
-  {
-    id: "unit-converter",
-    name: "단위 변환기",
-    description: "길이, 무게, 온도, 부피 등 다양한 단위를 변환합니다.",
-    url: "https://ws-14-unit-converter.vercel.app/",
-    tags: ["Utility", "Calculator"],
-    category: "Tools",
-    year: "2026",
-    longDescription: "웹 브라우저에서 서버리스로 작동하는 단위 변환기입니다. 길이, 무게, 온도, 부피 등 4가지 카테고리의 다양한 단위를 간편하게 변환할 수 있으며, 양방향 변환을 지원합니다.",
-    features: [
-      "4가지 카테고리 (길이, 무게, 온도, 부피)",
-      "길이: 미터, 킬로미터, 마일, 야드, 피트, 인치",
-      "무게: 킬로그램, 그램, 톤, 파운드, 온스",
-      "온도: 섭씨, 화씨, 켈빈",
-      "부피: 리터, 갤런, 쿼트, 컵",
-      "양방향 변환 및 실시간 계산"
-    ],
-    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "Tailwind CSS"]
-  },
-  {
-    id: "short-generator",
-    name: "숏폼 비디오 변환기",
-    description: "가로 영상을 세로 숏폼(9:16)으로 변환하는 도구입니다.",
-    url: "https://ws-15-short-generator.vercel.app/",
-    tags: ["Video", "Utility"],
-    category: "Media",
-    year: "2026",
-    longDescription: "브라우저에서 가로 영상을 세로 숏폼 형식(9:16)으로 변환하는 서버리스 웹 애플리케이션입니다. YouTube Shorts, TikTok, Instagram Reels에 최적화된 영상을 만들 수 있습니다.",
-    features: [
-      "가로 영상을 9:16 세로 비율로 자동 변환",
-      "실시간 미리보기 및 구간 선택 (최대 1분)",
-      "텍스트 오버레이 (위치, 크기, 색상 조정)",
-      "WebM/MP4 포맷 선택",
-      "Canvas API 실시간 렌더링 (30fps)",
-      "FFmpeg.wasm MP4 변환"
-    ],
-    techStack: ["React", "TypeScript", "Vite", "Canvas API", "MediaRecorder API", "FFmpeg.wasm", "shadcn/ui"]
-  },
+  // 2026 Projects (Latest)
   {
     id: "insta-follower-check",
     name: "인스타그램 팔로워 분석",
@@ -258,6 +86,160 @@ const projects: Project[] = [
       "iframe 임베딩 지원, PWA 지원"
     ],
     techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "Tailwind CSS", "Sonner", "react-helmet-async"]
+  },
+  {
+    id: "short-generator",
+    name: "숏폼 비디오 변환기",
+    description: "가로 영상을 세로 숏폼(9:16)으로 변환하는 도구입니다.",
+    url: "https://ws-15-short-generator.vercel.app/",
+    tags: ["Video", "Utility"],
+    category: "Media",
+    year: "2026",
+    longDescription: "브라우저에서 가로 영상을 세로 숏폼 형식(9:16)으로 변환하는 서버리스 웹 애플리케이션입니다. YouTube Shorts, TikTok, Instagram Reels에 최적화된 영상을 만들 수 있습니다.",
+    features: [
+      "가로 영상을 9:16 세로 비율로 자동 변환",
+      "실시간 미리보기 및 구간 선택 (최대 1분)",
+      "텍스트 오버레이 (위치, 크기, 색상 조정)",
+      "WebM/MP4 포맷 선택",
+      "Canvas API 실시간 렌더링 (30fps)",
+      "FFmpeg.wasm MP4 변환"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "Canvas API", "MediaRecorder API", "FFmpeg.wasm", "shadcn/ui"]
+  },
+  {
+    id: "unit-converter",
+    name: "단위 변환기",
+    description: "길이, 무게, 온도, 부피 등 다양한 단위를 변환합니다.",
+    url: "https://ws-14-unit-converter.vercel.app/",
+    tags: ["Utility", "Calculator"],
+    category: "Tools",
+    year: "2026",
+    longDescription: "웹 브라우저에서 서버리스로 작동하는 단위 변환기입니다. 길이, 무게, 온도, 부피 등 4가지 카테고리의 다양한 단위를 간편하게 변환할 수 있으며, 양방향 변환을 지원합니다.",
+    features: [
+      "4가지 카테고리 (길이, 무게, 온도, 부피)",
+      "길이: 미터, 킬로미터, 마일, 야드, 피트, 인치",
+      "무게: 킬로그램, 그램, 톤, 파운드, 온스",
+      "온도: 섭씨, 화씨, 켈빈",
+      "부피: 리터, 갤런, 쿼트, 컵",
+      "양방향 변환 및 실시간 계산"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "Tailwind CSS"]
+  },
+  {
+    id: "super-normalizer",
+    name: "슈퍼 노멀라이저",
+    description: "브라우저에서 작동하는 고성능 오디오 노멀라이제이션 도구입니다.",
+    url: "https://ws-13-super-normalizer.vercel.app/",
+    tags: ["Audio", "Utility"],
+    category: "Media",
+    year: "2026",
+    longDescription: "웹 브라우저에서 서버 업로드 없이 완전히 작동하는 오디오 노멀라이저입니다. Peak, RMS, LUFS 세 가지 방식의 노멀라이제이션을 지원하며, 실시간 파형 시각화와 다양한 포맷 출력을 제공합니다.",
+    features: [
+      "3가지 노멀라이제이션 방식 (Peak, RMS, LUFS)",
+      "실시간 파형 시각화 및 비교",
+      "다양한 입력 형식 (MP3, WAV, OGG, M4A)",
+      "다양한 출력 형식 (WAV 16/24bit, FLAC, MP3, OGG)",
+      "완전한 클라이언트 사이드 처리",
+      "Canvas API 고해상도 렌더링"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "Web Audio API", "Canvas API", "shadcn/ui"]
+  },
+  // 2025 Projects
+  {
+    id: "youtube-downloader",
+    name: "YouTube 다운로더",
+    description: "YouTube 영상을 다양한 형식으로 다운로드할 수 있습니다.",
+    url: "https://ws-11-yt-downloader.vercel.app/",
+    tags: ["Media", "Utility"],
+    category: "Media",
+    year: "2025",
+    longDescription: "YouTube 영상과 오디오를 다양한 형식으로 다운로드하는 웹 애플리케이션입니다. MP4, WebM, MP3 등 여러 포맷과 해상도를 지원하며, 썸네일과 자막도 다운로드할 수 있습니다.",
+    features: [
+      "영상 다운로드 (MP4, WebM, 1080p/720p/480p/360p)",
+      "오디오 추출 (MP3, AAC, M4A, OPUS)",
+      "썸네일 다운로드 (최대/고화질/중간/기본)",
+      "자막 다운로드 (SRT, VTT, TXT)",
+      "실시간 영상 정보 조회 (YouTube Data API)",
+      "반응형 디자인 및 다크 모드 지원"
+    ],
+    techStack: ["React", "TypeScript", "Vercel Functions", "@distube/ytdl-core", "FFmpeg", "shadcn/ui"]
+  },
+  {
+    id: "color-palette",
+    name: "색상 팔레트",
+    description: "간단하고 직관적인 색상 선택 및 변환 도구입니다.",
+    url: "https://ws-10-color-palette.vercel.app/",
+    tags: ["Design", "Utility"],
+    category: "Tools",
+    year: "2025",
+    longDescription: "디자이너와 개발자를 위한 종합 색상 도구입니다. 20단계 그레이스케일과 20가지 색조에서 400가지 색상을 선택하고, HEX, RGB, HSL, CMYK 형식으로 변환할 수 있습니다.",
+    features: [
+      "20단계 그레이스케일 및 20가지 색조",
+      "색조별 400색 (채도 × 명도 조합)",
+      "HEX, RGB, HSL, CMYK 형식 변환",
+      "원클릭 클립보드 복사",
+      "즐겨찾기 저장 (최대 50개)",
+      "최근 사용 히스토리 (최대 20개)",
+      "URL 공유 및 CSS/JSON/Figma 내보내기"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "Tailwind CSS", "Sonner"]
+  },
+  {
+    id: "lotto-generator",
+    name: "로또 번호 생성기",
+    description: "대한민국 로또 6/45 번호를 12가지 알고리즘으로 생성합니다.",
+    url: "https://ws-09-lotto-gen.vercel.app/",
+    tags: ["Utility", "Algorithm"],
+    category: "Tools",
+    year: "2025",
+    longDescription: "12가지 다양한 알고리즘으로 로또 번호를 생성하는 웹 애플리케이션입니다. 완전 무작위, 홀짝 균형, 고저 균형, 연속번호 제한, 분산형, 패턴 회피, SHA-256 해시, 시간 기반, 피보나치, 소수, 황금비, LCG 방식을 지원합니다.",
+    features: [
+      "12가지 다양한 알고리즘 (무작위, 홀짝, 피보나치, 황금비 등)",
+      "최대 50개까지 동시 생성",
+      "중복 번호 자동 제거",
+      "TXT, CSV, JSON 형식 내보내기",
+      "고유 파일명 생성 (해시 기반)",
+      "WCAG 2.1 AA 접근성 준수"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "SHA-256", "LCG", "Sonner"]
+  },
+  {
+    id: "phopic",
+    name: "포픽",
+    description: "브라우저에서 작동하는 무료 온라인 이미지 편집 도구입니다.",
+    url: "https://ws-08-phopic-sgoz.vercel.app/",
+    tags: ["Image", "Editor"],
+    category: "Media",
+    year: "2025",
+    longDescription: "서버 업로드 없이 브라우저에서 완전히 작동하는 무료 온라인 이미지 편집 도구입니다. 크롭, 회전, 반전, 리사이즈, 14가지 필터 등 다양한 편집 기능을 제공하며, 모든 처리가 클라이언트 측에서 이루어져 개인정보가 완전히 보호됩니다.",
+    features: [
+      "크롭, 회전, 좌우/상하 반전, 리사이즈",
+      "14가지 필터 (흑백, 세피아, 빈티지, 블러 등)",
+      "밝기, 대비, 채도, RGB, Hue 조정",
+      "Undo/Redo 기능 (최대 50단계)",
+      "PNG, JPG, WebP 저장",
+      "완전한 클라이언트 사이드 처리 (서버 업로드 없음)"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "Canvas API", "shadcn/ui", "Sonner"]
+  },
+  {
+    id: "password-generator",
+    name: "비밀번호 생성기",
+    description: "Web Crypto API로 암호학적으로 안전한 비밀번호를 생성합니다.",
+    url: "https://ws-07-password-generator.vercel.app/",
+    tags: ["Security", "Utility"],
+    category: "Tools",
+    year: "2025",
+    longDescription: "Math.random() 대신 Web Crypto API를 사용하여 암호학적으로 안전한 비밀번호를 생성합니다. 최대 100개까지 동시 생성 가능하며, 대문자, 소문자, 숫자, 특수문자를 개별적으로 선택할 수 있습니다.",
+    features: [
+      "Web Crypto API (crypto.getRandomValues) 사용",
+      "1-128자 길이 설정",
+      "최대 100개 동시 생성",
+      "개별 문자 타입 선택 (대소문자, 숫자, 특수문자)",
+      "실시간 강도 평가기",
+      "TXT 파일로 일괄 내보내기"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "Web Crypto API", "shadcn/ui", "Lucide"]
   },
   {
     id: "realtime-exchange",
