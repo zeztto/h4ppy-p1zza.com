@@ -9,13 +9,13 @@
 
 ## 📖 Overview | 개요
 
-React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 26개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기와 블로그 섹션을 포함합니다.
+React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 27개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기, 철학적 에세이 프로필 페이지, 블로그 섹션을 포함합니다.
 
-A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 26 web application projects with interactive iframe previews and a blog section.
+A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 27 web application projects with interactive iframe previews, philosophical essay profile, and a blog section.
 
 ## ✨ Features | 주요 기능
 
-- 🎨 **Interactive Portfolio** - 26개 프로젝트의 라이브 iframe 미리보기
+- 🎨 **Interactive Portfolio** - 27개 프로젝트의 라이브 iframe 미리보기
 - 📱 **Responsive Design** - 모바일부터 데스크톱까지 완벽한 반응형
 - 🎯 **Category Filtering** - 카테고리별 프로젝트 필터링
 - 📝 **Blog Section** - 기술 블로그 포스트 모음
@@ -52,7 +52,8 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 26
 - **메모모미 (Memomome)** - 간단하고 빠른 메모 애플리케이션
 - **Anonymo** - P2P 익명 게시판 및 E2EE 채팅
 
-### Archive | 아카이브
+### Archive | 아카이브 (9개)
+- **h4ppy p1zza 포트폴리오** - 이 포트폴리오 사이트 자체 (메타 프로젝트)
 - **큐알잉 (QR-ing)** - QR 코드 생성 도구
 - **키프레임 생성기** - 애니메이션 키프레임 생성 도구
 - **Endless Blood** - 인터랙티브 게임
