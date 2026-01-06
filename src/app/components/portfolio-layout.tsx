@@ -491,21 +491,22 @@ const projects: Project[] = [
   },
   {
     id: "prime-distribution",
-    name: "소수 분포 양자역학",
-    description: "소수 분포와 양자역학 시뮬레이션 프로젝트입니다.",
+    name: "소수 분포, 양자역학, 그리고 홀로그래픽 우주",
+    description: "리만 가설과 양자역학의 연결을 탐구하는 학술 논문 웹사이트입니다.",
     url: "https://prime-distribution-quantum-mechanic.vercel.app/",
-    tags: ["Science", "Simulation"],
+    tags: ["Science", "Academic"],
     category: "Archive",
     year: "2025",
-    longDescription: "수학과 물리학의 아름다움을 시각화하는 인터랙티브 시뮬레이션입니다. 소수의 분포와 양자역학의 원리를 탐구하세요.",
+    longDescription: "리만 가설의 소수 분포, Montgomery-Dyson 발견의 양자역학적 연결, 홀로그래픽 우주 이론을 통합한 학술 논문을 웹으로 구현한 프로젝트입니다. 다크 테마로 최적화된 읽기 경험과 7개 섹션의 논문 내용을 인터랙티브하게 제공합니다.",
     features: [
-      "실시간 소수 분포 시각화",
-      "양자역학 시뮬레이션",
-      "인터랙티브 파라미터 조절",
-      "교육용 설명 제공",
-      "고성능 Canvas 렌더링"
+      "7개 논문 섹션 (서론, 양자역학적 해석, 홀로그래픽 원리 등)",
+      "2025-2035 검증 가능한 5가지 이론적 예측",
+      "다크 테마 최적화 읽기 경험",
+      "목차 기반 섹션 네비게이션",
+      "Markdown 렌더링 및 수식 지원",
+      "PDF 다운로드 지원"
     ],
-    techStack: ["React", "TypeScript", "Canvas API", "Web Workers"]
+    techStack: ["React Router v7", "TypeScript", "Tailwind CSS", "Framer Motion", "Markdown", "Vite"]
   },
   {
     id: "eazy-youtube-share",
