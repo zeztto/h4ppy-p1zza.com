@@ -359,14 +359,14 @@ const projects: Project[] = [
   {
     id: "h4ppy-p1zza-portfolio",
     name: "h4ppy p1zza 포트폴리오",
-    description: "26개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.",
+    description: "27개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.",
     url: "https://www.h4ppy-p1zza.com/",
     tags: ["Portfolio", "Meta"],
     category: "Archive",
     year: "2026",
-    longDescription: "이 포트폴리오 웹사이트 자체도 하나의 프로젝트입니다. 성능 최적화(번들 크기 60% 감소), 보안 강화(CSP, TypeScript strict mode), SEO 최적화를 거쳐 완성되었습니다. 26개의 프로젝트를 인터랙티브하게 소개하며, 철학적 에세이 형식의 프로필 페이지를 포함합니다.",
+    longDescription: "이 포트폴리오 웹사이트 자체도 하나의 프로젝트입니다. 성능 최적화(번들 크기 60% 감소), 보안 강화(CSP, TypeScript strict mode), SEO 최적화를 거쳐 완성되었습니다. 27개의 프로젝트를 인터랙티브하게 소개하며, 철학적 에세이 형식의 프로필 페이지를 포함합니다.",
     features: [
-      "26개 프로젝트 인터랙티브 iframe 미리보기",
+      "27개 프로젝트 인터랙티브 iframe 미리보기",
       "카테고리별 필터링 (Media, Tools, Finance, Productivity, Archive)",
       "성능 최적화 (번들 60% 감소, 105개 의존성 제거)",
       "보안 강화 (CSP, 보안 헤더, TypeScript strict mode)",
