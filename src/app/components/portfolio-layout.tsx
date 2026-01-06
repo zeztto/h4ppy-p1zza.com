@@ -202,6 +202,64 @@ const projects: Project[] = [
     techStack: ["React", "TypeScript", "Vite", "Canvas API", "MediaRecorder API", "FFmpeg.wasm", "shadcn/ui"]
   },
   {
+    id: "insta-follower-check",
+    name: "인스타그램 팔로워 분석",
+    description: "브라우저에서 안전하게 인스타그램 팔로워를 분석하는 도구입니다.",
+    url: "https://ws-18-insta-follower-check.vercel.app/",
+    tags: ["Social", "Analytics"],
+    category: "Productivity",
+    year: "2026",
+    longDescription: "모든 데이터 처리가 브라우저에서 로컬로 진행되는 프라이버시 중심 인스타그램 팔로워 분석 도구입니다. 맞팔로우 확인, 팔로우백 없는 사람, 팔로우 안 한 사람, 차단된 프로필 등을 분석하고 TXT, HTML, JSON 형식으로 내보낼 수 있습니다.",
+    features: [
+      "맞팔로우 확인 (상호 팔로우)",
+      "팔로우백 없는 사람 찾기",
+      "팔로우 안 한 사람 찾기",
+      "보류 중인 팔로우 요청 및 차단 프로필",
+      "최근 언팔로우한 사람 추적",
+      "TXT, HTML, JSON 형식 다운로드",
+      "완전한 클라이언트 사이드 처리 (서버 전송 없음)"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "JSZip", "shadcn/ui", "Tailwind CSS"]
+  },
+  {
+    id: "salary-calculator",
+    name: "2026년 연봉 계산기",
+    description: "2026년 기준 연봉 및 실수령액을 계산하는 도구입니다.",
+    url: "https://ws-17-salary-calculator.vercel.app/",
+    tags: ["Finance", "Calculator"],
+    category: "Finance",
+    year: "2026",
+    longDescription: "2026년 최신 세율과 4대보험료를 반영한 연봉 계산기입니다. 연봉을 입력하면 월급, 4대보험, 소득세, 실수령액을 자동 계산하며, 역으로 원하는 실수령액에 필요한 연봉도 계산할 수 있습니다.",
+    features: [
+      "2026년 최신 세율 및 4대보험료 적용",
+      "양방향 계산 (연봉↔실수령액)",
+      "비과세 항목 설정 (식대, 교통비)",
+      "이진 탐색 알고리즘으로 정확한 역산",
+      "빠른 선택 버튼 (3천만원~1억원)",
+      "월별 상세 내역 표시"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "React Hook Form", "Motion", "Sonner"]
+  },
+  {
+    id: "compound-calculator",
+    name: "복리 투자 수익 계산기",
+    description: "원금과 이자율로 복리 투자 수익을 계산하는 도구입니다.",
+    url: "https://ws-16-compund-calculator.vercel.app/",
+    tags: ["Finance", "Investment"],
+    category: "Finance",
+    year: "2026",
+    longDescription: "원금과 이자율을 입력하여 복리 투자 수익을 정확하게 계산하는 웹 애플리케이션입니다. 일별, 월별, 연별 복리 주기를 지원하며, 원화와 달러 통화 선택이 가능합니다. 실효 수익률과 상세 내역 테이블을 제공합니다.",
+    features: [
+      "3가지 복리 주기 (일별, 월별, 연별)",
+      "원화(KRW) 및 달러(USD) 지원",
+      "실시간 계산 및 결과 표시",
+      "지급 주기별 이자 및 잔액 상세 테이블",
+      "실효 연수익률 계산",
+      "iframe 임베딩 지원, PWA 지원"
+    ],
+    techStack: ["React", "TypeScript", "Vite", "shadcn/ui", "Tailwind CSS", "Sonner", "react-helmet-async"]
+  },
+  {
     id: "realtime-exchange",
     name: "실시간 환율",
     description: "실시간 환율 조회 및 통화 변환 서비스입니다.",

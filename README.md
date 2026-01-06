@@ -9,13 +9,13 @@
 
 ## 📖 Overview | 개요
 
-React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 23개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기와 블로그 섹션을 포함합니다.
+React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 26개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기와 블로그 섹션을 포함합니다.
 
-A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 23 web application projects with interactive iframe previews and a blog section.
+A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 26 web application projects with interactive iframe previews and a blog section.
 
 ## ✨ Features | 주요 기능
 
-- 🎨 **Interactive Portfolio** - 23개 프로젝트의 라이브 iframe 미리보기
+- 🎨 **Interactive Portfolio** - 26개 프로젝트의 라이브 iframe 미리보기
 - 📱 **Responsive Design** - 모바일부터 데스크톱까지 완벽한 반응형
 - 🎯 **Category Filtering** - 카테고리별 프로젝트 필터링
 - 📝 **Blog Section** - 기술 블로그 포스트 모음
@@ -41,11 +41,14 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 23
 - **텍스트 분석기** - 텍스트 통계 및 분석 도구
 - **이미지·문서 파일 변환기** - 다양한 파일 형식 변환 도구
 
-### Finance | 금융 (2개)
+### Finance | 금융 (5개)
+- **2026년 연봉 계산기** - 최신 세율 및 4대보험료 반영 연봉 계산
+- **복리 투자 수익 계산기** - 복리 투자 수익률 계산 도구
 - **실시간 환율** - 실시간 환율 정보 서비스
 - **대출 이자 계산기** - 대출 이자 계산 도구
 
-### Productivity | 생산성 (2개)
+### Productivity | 생산성 (3개)
+- **인스타그램 팔로워 분석** - 팔로워/팔로우 관계 분석 도구
 - **메모모미 (Memomome)** - 간단하고 빠른 메모 애플리케이션
 - **Anonymo** - P2P 익명 게시판 및 E2EE 채팅
 
