@@ -1,20 +1,3 @@
-/**
- * Type-safe environment variable access
- * All environment variables must be prefixed with VITE_ to be exposed
- */
-
-interface ImportMetaEnv {
-  readonly VITE_APP_TITLE: string;
-  readonly VITE_APP_VERSION: string;
-  readonly VITE_ENABLE_ANALYTICS: string;
-  readonly VITE_ENABLE_CSP: string;
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
-}
-
-// Validation helper
 function getEnvVar(key: keyof ImportMetaEnv, fallback?: string): string {
   const value = import.meta.env[key];
 

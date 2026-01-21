@@ -18,7 +18,7 @@ export interface CSPDirectives {
   'frame-ancestors': string[];
 }
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+const isDevelopment = import.meta.env.DEV;
 
 export const cspDirectives: CSPDirectives = {
   'default-src': ["'self'"],
