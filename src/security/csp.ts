@@ -24,10 +24,7 @@ export const cspDirectives: CSPDirectives = {
   'default-src': ["'self'"],
 
   // Scripts: Allow self and inline for Vite HMR in dev
-  'script-src': [
-    "'self'",
-    ...(isDevelopment ? ["'unsafe-inline'", "'unsafe-eval'"] : []),
-  ],
+  'script-src': ["'self'", ...(isDevelopment ? ["'unsafe-inline'", "'unsafe-eval'"] : [])],
 
   // Styles: Allow self and inline (Tailwind, inline styles)
   'style-src': ["'self'", "'unsafe-inline'"],
@@ -37,6 +34,11 @@ export const cspDirectives: CSPDirectives = {
     "'self'",
     'data:',
     'blob:',
+    'https://ws-19-crypto-tracker.vercel.app',
+    'https://server-time-sigma.vercel.app',
+    'https://lottery-roulette-one.vercel.app',
+    'https://tarot-card-two-mu.vercel.app',
+    'https://card-puzzle-ten.vercel.app',
     'https://ws-08-phopic-sgoz.vercel.app',
     'https://ws-07-password-generator.vercel.app',
     'https://ws-06-realtime-exchange.vercel.app',
@@ -55,6 +57,11 @@ export const cspDirectives: CSPDirectives = {
   // Frames: Restrict to specific external projects
   'frame-src': [
     "'self'",
+    'https://ws-19-crypto-tracker.vercel.app',
+    'https://server-time-sigma.vercel.app',
+    'https://lottery-roulette-one.vercel.app',
+    'https://tarot-card-two-mu.vercel.app',
+    'https://card-puzzle-ten.vercel.app',
     'https://ws-08-phopic-sgoz.vercel.app',
     'https://ws-07-password-generator.vercel.app',
     'https://ws-06-realtime-exchange.vercel.app',

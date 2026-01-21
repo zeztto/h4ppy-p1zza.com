@@ -9,13 +9,13 @@
 
 ## 📖 Overview | 개요
 
-React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 27개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기, 철학적 에세이 프로필 페이지, 블로그 섹션을 포함합니다.
+React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 32개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기, 철학적 에세이 프로필 페이지, 블로그 섹션을 포함합니다.
 
-A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 27 web application projects with interactive iframe previews, philosophical essay profile, and a blog section.
+A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 32 web application projects with interactive iframe previews, philosophical essay profile, and a blog section.
 
 ## ✨ Features | 주요 기능
 
-- 🎨 **Interactive Portfolio** - 27개 프로젝트의 라이브 iframe 미리보기
+- 🎨 **Interactive Portfolio** - 32개 프로젝트의 라이브 iframe 미리보기
 - 📱 **Responsive Design** - 모바일부터 데스크톱까지 완벽한 반응형
 - 🎯 **Category Filtering** - 카테고리별 프로젝트 필터링
 - 📝 **Blog Section** - 기술 블로그 포스트 모음
@@ -27,32 +27,44 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 27
 ## 🎯 Showcased Projects | 프로젝트 소개
 
 ### Media | 미디어 (4개)
+
 - **포픽 (Phopic)** - 사진 편집 및 관리 웹 애플리케이션
 - **YouTube 다운로더** - YouTube 영상/오디오 다운로드 도구
 - **슈퍼 노멀라이저** - 오디오 노멀라이제이션 도구 (Peak/RMS/LUFS)
 - **숏폼 비디오 변환기** - 가로 영상을 세로 숏폼(9:16)으로 변환
 
-### Tools | 도구 (7개)
+### Tools | 도구 (8개)
+
 - **비밀번호 생성기** - 안전한 비밀번호 생성 도구
 - **로또 번호 생성기** - 12가지 알고리즘으로 로또 번호 생성
 - **색상 팔레트** - HEX, RGB, HSL, CMYK 색상 선택 및 변환
 - **단위 변환기** - 길이, 무게, 온도, 부피 변환 도구
+- **서버 시간 동기화** - 웹사이트 서버 시간 실시간 비교 도구
 - **다국어 로렘 입숨** - 다국어 지원 더미 텍스트 생성기
 - **텍스트 분석기** - 텍스트 통계 및 분석 도구
 - **이미지·문서 파일 변환기** - 다양한 파일 형식 변환 도구
 
 ### Finance | 금융 (5개)
+
+- **코인 나우** - 실시간 가상화폐 시세 및 차트
 - **2026년 연봉 계산기** - 최신 세율 및 4대보험료 반영 연봉 계산
 - **복리 투자 수익 계산기** - 복리 투자 수익률 계산 도구
 - **실시간 환율** - 실시간 환율 정보 서비스
 - **대출 이자 계산기** - 대출 이자 계산 도구
 
-### Productivity | 생산성 (3개)
+### Games | 게임 (3개)
+
+- **룰렛 추첨** - 암호학적으로 안전한 무작위 룰렛 추첨 시스템
+- **타로카드 점** - 타로카드로 확인하는 5가지 운세
+- **카드 퍼즐** - 기억력 카드 매칭 게임
+
+### Productivity | 생산성 (2개)
+
 - **인스타그램 팔로워 분석** - 팔로워/팔로우 관계 분석 도구
 - **메모모미 (Memomome)** - 간단하고 빠른 메모 애플리케이션
-- **Anonymo** - P2P 익명 게시판 및 E2EE 채팅
 
 ### Archive | 아카이브 (9개)
+
 - **h4ppy p1zza 포트폴리오** - 이 포트폴리오 사이트 자체 (메타 프로젝트)
 - **큐알잉 (QR-ing)** - QR 코드 생성 도구
 - **키프레임 생성기** - 애니메이션 키프레임 생성 도구
@@ -66,22 +78,26 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 27
 ## 🛠️ Tech Stack | 기술 스택
 
 ### Frontend
+
 - **React** 18.3.1 - UI 라이브러리
 - **TypeScript** 5.x - 타입 안전성
 - **Vite** 6.4.1 - 빌드 도구
 
 ### UI Framework
+
 - **shadcn/ui** - UI 컴포넌트 라이브러리
 - **Radix UI** - Headless UI primitives
 - **Tailwind CSS** 4.1.12 - 유틸리티 CSS 프레임워크
 - **Lucide Icons** - 아이콘 라이브러리
 
 ### Styling
+
 - **class-variance-authority** - 컴포넌트 variant 관리
 - **clsx** + **tailwind-merge** - className 유틸리티
 - **Motion** (Framer Motion) 12.23.24 - 애니메이션
 
 ### Development Tools
+
 - **ESLint** 9.x - 코드 품질 및 보안 검사
 - **Prettier** 3.x - 코드 포맷팅
 - **TypeScript** strict mode - 엄격한 타입 체크
@@ -221,12 +237,14 @@ vercel
 ## 📊 Performance | 성능
 
 ### Bundle Size
+
 - Initial JS: <150KB gzipped
 - Total assets: <300KB gzipped
 - 미사용 의존성 105개 제거
 - 미사용 UI 컴포넌트 41개 삭제
 
 ### Lighthouse Scores (목표)
+
 - Performance: >95
 - SEO: 100
 - Accessibility: >90
