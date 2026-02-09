@@ -2,7 +2,7 @@
   {
     "id": "e2e-admin-crud-test",
     "name": "E2E Admin CRUD Test",
-    "description": "관리자 CRUD E2E 커밋 검증용 프로젝트",
+    "description": "관리자 CRUD E2E 수정 검증용 프로젝트",
     "url": "https://example.com/e2e-admin-crud",
     "category": "Tools",
     "tags": [
