@@ -1,18 +1,5 @@
 [
   {
-    "id": "e2e-admin-crud-test",
-    "name": "E2E Admin CRUD Test",
-    "description": "관리자 CRUD E2E 수정 검증용 프로젝트",
-    "url": "https://example.com/e2e-admin-crud",
-    "category": "Tools",
-    "tags": [
-      "e2e",
-      "admin",
-      "test"
-    ],
-    "year": "2026"
-  },
-  {
     "id": "emoji-list",
     "name": "이모지 모음",
     "description": "이모지를 검색하고 클릭하면 클립보드에 복사되는 서버리스 웹 앱입니다.",
