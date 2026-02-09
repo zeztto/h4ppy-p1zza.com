@@ -2,14 +2,14 @@
  * Project Data
  *
  * Centralized project data for the portfolio website.
- * Total: 32 projects across 6 categories
+ * Total: 34 projects across 6 categories
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
- * - Tools (9): Utilities, converters, generators
+ * - Tools (10): Utilities, converters, generators
  * - Finance (5): Financial calculators and trackers
  * - Productivity (3): Notes, analytics, collaboration
- * - Games (3): Entertainment and games
+ * - Games (4): Entertainment and games
  * - Archive (8): Legacy and miscellaneous projects
  */
 
@@ -31,6 +31,59 @@ export const projects: Project[] = [
   // 2026 Projects (Latest)
   // ============================================
 
+  // NEW: Emoji List - Tools
+  {
+    id: 'emoji-list',
+    name: '이모지 모음',
+    description: '이모지를 검색하고 클릭하면 클립보드에 복사되는 서버리스 웹 앱입니다.',
+    url: 'https://emoji-list-seven.vercel.app/',
+    tags: ['Utility', 'Emoji', 'Clipboard'],
+    category: 'Tools',
+    year: '2026',
+    longDescription:
+      '11개 카테고리로 분류된 이모지를 검색하고 클릭 한 번으로 클립보드에 복사할 수 있는 서버리스 웹 애플리케이션입니다. 즐겨찾기와 최근 사용 기록이 로컬 스토리지에 저장되어 자주 쓰는 이모지에 빠르게 접근할 수 있습니다.',
+    features: [
+      '이모지 또는 카테고리 이름으로 검색',
+      '클릭하면 클립보드에 자동 복사',
+      '즐겨찾기 저장 (localStorage)',
+      '최근 사용 기록 최대 20개',
+      '11개 카테고리별 탐색',
+      '모바일, 태블릿, 데스크톱 반응형 디자인',
+      'iframe 임베딩 지원',
+    ],
+    techStack: [
+      'React',
+      'TypeScript',
+      'Vite',
+      'Tailwind CSS',
+      'shadcn/ui',
+      'Sonner',
+      'Lucide React',
+    ],
+  },
+  // NEW: Sudoku - Games
+  {
+    id: 'sudoku',
+    name: '수도쿠',
+    description: '5가지 난이도로 즐기는 한국어 수도쿠 게임입니다.',
+    url: 'https://sudocux.vercel.app/',
+    tags: ['Game', 'Puzzle', 'Logic'],
+    category: 'Games',
+    year: '2026',
+    longDescription:
+      '브라우저에서 서버리스로 동작하는 한국어 수도쿠 게임입니다. 쉬움부터 마스터까지 5가지 난이도를 제공하며, 노트 모드, 힌트, 일시정지 기능을 지원합니다. 최고 기록이 로컬 스토리지에 저장됩니다.',
+    features: [
+      '5가지 난이도 (쉬움, 보통, 어려움, 전문가, 마스터)',
+      '노트 모드로 후보 숫자 메모',
+      '힌트 기능',
+      '일시정지 기능',
+      '실수 카운트',
+      '난이도별 최고 기록 저장',
+      '키보드 입력 지원',
+      'iframe 임베딩 지원',
+    ],
+    techStack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Motion', 'Sonner', 'sudoku-gen'],
+  },
   // NEW: Crypto Tracker - Finance
   {
     id: 'crypto-tracker',
@@ -571,15 +624,15 @@ export const projects: Project[] = [
   {
     id: 'h4ppy-p1zza-portfolio',
     name: 'h4ppy p1zza 포트폴리오',
-    description: '32개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.',
+    description: '34개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.',
     url: 'https://www.h4ppy-p1zza.com/',
     tags: ['Portfolio', 'Meta'],
     category: 'Archive',
     year: '2026',
     longDescription:
-      '이 포트폴리오 웹사이트 자체도 하나의 프로젝트입니다. 성능 최적화(번들 크기 60% 감소), 보안 강화(CSP, TypeScript strict mode), SEO 최적화를 거쳐 완성되었습니다. 32개의 프로젝트를 인터랙티브하게 소개하며, 철학적 에세이 형식의 프로필 페이지를 포함합니다.',
+      '이 포트폴리오 웹사이트 자체도 하나의 프로젝트입니다. 성능 최적화(번들 크기 60% 감소), 보안 강화(CSP, TypeScript strict mode), SEO 최적화를 거쳐 완성되었습니다. 34개의 프로젝트를 인터랙티브하게 소개하며, 철학적 에세이 형식의 프로필 페이지를 포함합니다.',
     features: [
-      '32개 프로젝트 인터랙티브 iframe 미리보기',
+      '34개 프로젝트 인터랙티브 iframe 미리보기',
       '카테고리별 필터링 (Media, Tools, Finance, Productivity, Games, Archive)',
       '성능 최적화 (번들 60% 감소, 105개 의존성 제거)',
       '보안 강화 (CSP, 보안 헤더, TypeScript strict mode)',

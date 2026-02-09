@@ -9,13 +9,13 @@
 
 ## 📖 Overview | 개요
 
-React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 32개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기, 철학적 에세이 프로필 페이지, 블로그 섹션을 포함합니다.
+React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 34개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기, 철학적 에세이 프로필 페이지, 블로그 섹션을 포함합니다.
 
-A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 32 web application projects with interactive iframe previews, philosophical essay profile, and a blog section.
+A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 34 web application projects with interactive iframe previews, philosophical essay profile, and a blog section.
 
 ## ✨ Features | 주요 기능
 
-- 🎨 **Interactive Portfolio** - 32개 프로젝트의 라이브 iframe 미리보기
+- 🎨 **Interactive Portfolio** - 34개 프로젝트의 라이브 iframe 미리보기
 - 📱 **Responsive Design** - 모바일부터 데스크톱까지 완벽한 반응형
 - 🎯 **Category Filtering** - 카테고리별 프로젝트 필터링
 - 📝 **Blog Section** - 기술 블로그 포스트 모음
@@ -33,8 +33,9 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 32
 - **슈퍼 노멀라이저** - 오디오 노멀라이제이션 도구 (Peak/RMS/LUFS)
 - **숏폼 비디오 변환기** - 가로 영상을 세로 숏폼(9:16)으로 변환
 
-### Tools | 도구 (8개)
+### Tools | 도구 (9개)
 
+- **이모지 모음** - 이모지 검색 및 클립보드 복사 도구
 - **비밀번호 생성기** - 안전한 비밀번호 생성 도구
 - **로또 번호 생성기** - 12가지 알고리즘으로 로또 번호 생성
 - **색상 팔레트** - HEX, RGB, HSL, CMYK 색상 선택 및 변환
@@ -52,8 +53,9 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 32
 - **실시간 환율** - 실시간 환율 정보 서비스
 - **대출 이자 계산기** - 대출 이자 계산 도구
 
-### Games | 게임 (3개)
+### Games | 게임 (4개)
 
+- **수도쿠** - 5가지 난이도로 즐기는 한국어 수도쿠 게임
 - **룰렛 추첨** - 암호학적으로 안전한 무작위 룰렛 추첨 시스템
 - **타로카드 점** - 타로카드로 확인하는 5가지 운세
 - **카드 퍼즐** - 기억력 카드 매칭 게임
