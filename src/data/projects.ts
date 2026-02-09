@@ -2,14 +2,14 @@
  * Project Data
  *
  * Centralized project data for the portfolio website.
- * Total: 34 projects across 6 categories
+ * Total: 36 projects across 6 categories
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
- * - Tools (10): Utilities, converters, generators
+ * - Tools (11): Utilities, converters, generators
  * - Finance (5): Financial calculators and trackers
  * - Productivity (3): Notes, analytics, collaboration
- * - Games (4): Entertainment and games
+ * - Games (5): Entertainment and games
  * - Archive (8): Legacy and miscellaneous projects
  */
 
@@ -83,6 +83,51 @@ export const projects: Project[] = [
       'iframe 임베딩 지원',
     ],
     techStack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Motion', 'Sonner', 'sudoku-gen'],
+  },
+  // NEW: Tetrix - Games
+  {
+    id: 'tetrix',
+    name: '테트릭스',
+    description: 'Modern Guideline을 준수하는 서버리스 테트리스 게임입니다.',
+    url: 'https://tetrix-six.vercel.app/',
+    tags: ['Game', 'Puzzle', 'Classic'],
+    category: 'Games',
+    year: '2026',
+    longDescription:
+      '서버리스로 작동하는 완전한 테트리스 게임입니다. Modern Guideline을 준수하며, 모바일과 데스크톱 모두에서 플레이할 수 있습니다. SRS 회전 시스템, 고스트 피스, 홀드, 7-Bag 랜덤화 등 현대적인 테트리스 기능을 모두 지원합니다.',
+    features: [
+      'SRS 회전 시스템 + Wall Kick 지원',
+      '고스트 피스 (블록 떨어질 위치 미리보기)',
+      '홀드 기능 (블록 보관)',
+      '넥스트 미리보기 (다음 3개 블록)',
+      '7-Bag 랜덤화 (공정한 블록 분배)',
+      'Modern Guideline 점수 시스템',
+      'Back-to-Back 및 콤보 보너스',
+      '리더보드 Top 10 로컬 저장',
+      '모바일 터치 컨트롤',
+    ],
+    techStack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Vitest'],
+  },
+  // NEW: Simple Calculator - Tools
+  {
+    id: 'simple-calculator',
+    name: '계산기',
+    description: '기본, Casio FX-570EX, TI-36X Pro, AlphaOmega 4가지 모드를 제공하는 계산기입니다.',
+    url: 'https://simple-calculator-ten-lac.vercel.app/',
+    tags: ['Utility', 'Calculator', 'Math'],
+    category: 'Tools',
+    year: '2026',
+    longDescription:
+      'React, TypeScript, Vite로 구축된 다양한 계산기 모드를 제공하는 서버리스 계산기 애플리케이션입니다. 기본 사칙연산부터 공학용 계산기까지 4가지 모드를 지원합니다.',
+    features: [
+      '기본 계산기: 사칙연산 및 메모리 기능 (M+, M-, MR, MC)',
+      'Casio FX-570EX: 삼각함수, 로그, 지수 공학 계산',
+      'TI-36X Pro: Texas Instruments 스타일 공학용',
+      'AlphaOmega: 기본/삼각함수/통계/고급 탭 구분',
+      'DEG/RAD 모드 전환',
+      '반응형 디자인',
+    ],
+    techStack: ['React', 'TypeScript', 'Vite', 'mathjs', 'Tailwind CSS', 'Radix UI', 'Vitest'],
   },
   // NEW: Crypto Tracker - Finance
   {
@@ -624,15 +669,15 @@ export const projects: Project[] = [
   {
     id: 'h4ppy-p1zza-portfolio',
     name: 'h4ppy p1zza 포트폴리오',
-    description: '34개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.',
+    description: '36개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.',
     url: 'https://www.h4ppy-p1zza.com/',
     tags: ['Portfolio', 'Meta'],
     category: 'Archive',
     year: '2026',
     longDescription:
-      '이 포트폴리오 웹사이트 자체도 하나의 프로젝트입니다. 성능 최적화(번들 크기 60% 감소), 보안 강화(CSP, TypeScript strict mode), SEO 최적화를 거쳐 완성되었습니다. 34개의 프로젝트를 인터랙티브하게 소개하며, 철학적 에세이 형식의 프로필 페이지를 포함합니다.',
+      '이 포트폴리오 웹사이트 자체도 하나의 프로젝트입니다. 성능 최적화(번들 크기 60% 감소), 보안 강화(CSP, TypeScript strict mode), SEO 최적화를 거쳐 완성되었습니다. 36개의 프로젝트를 인터랙티브하게 소개하며, 철학적 에세이 형식의 프로필 페이지를 포함합니다.',
     features: [
-      '34개 프로젝트 인터랙티브 iframe 미리보기',
+      '36개 프로젝트 인터랙티브 iframe 미리보기',
       '카테고리별 필터링 (Media, Tools, Finance, Productivity, Games, Archive)',
       '성능 최적화 (번들 60% 감소, 105개 의존성 제거)',
       '보안 강화 (CSP, 보안 헤더, TypeScript strict mode)',
