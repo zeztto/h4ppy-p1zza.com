@@ -546,44 +546,33 @@ function LandingPage({
         <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
           다양한 분야의 클라이언트를 위해 기획, 디자인, 개발한 웹사이트입니다.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-5xl mx-auto">
           {projects
             .filter((p) => p.category === 'Websites')
             .map((project) => (
-              <Card
+              <div
                 key={project.id}
-                className="group cursor-pointer transition-all hover:shadow-lg hover:scale-105 hover:border-primary/50 overflow-hidden"
+                className="group cursor-pointer"
                 onClick={() => window.open(project.url, '_blank')}
               >
-                <div className="flex gap-4 p-4">
-                  {project.thumbnail && (
-                    <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border border-border">
-                      <img
-                        src={project.thumbnail}
-                        alt={project.name}
-                        className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-300"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <h4 className="font-semibold text-sm leading-tight">{project.name}</h4>
-                      <ExternalLink className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
-                    </div>
-                    <p className="text-muted-foreground text-xs line-clamp-2 mb-2">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-1">
-                      {project.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-[10px] px-1.5 py-0">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
+                {project.thumbnail && (
+                  <div className="aspect-square rounded-lg overflow-hidden border border-border mb-3 group-hover:border-primary/50 group-hover:shadow-lg transition-all">
+                    <img
+                      src={project.thumbnail}
+                      alt={project.name}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
                   </div>
+                )}
+                <div className="flex items-start justify-between gap-1">
+                  <h4 className="font-semibold text-sm leading-tight">{project.name}</h4>
+                  <ExternalLink className="h-3 w-3 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-0.5" />
                 </div>
-              </Card>
+                <p className="text-muted-foreground text-xs line-clamp-1 mt-0.5">
+                  {project.description}
+                </p>
+              </div>
             ))}
         </div>
       </div>
@@ -707,7 +696,10 @@ function PortfolioPage({
   onSelectProject: (project: Project) => void;
 }) {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const categories = ['All', ...new Set(projects.map((p) => p.category))];
+  const otherCategories = [...new Set(projects.map((p) => p.category))].filter(
+    (c) => c !== 'Websites'
+  );
+  const categories = ['All', 'Websites', ...otherCategories];
 
   const filteredProjects =
     selectedCategory === 'All' ? projects : projects.filter((p) => p.category === selectedCategory);
@@ -745,9 +737,9 @@ function PortfolioPage({
             <div className="grid md:grid-cols-3 gap-6 p-6">
               {/* Left: Basic Info */}
               <div className="md:col-span-1">
-                <div className="flex items-start gap-3 mb-4">
-                  {project.thumbnail ? (
-                    <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-border">
+                {project.thumbnail ? (
+                  <>
+                    <div className="aspect-square rounded-lg overflow-hidden border border-border mb-4">
                       <img
                         src={project.thumbnail}
                         alt={project.name}
@@ -755,12 +747,6 @@ function PortfolioPage({
                         loading="lazy"
                       />
                     </div>
-                  ) : (
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Star className="h-6 w-6 text-primary" />
-                    </div>
-                  )}
-                  <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <Badge variant="secondary" className="text-xs">
                         {project.category}
@@ -773,8 +759,28 @@ function PortfolioPage({
                     </div>
                     <h3 className="mb-2">{project.name}</h3>
                     <p className="text-muted-foreground">{project.description}</p>
+                  </>
+                ) : (
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Star className="h-6 w-6 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Badge variant="secondary" className="text-xs">
+                          {project.category}
+                        </Badge>
+                        {project.year && (
+                          <Badge variant="outline" className="text-xs">
+                            {project.year}
+                          </Badge>
+                        )}
+                      </div>
+                      <h3 className="mb-2">{project.name}</h3>
+                      <p className="text-muted-foreground">{project.description}</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.tags.map((tag) => (

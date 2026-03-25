@@ -2,7 +2,7 @@
  * Project Data
  *
  * Centralized project data for the portfolio website.
- * Total: 42 projects across 7 categories
+ * Total: 41 projects across 7 categories
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
@@ -11,7 +11,7 @@
  * - Productivity (3): Notes, analytics, collaboration
  * - Games (5): Entertainment and games
  * - Websites (6): Client websites and web services
- * - Archive (8): Legacy and miscellaneous projects
+ * - Archive (7): Legacy and miscellaneous projects
  */
 
 export interface Project {
@@ -907,26 +907,6 @@ export const projects: Project[] = [
       '집단 지성 기반 인사이트 제공',
     ],
     techStack: ['Next.js', 'Supabase', 'AI/ML', 'LMSR Algorithm', 'TypeScript'],
-  },
-  {
-    id: 'h4ppylabs',
-    name: '해피랩스',
-    description: '뮤지션을 위한 창의적인 가상악기와 이펙터를 만드는 사운드 연구소입니다.',
-    url: 'https://www.h4ppylabs.com/',
-    tags: ['Audio', 'VST', 'Music Production'],
-    category: 'Archive',
-    year: '2025',
-    longDescription:
-      'h4ppy Labs는 뮤지션을 위한 창의적인 가상악기와 이펙터를 만듭니다. 기술과 예술의 경계에서 새로운 영감을 주는 도구를 연구하며, 타협하지 않는 최상의 오디오 품질과 뮤지션의 상상력을 제한하지 않는 도구를 추구합니다.',
-    features: [
-      'FUZZA - 일렉트릭 기타용 퍼즈 디스토션 플러그인',
-      'DUCKAVERB - 원노브 덕킹 리버브 플러그인',
-      'VST3 / AU / Standalone 멀티 포맷 지원',
-      'Zero Latency 실시간 오디오 처리',
-      '크로스 플랫폼 (macOS, Windows)',
-      '최신 DSP 기술 기반 사운드 엔진',
-    ],
-    techStack: ['C++', 'JUCE', 'DSP', 'VST3', 'Audio Unit', 'CMake'],
   },
   {
     id: 'nvidia-q3',
