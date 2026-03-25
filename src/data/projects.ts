@@ -2,7 +2,7 @@
  * Project Data
  *
  * Centralized project data for the portfolio website.
- * Total: 36 projects across 6 categories
+ * Total: 42 projects across 7 categories
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
@@ -10,6 +10,7 @@
  * - Finance (5): Financial calculators and trackers
  * - Productivity (3): Notes, analytics, collaboration
  * - Games (5): Entertainment and games
+ * - Websites (6): Client websites and web services
  * - Archive (8): Legacy and miscellaneous projects
  */
 
@@ -695,6 +696,127 @@ export const projects: Project[] = [
       'Prettier',
       'Vercel',
     ],
+  },
+
+  // ============================================
+  // Websites (6)
+  // ============================================
+  {
+    id: 'h4ppylabs',
+    name: 'h4ppy Labs',
+    description: '뮤지션을 위한 무료 VST3/AU 오디오 플러그인을 개발하는 크리에이티브 오디오 도구 스튜디오.',
+    url: 'https://www.h4ppylabs.com/',
+    tags: ['Audio', 'Open Source', 'Music'],
+    category: 'Websites',
+    year: '2025',
+    longDescription:
+      'h4ppy Labs는 기타리스트와 뮤지션을 위한 창의적인 가상악기 및 이펙터 플러그인을 제작합니다. 퍼즈 디스토션 플러그인 FUZZA와 원노브 덕킹 리버브 플러그인 DUCKAVERB를 무료로 제공하며, Windows와 macOS를 모두 지원합니다. DSP 기술을 기반으로 제로 레이턴시, 노이즈 게이트, 다양한 클리핑 모드 등 전문적인 기능을 갖추고 있습니다.',
+    features: [
+      'FUZZA: 일렉트릭 기타용 퍼즈 디스토션 VST3/AU 플러그인',
+      'DUCKAVERB: 원노브 덕킹 리버브 플러그인',
+      '제로 레이턴시 실시간 처리',
+      'Windows/macOS 크로스 플랫폼 지원',
+      '3가지 톤 프리셋과 3가지 클리핑 모드',
+      'GitHub 오픈소스 프로젝트',
+    ],
+    techStack: ['HTML', 'CSS', 'JavaScript', 'Google Analytics'],
+  },
+  {
+    id: 'meetgirls',
+    name: '밋걸',
+    description: '행사 동행, 데이트 연습, 메시지 코칭 등을 제공하는 프리미엄 매칭 서비스.',
+    url: 'https://meetgirls.kr/',
+    tags: ['Service', 'Lifestyle', 'Matchmaking'],
+    category: 'Websites',
+    year: '2025',
+    longDescription:
+      '밋걸은 특별한 순간에 함께할 파트너를 매칭해주는 프리미엄 컨시어지 서비스입니다. 가족 모임, 결혼식, 브랜드 행사 등의 동행 서비스부터 실전 데이트 연습, 메시지/통화 코칭, 풀데이 컨시어지까지 다양한 서비스를 운영합니다. 24시간 내 응답, 100% 프라이버시 보호, 서울 전역 대응이 가능합니다.',
+    features: [
+      '행사 동행 서비스 (결혼식, 가족 모임, 브랜드 행사)',
+      '데이트 연습 및 실전 피드백 제공',
+      '메시지 & 통화 코칭',
+      '풀데이 컨시어지 서비스',
+      '24시간 내 응답 및 100% 프라이버시 보호',
+      '4단계 진행 프로세스',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS'],
+  },
+  {
+    id: 'srbbrs',
+    name: 'SRBBRS',
+    description: '프랑스 AOP 버터로 만든 72겹 정통 크로와상 전문 베이커리 카페.',
+    url: 'https://srbbrs.com/',
+    tags: ['Food', 'Bakery', 'Cafe'],
+    category: 'Websites',
+    year: '2025',
+    longDescription:
+      'SRBBRS는 서울 성동구 서울숲에 위치한 크로와상 전문 베이커리입니다. 매일 새벽 4시부터 프랑스 AOP 인증 버터와 국내산 유기농 밀가루로 72겹의 크로와상을 직접 만들며, 오랜 발효와 숙성을 거쳐 바삭함과 부드러움의 균형을 추구합니다.',
+    features: [
+      '클래식 크로와상, 아몬드 크로와상, 팡 오 쇼콜라 시그니처 메뉴',
+      '프랑스 AOP 인증 버터 사용, 72겹 수제 레이어',
+      '매일 새벽 직접 제조하는 신선한 빵',
+      '크로플, 시즌 스페셜 등 다양한 메뉴',
+      '서울 성동구 서울숲 소재',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS'],
+  },
+  {
+    id: 'axmx',
+    name: 'AXMX Exchange',
+    description: '기관급 보안과 0.01% 초저수수료를 제공하는 암호화폐 거래소 플랫폼.',
+    url: 'https://axmx.kr/',
+    tags: ['Crypto', 'Fintech', 'Exchange'],
+    category: 'Websites',
+    year: '2025',
+    longDescription:
+      'AXMX Exchange는 300개 이상의 거래쌍을 지원하며, 0.001초 이내 주문 체결과 초저수수료를 제공하는 암호화폐 거래소입니다. 95% 콜드스토리지 보관, SOC 2 Type II 인증, 다중서명 지갑 등 기관급 보안을 갖추고 있으며, REST/WebSocket/FIX API를 지원합니다.',
+    features: [
+      '300+ 거래쌍, 실시간 시장 데이터 제공',
+      '0.001초 초고속 체결, 0.01% 초저수수료',
+      '95% 콜드스토리지, SOC 2 인증, 멀티시그 보안',
+      'REST, WebSocket, FIX API 지원',
+      '24/7 한국어 포함 15개 언어 지원',
+      'VIP 등급제 수수료 체계',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS'],
+  },
+  {
+    id: 'garlicton',
+    name: '갈릭톤 스튜디오',
+    description: '메탈 음악 전문 레코딩, 믹싱, 마스터링, 프로듀싱 스튜디오.',
+    url: 'https://garlicton.com/',
+    tags: ['Music', 'Studio', 'Recording'],
+    category: 'Websites',
+    year: '2025',
+    longDescription:
+      '갈릭톤 스튜디오는 인천 강화군에 위치한 K-메탈 음악 전문 레코딩 스튜디오로, 15년 이상 경력의 엔지니어가 운영합니다. 보컬 레코딩부터 믹싱, 마스터링, 프로듀싱까지 음악 제작의 전 과정을 지원하며, 아날로그 아웃보드와 디지털 프로세싱을 결합한 하이브리드 방식을 사용합니다.',
+    features: [
+      '레코딩, 믹싱, 마스터링, 프로듀싱 전 과정 지원',
+      '메탈/하드코어 음악 전문 (K-Metal)',
+      '한국대중음악상(KMA) 수상 3회, 노미네이트 5회',
+      '하이브리드 믹싱 (아날로그 아웃보드 + 디지털)',
+      '한국어/영어 다국어 지원',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Cloudinary', 'Tailwind CSS'],
+  },
+  {
+    id: 'pedals',
+    name: 'PEDALS',
+    description: '70~80년대 빈티지 톤을 재현하는 한국 수제 부띠끄 기타 이펙터 페달 브랜드.',
+    url: 'https://pedals.kr/',
+    tags: ['Music', 'Hardware', 'Guitar'],
+    category: 'Websites',
+    year: '2025',
+    longDescription:
+      'PEDALS는 한국의 공방에서 포인트 투 포인트 핸드 와이어링으로 하나하나 수작업 제작하는 부띠끄 기타 이펙터 페달 브랜드입니다. 디스토션, 퍼즈, 아날로그 코러스, 테이프 에코 등의 제품을 판매하며, 부품 선별부터 사운드 테스트까지 모든 공정을 수작업으로 진행합니다.',
+    features: [
+      '핸드크래프트 포인트 투 포인트 와이어링 제작',
+      '디스토션, 퍼즈, 아날로그 코러스, 테이프 에코 라인업',
+      '부품 하나하나를 직접 소리로 선별',
+      '실제 앰프/기타 연결 사운드 테스트 후 출하',
+      '시리얼 넘버 개별 부여',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS'],
   },
 
   // ============================================
