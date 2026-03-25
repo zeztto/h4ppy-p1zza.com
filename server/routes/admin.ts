@@ -1,5 +1,6 @@
 import { asc, desc, eq, sql } from 'drizzle-orm';
 import { Router } from 'express';
+import { nanoid } from 'nanoid';
 import type { Database } from '../../db/client.js';
 import { projects, siteProfile, siteSections } from '../../db/schema.js';
 import { env } from '../env.js';
@@ -415,6 +416,101 @@ export function createAdminRouter() {
       });
 
       res.status(200).json(rows.map(mapSection));
+    })
+  );
+
+  router.post(
+    '/sections',
+    asyncHandler(async (req, res) => {
+      const payload = requireJsonObject(req.body);
+      const name = stringField(payload['name'], 'name');
+      assert(name, 400, 'Section name is required');
+
+      const now = new Date();
+      const row = {
+        id: nanoid(),
+        key: toOptionalString(payload['key'], 'key'),
+        name,
+        description: stringField(payload['description'], 'description'),
+        sectionType: stringField(payload['sectionType'], 'sectionType', 'template'),
+        templateKey: toOptionalString(payload['templateKey'], 'templateKey'),
+        contentJson: stringField(payload['contentJson'], 'contentJson', '{}'),
+        enabled: payload['enabled'] !== false,
+        sortOrder:
+          typeof payload['sortOrder'] === 'number' ? Math.floor(payload['sortOrder']) : 999_999,
+        updatedAt: now,
+      };
+
+      await res.locals.db.insert(siteSections).values(row);
+      res.status(201).json(mapSection(row));
+    })
+  );
+
+  router.patch(
+    '/sections/:id',
+    asyncHandler(async (req, res) => {
+      const sectionId = req.params['id'];
+      assert(typeof sectionId === 'string' && sectionId.length > 0, 400, 'Section id is required');
+
+      const existing = await res.locals.db.query.siteSections.findFirst({
+        where: eq(siteSections.id, sectionId),
+      });
+      assert(existing, 404, 'Section not found');
+
+      const payload = requireJsonObject(req.body);
+      const nextRow = {
+        key:
+          payload['key'] !== undefined
+            ? toOptionalString(payload['key'], 'key')
+            : existing.key,
+        name:
+          payload['name'] !== undefined ? stringField(payload['name'], 'name') : existing.name,
+        description:
+          payload['description'] !== undefined
+            ? stringField(payload['description'], 'description')
+            : existing.description,
+        sectionType:
+          payload['sectionType'] !== undefined
+            ? stringField(payload['sectionType'], 'sectionType')
+            : existing.sectionType,
+        templateKey:
+          payload['templateKey'] !== undefined
+            ? toOptionalString(payload['templateKey'], 'templateKey')
+            : existing.templateKey,
+        contentJson:
+          payload['contentJson'] !== undefined
+            ? stringField(payload['contentJson'], 'contentJson')
+            : existing.contentJson,
+        enabled:
+          typeof payload['enabled'] === 'boolean' ? payload['enabled'] : existing.enabled,
+        sortOrder:
+          typeof payload['sortOrder'] === 'number'
+            ? Math.floor(payload['sortOrder'])
+            : existing.sortOrder,
+        updatedAt: new Date(),
+      };
+
+      await res.locals.db
+        .update(siteSections)
+        .set(nextRow)
+        .where(eq(siteSections.id, sectionId));
+
+      const updated = await res.locals.db.query.siteSections.findFirst({
+        where: eq(siteSections.id, sectionId),
+      });
+
+      assert(updated, 500, 'Updated section missing');
+      res.status(200).json(mapSection(updated));
+    })
+  );
+
+  router.delete(
+    '/sections/:id',
+    asyncHandler(async (req, res) => {
+      const sectionId = req.params['id'];
+      assert(typeof sectionId === 'string' && sectionId.length > 0, 400, 'Section id is required');
+      await res.locals.db.delete(siteSections).where(eq(siteSections.id, sectionId));
+      res.status(204).send();
     })
   );
 
