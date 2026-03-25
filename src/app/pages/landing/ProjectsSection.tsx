@@ -3,21 +3,30 @@ import { motion } from 'motion/react';
 import { SectionHeading } from '@/app/components/SectionHeading';
 import { ProjectCard } from '@/app/components/ProjectCard';
 import type { PublicProject } from '@/app/lib/types';
+import type { ProjectsSectionContent } from '@/app/lib/section-content-types';
+import { DEFAULT_PROJECTS_CONTENT } from '@/data/site-content';
 
 interface ProjectsSectionProps {
   projects: PublicProject[];
+  content?: ProjectsSectionContent;
 }
 
-export function ProjectsSection({ projects }: ProjectsSectionProps) {
-  const featured = projects.filter((p) => p.isFeatured);
+export function ProjectsSection({ projects, content }: ProjectsSectionProps) {
+  const data = content ?? DEFAULT_PROJECTS_CONTENT;
 
-  if (featured.length === 0) return null;
+  const filtered = data.showFeaturedOnly
+    ? projects.filter((p) => p.isFeatured)
+    : projects;
+
+  const displayed = filtered.slice(0, data.maxItems);
+
+  if (displayed.length === 0) return null;
 
   return (
     <section className="py-24">
       <div className="max-w-6xl mx-auto px-6">
         <SectionHeading
-          title="Featured Projects"
+          title={data.title}
           action={
             <Link
               to="/portfolio"
@@ -28,7 +37,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
           }
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          {featured.map((p, index) => (
+          {displayed.map((p, index) => (
             <motion.div
               key={p.id}
               initial={{ opacity: 0, y: 20 }}
