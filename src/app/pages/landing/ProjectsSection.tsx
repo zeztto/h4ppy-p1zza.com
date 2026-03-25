@@ -2,9 +2,17 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { SectionHeading } from '@/app/components/SectionHeading';
 import { ProjectCard } from '@/app/components/ProjectCard';
+import { useSettings } from '@/app/hooks/useSettings';
 import type { PublicProject } from '@/app/lib/types';
 import type { ProjectsSectionContent } from '@/app/lib/section-content-types';
 import { DEFAULT_PROJECTS_CONTENT } from '@/data/site-content';
+
+const gridColsClass: Record<number, string> = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-1 md:grid-cols-2',
+  3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+  4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
+};
 
 interface ProjectsSectionProps {
   projects: PublicProject[];
@@ -13,6 +21,12 @@ interface ProjectsSectionProps {
 
 export function ProjectsSection({ projects, content }: ProjectsSectionProps) {
   const data = content ?? DEFAULT_PROJECTS_CONTENT;
+  const { data: gridSettings } = useSettings<{ landingColumns: number; portfolioPageColumns: number }>(
+    'portfolio_grid',
+    { landingColumns: 3, portfolioPageColumns: 3 },
+  );
+  const columns = gridSettings.landingColumns;
+  const gridClass = gridColsClass[columns] ?? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
 
   const filtered = data.showFeaturedOnly
     ? projects.filter((p) => p.isFeatured)
@@ -36,7 +50,7 @@ export function ProjectsSection({ projects, content }: ProjectsSectionProps) {
             </Link>
           }
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        <div className={`grid ${gridClass} gap-6 mt-8`}>
           {displayed.map((p, index) => (
             <motion.div
               key={p.id}
