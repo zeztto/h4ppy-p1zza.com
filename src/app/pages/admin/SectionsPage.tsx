@@ -34,7 +34,8 @@ export default function SectionsPage() {
   const handleToggle = (index: number) => {
     setSections((prev) => {
       const next = [...prev];
-      next[index] = { ...next[index], enabled: !next[index].enabled };
+      const item = next[index]!;
+      next[index] = { ...item, enabled: !item.enabled };
       return next;
     });
     setHasChanges(true);
@@ -47,10 +48,13 @@ export default function SectionsPage() {
 
     setSections((prev) => {
       const next = [...prev];
-      const tempSort = next[index].sortOrder;
-      next[index] = { ...next[index], sortOrder: next[targetIndex].sortOrder };
-      next[targetIndex] = { ...next[targetIndex], sortOrder: tempSort };
-      [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+      const a = next[index]!;
+      const b = next[targetIndex]!;
+      next[index] = { ...a, sortOrder: b.sortOrder };
+      next[targetIndex] = { ...b, sortOrder: a.sortOrder };
+      const tmp = next[index]!;
+      next[index] = next[targetIndex]!;
+      next[targetIndex] = tmp;
       return next;
     });
     setHasChanges(true);

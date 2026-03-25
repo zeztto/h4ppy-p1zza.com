@@ -191,7 +191,10 @@ export default function ProjectsPage() {
     if (targetIndex < 0 || targetIndex >= projects.length) return;
 
     const newProjects = [...projects];
-    [newProjects[index], newProjects[targetIndex]] = [newProjects[targetIndex], newProjects[index]];
+    const a = newProjects[index]!;
+    const b = newProjects[targetIndex]!;
+    newProjects[index] = b;
+    newProjects[targetIndex] = a;
     setProjects(newProjects);
 
     try {

@@ -38,7 +38,7 @@ export function ProfilePage() {
   const p = profile ?? profileFallback;
 
   const sections = p.essayMarkdown.split('\n## ');
-  const intro = sections[0];
+  const intro = sections[0] ?? '';
   const namedSections = sections.slice(1).map((s) => {
     const [title = '', ...body] = s.split('\n');
     return { title: title.trim(), body: body.join('\n').trim() };

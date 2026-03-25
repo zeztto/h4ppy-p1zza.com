@@ -145,9 +145,8 @@ export function AdminLayout() {
   const { pathname } = useLocation();
 
   // Close sidebar on route change
-  useEffect(() => {
-    setSidebarOpen(false);
-  }, [pathname]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setSidebarOpen(false); }, [pathname]);
 
   return (
     <div className="min-h-screen">

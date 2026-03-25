@@ -25,9 +25,8 @@ export function PublicLayout() {
   const { data: profile } = usePublicData<PublicProfile>('profile', fallbackProfile);
 
   // Close mobile menu on route change
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setIsMenuOpen(false); }, [pathname]);
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -4,7 +4,7 @@ import { FolderKanban, Globe, FileEdit, Layers, Plus, User, ExternalLink } from 
 import { getDashboard } from '@/app/admin/services/api';
 import type { AdminDashboardResponse, AdminActivity } from '@/app/admin/types';
 import { Button } from '@/app/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
+import { Card, CardContent } from '@/app/components/ui/card';
 
 export default function DashboardPage() {
   const [data, setData] = useState<AdminDashboardResponse | null>(null);

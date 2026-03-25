@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Calendar, Clock } from "lucide-react";
-import { Footer } from "./footer";
+import { Footer } from "./Footer";
 
 interface BlogPost {
   id: string;
