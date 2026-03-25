@@ -1,5 +1,7 @@
 import type { ProjectRow, SiteProfileRow, SiteSectionRow, SiteSettingsRow } from '../../db/schema.js';
 
+const PORTFOLIO_PROJECT_ID = 'h4ppy-p1zza-portfolio';
+
 function parseArray(value: string | null | undefined) {
   if (!value) {
     return [];
@@ -17,8 +19,14 @@ export function serializeArray(values: string[] | undefined) {
   return JSON.stringify(values ?? []);
 }
 
-export function mapProject(row: ProjectRow) {
-  return {
+function replacePortfolioProjectCount(value: string, publishedProjectCount: number) {
+  return value
+    .replace(/\d+개 프로젝트/g, `${publishedProjectCount}개 프로젝트`)
+    .replace(/\d+개의 프로젝트/g, `${publishedProjectCount}개의 프로젝트`);
+}
+
+export function mapProject(row: ProjectRow, publishedProjectCount?: number) {
+  const project = {
     id: row.id,
     name: row.name,
     description: row.description,
@@ -36,6 +44,19 @@ export function mapProject(row: ProjectRow) {
     isPublished: row.isPublished,
     createdAt: row.createdAt?.toISOString() ?? null,
     updatedAt: row.updatedAt?.toISOString() ?? null,
+  };
+
+  if (project.id !== PORTFOLIO_PROJECT_ID || typeof publishedProjectCount !== 'number') {
+    return project;
+  }
+
+  return {
+    ...project,
+    description: replacePortfolioProjectCount(project.description, publishedProjectCount),
+    longDescription: replacePortfolioProjectCount(project.longDescription, publishedProjectCount),
+    features: project.features.map((feature) =>
+      replacePortfolioProjectCount(feature, publishedProjectCount)
+    ),
   };
 }
 

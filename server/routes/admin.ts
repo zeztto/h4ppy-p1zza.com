@@ -7,6 +7,7 @@ import { env } from '../env.js';
 import { resolveCloudinaryConfig, signCloudinaryUpload } from '../lib/cloudinary.js';
 import { mapProfile, mapProject, mapSection, serializeArray } from '../lib/content.js';
 import { asyncHandler, assert, requireJsonObject } from '../lib/http.js';
+import { countPublishedProjects } from '../lib/projects.js';
 
 function stringField(value: unknown, field: string, fallback = '') {
   if (value == null) {
@@ -112,11 +113,14 @@ export function createAdminRouter() {
   router.get(
     '/projects',
     asyncHandler(async (_req, res) => {
-      const rows = await res.locals.db.query.projects.findMany({
-        orderBy: [asc(projects.sortOrder), asc(projects.name)],
-      });
+      const [rows, publishedProjectCount] = await Promise.all([
+        res.locals.db.query.projects.findMany({
+          orderBy: [asc(projects.sortOrder), asc(projects.name)],
+        }),
+        countPublishedProjects(res.locals.db),
+      ]);
 
-      res.status(200).json(rows.map(mapProject));
+      res.status(200).json(rows.map((row) => mapProject(row, publishedProjectCount)));
     })
   );
 
@@ -163,7 +167,8 @@ export function createAdminRouter() {
       };
 
       await res.locals.db.insert(projects).values(row);
-      res.status(201).json(mapProject(row));
+      const publishedProjectCount = await countPublishedProjects(res.locals.db);
+      res.status(201).json(mapProject(row, publishedProjectCount));
     })
   );
 
@@ -231,12 +236,15 @@ export function createAdminRouter() {
       };
 
       await res.locals.db.update(projects).set(nextRow).where(eq(projects.id, projectId));
-      const updated = await res.locals.db.query.projects.findFirst({
-        where: eq(projects.id, projectId),
-      });
+      const [updated, publishedProjectCount] = await Promise.all([
+        res.locals.db.query.projects.findFirst({
+          where: eq(projects.id, projectId),
+        }),
+        countPublishedProjects(res.locals.db),
+      ]);
 
       assert(updated, 500, 'Updated project missing');
-      res.status(200).json(mapProject(updated));
+      res.status(200).json(mapProject(updated, publishedProjectCount));
     })
   );
 
@@ -265,11 +273,14 @@ export function createAdminRouter() {
         )
       );
 
-      const rows = await res.locals.db.query.projects.findMany({
-        orderBy: [asc(projects.sortOrder), asc(projects.name)],
-      });
+      const [rows, publishedProjectCount] = await Promise.all([
+        res.locals.db.query.projects.findMany({
+          orderBy: [asc(projects.sortOrder), asc(projects.name)],
+        }),
+        countPublishedProjects(res.locals.db),
+      ]);
 
-      res.status(200).json(rows.map(mapProject));
+      res.status(200).json(rows.map((row) => mapProject(row, publishedProjectCount)));
     })
   );
 

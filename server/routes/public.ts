@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { projects, siteProfile, siteSections, siteSettings } from '../../db/schema.js';
 import { mapProfile, mapProject, mapSection, mapSetting } from '../lib/content.js';
 import { asyncHandler, assert } from '../lib/http.js';
+import { countPublishedProjects } from '../lib/projects.js';
 
 export function createPublicRouter() {
   const router = Router();
@@ -15,7 +16,7 @@ export function createPublicRouter() {
         orderBy: [asc(projects.sortOrder), asc(projects.name)],
       });
 
-      res.status(200).json(rows.map(mapProject));
+      res.status(200).json(rows.map((row) => mapProject(row, rows.length)));
     })
   );
 
@@ -25,12 +26,15 @@ export function createPublicRouter() {
       const projectId = req.params['id'];
       assert(typeof projectId === 'string' && projectId.length > 0, 400, 'Project id is required');
 
-      const row = await res.locals.db.query.projects.findFirst({
-        where: eq(projects.id, projectId),
-      });
+      const [row, publishedProjectCount] = await Promise.all([
+        res.locals.db.query.projects.findFirst({
+          where: eq(projects.id, projectId),
+        }),
+        countPublishedProjects(res.locals.db),
+      ]);
 
       assert(row && row.isPublished, 404, 'Project not found');
-      res.status(200).json(mapProject(row));
+      res.status(200).json(mapProject(row, publishedProjectCount));
     })
   );
 
