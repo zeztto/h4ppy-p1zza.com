@@ -1,19 +1,6 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
   <rect width="180" height="180" rx="40" fill="#030213"/>
-
-  <!-- Pizza slice shape -->
-  <path d="M90 50 L140 140 L40 140 Z" fill="#FF6B6B" stroke="#FFD93D" stroke-width="6"/>
-
-  <!-- Pepperoni spots -->
-  <circle cx="90" cy="100" r="10" fill="#C92A2A"/>
-  <circle cx="70" cy="120" r="8" fill="#C92A2A"/>
-  <circle cx="110" cy="120" r="8" fill="#C92A2A"/>
-  <circle cx="75" cy="95" r="6" fill="#C92A2A"/>
-  <circle cx="105" cy="95" r="6" fill="#C92A2A"/>
-
-  <!-- Happy face -->
-  <circle cx="80" cy="90" r="4" fill="#030213"/>
-  <circle cx="100" cy="90" r="4" fill="#030213"/>
-  <path d="M75 105 Q90 115 105 105" stroke="#030213" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M70 56L40 90L70 124" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M110 56L140 90L110 124" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="97" y1="48" x2="83" y2="132" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
 </svg>
