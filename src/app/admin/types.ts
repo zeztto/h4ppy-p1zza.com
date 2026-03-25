@@ -82,10 +82,20 @@ export interface AdminProfile {
 }
 
 export interface AdminSection {
-  key: string;
+  id: string;
+  key: string | null;
   name: string;
   description: string;
+  sectionType: string;
+  templateKey: string | null;
+  contentJson: string;
   enabled: boolean;
   sortOrder: number;
   updatedAt?: string;
+}
+
+export interface AdminSetting {
+  key: string;
+  value: string;
+  updatedAt: string;
 }

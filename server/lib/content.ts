@@ -1,4 +1,4 @@
-import type { ProjectRow, SiteProfileRow, SiteSectionRow } from '../../db/schema.js';
+import type { ProjectRow, SiteProfileRow, SiteSectionRow, SiteSettingsRow } from '../../db/schema.js';
 
 function parseArray(value: string | null | undefined) {
   if (!value) {
@@ -56,11 +56,23 @@ export function mapProfile(row: SiteProfileRow) {
 
 export function mapSection(row: SiteSectionRow) {
   return {
+    id: row.id,
     key: row.key,
     name: row.name,
     description: row.description,
+    sectionType: row.sectionType,
+    templateKey: row.templateKey,
+    contentJson: row.contentJson,
     enabled: row.enabled,
     sortOrder: row.sortOrder,
+    updatedAt: row.updatedAt.toISOString(),
+  };
+}
+
+export function mapSetting(row: SiteSettingsRow) {
+  return {
+    key: row.key,
+    value: row.value,
     updatedAt: row.updatedAt.toISOString(),
   };
 }
