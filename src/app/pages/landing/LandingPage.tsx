@@ -1,5 +1,12 @@
 import { usePublicData } from '@/app/hooks/usePublicData';
 import type { PublicProject, PublicProfile, PublicSection } from '@/app/lib/types';
+import type {
+  HeroContent,
+  ProjectsSectionContent,
+  ValuesContent,
+  SkillsContent,
+  ExperienceContent,
+} from '@/app/lib/section-content-types';
 import { DEFAULT_SITE_PROFILE, DEFAULT_SITE_SECTIONS } from '@/data/site-content';
 import { HeroSection } from './HeroSection';
 import { ProjectsSection } from './ProjectsSection';
@@ -19,6 +26,15 @@ const sectionsFallback: PublicSection[] = DEFAULT_SITE_SECTIONS.map((s) => ({
   key: s.key ?? null,
   updatedAt: '',
 }));
+
+function parseContentJson<T>(json: string): T | undefined {
+  if (!json || json === '{}') return undefined;
+  try {
+    return JSON.parse(json) as T;
+  } catch {
+    return undefined;
+  }
+}
 
 export function LandingPage() {
   const { data: projects, loading: projectsLoading } =
@@ -48,23 +64,57 @@ export function LandingPage() {
   const renderSection = (section: PublicSection) => {
     const tplKey = section.templateKey ?? section.key;
     switch (tplKey) {
-      case 'projects':
-        return <ProjectsSection key={section.id} projects={projects ?? []} />;
-      case 'values':
-        return <ValuesSection key={section.id} />;
-      case 'skills':
-        return <SkillsSection key={section.id} />;
-      case 'experience':
-        return <ExperienceSection key={section.id} />;
+      case 'hero': {
+        const content = parseContentJson<HeroContent>(section.contentJson);
+        return (
+          <HeroSection
+            key={section.id}
+            profile={profile ?? profileFallback}
+            {...(content ? { content } : {})}
+          />
+        );
+      }
+      case 'projects': {
+        const content = parseContentJson<ProjectsSectionContent>(section.contentJson);
+        return (
+          <ProjectsSection
+            key={section.id}
+            projects={projects ?? []}
+            {...(content ? { content } : {})}
+          />
+        );
+      }
+      case 'values': {
+        const content = parseContentJson<ValuesContent>(section.contentJson);
+        return (
+          <ValuesSection
+            key={section.id}
+            {...(content ? { content } : {})}
+          />
+        );
+      }
+      case 'skills': {
+        const content = parseContentJson<SkillsContent>(section.contentJson);
+        return (
+          <SkillsSection
+            key={section.id}
+            {...(content ? { content } : {})}
+          />
+        );
+      }
+      case 'experience': {
+        const content = parseContentJson<ExperienceContent>(section.contentJson);
+        return (
+          <ExperienceSection
+            key={section.id}
+            {...(content ? { content } : {})}
+          />
+        );
+      }
       default:
         return null;
     }
   };
 
-  return (
-    <>
-      <HeroSection profile={profile ?? profileFallback} />
-      {sortedSections.map(renderSection)}
-    </>
-  );
+  return <>{sortedSections.map(renderSection)}</>;
 }
