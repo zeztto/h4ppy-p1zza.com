@@ -2,12 +2,26 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { usePublicData } from '@/app/hooks/usePublicData';
+import { useSettings } from '@/app/hooks/useSettings';
 import type { PublicProject } from '@/app/lib/types';
 import { ProjectCard } from '@/app/components/ProjectCard';
+
+const gridColsClass: Record<number, string> = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-1 md:grid-cols-2',
+  3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+  4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
+};
 
 export function PortfolioPage() {
   const { data: projects, loading, error } = usePublicData<PublicProject[]>('projects');
   const [activeFilter, setActiveFilter] = useState('All');
+  const { data: gridSettings } = useSettings<{ landingColumns: number; portfolioPageColumns: number }>(
+    'portfolio_grid',
+    { landingColumns: 3, portfolioPageColumns: 3 },
+  );
+  const columns = gridSettings.portfolioPageColumns;
+  const gridClass = gridColsClass[columns] ?? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
 
   if (loading) {
     return (
@@ -18,7 +32,7 @@ export function PortfolioPage() {
             <div key={i} className="h-8 w-20 bg-muted rounded-md animate-pulse" />
           ))}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        <div className={`grid ${gridClass} gap-6 mt-8`}>
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="aspect-video bg-muted rounded-xl animate-pulse" />
           ))}
@@ -76,7 +90,7 @@ export function PortfolioPage() {
         ))}
       </div>
 
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+      <motion.div layout className={`grid ${gridClass} gap-6 mt-8`}>
         <AnimatePresence mode="popLayout">
           {filtered.map((p) => (
             <motion.div

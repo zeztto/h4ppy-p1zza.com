@@ -1,32 +1,21 @@
 import { motion } from 'motion/react';
 import { SectionHeading } from '@/app/components/SectionHeading';
+import type { ExperienceContent } from '@/app/lib/section-content-types';
+import { DEFAULT_EXPERIENCE_CONTENT } from '@/data/site-content';
 
-const milestones = [
-  {
-    title: '웹 애플리케이션 개발',
-    description: 'React, TypeScript 기반의 풀스택 웹 앱 개발',
-  },
-  {
-    title: '마케팅 랜딩페이지 제작',
-    description: '전환율을 고려한 마케팅 페이지 기획 및 개발',
-  },
-  {
-    title: 'UI/UX 설계',
-    description: '사용자 경험을 최우선으로 한 인터페이스 설계',
-  },
-  {
-    title: '데이터 기반 의사결정',
-    description: '분석과 데이터를 활용한 서비스 개선',
-  },
-];
+interface ExperienceSectionProps {
+  content?: ExperienceContent;
+}
 
-export function ExperienceSection() {
+export function ExperienceSection({ content }: ExperienceSectionProps) {
+  const data = content ?? DEFAULT_EXPERIENCE_CONTENT;
+
   return (
     <section className="py-24 bg-secondary/30">
       <div className="max-w-6xl mx-auto px-6">
-        <SectionHeading title="주요 업무" />
+        <SectionHeading title={data.title} />
         <div className="border-l-2 border-border mt-8 space-y-10">
-          {milestones.map((milestone, index) => (
+          {data.items.map((milestone, index) => (
             <motion.div
               key={milestone.title}
               className="pl-8 relative"

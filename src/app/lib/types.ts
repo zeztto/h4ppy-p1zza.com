@@ -37,10 +37,21 @@ export interface PublicProfile {
 
 // Matches mapSection() in server/lib/content.ts
 export interface PublicSection {
-  key: string;
+  id: string;
+  key: string | null;
   name: string;
   description: string;
+  sectionType: string;
+  templateKey: string | null;
+  contentJson: string;
   enabled: boolean;
   sortOrder: number;
+  updatedAt: string;
+}
+
+// Matches mapSetting() in server/lib/content.ts
+export interface PublicSetting {
+  key: string;
+  value: string;
   updatedAt: string;
 }

@@ -10,6 +10,7 @@ import { attachSessionUser, requireAdmin, requireSameOrigin } from './middleware
 import { createAdminRouter } from './routes/admin.js';
 import { createAuthRouter } from './routes/auth.js';
 import { createPublicRouter } from './routes/public.js';
+import { createSettingsRouter } from './routes/settings.js';
 
 function resolveDistPath() {
   const candidates = [
@@ -98,7 +99,9 @@ export async function createApp() {
   });
   app.use('/api/auth', createAuthRouter());
   app.use('/api/public', createPublicRouter());
-  app.use('/api/admin', requireSameOrigin, requireAdmin, createAdminRouter());
+  const adminRouter = createAdminRouter();
+  adminRouter.use('/settings', createSettingsRouter());
+  app.use('/api/admin', requireSameOrigin, requireAdmin, adminRouter);
 
   if (distPath) {
     app.use(express.static(distPath, { index: false }));
