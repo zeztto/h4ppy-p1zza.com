@@ -32,7 +32,9 @@ export function ProjectsSection({ projects, content }: ProjectsSectionProps) {
     ? projects.filter((p) => p.isFeatured)
     : projects;
 
-  const displayed = filtered.slice(0, data.maxItems);
+  const displayed = data.showFeaturedOnly
+    ? filtered
+    : filtered.slice(0, data.maxItems);
 
   if (displayed.length === 0) return null;
 

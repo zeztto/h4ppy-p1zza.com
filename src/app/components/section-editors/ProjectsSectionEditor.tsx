@@ -46,11 +46,14 @@ export function ProjectsSectionEditor({ content, onSave, onClose }: ProjectsSect
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">최대 표시 수</label>
+            <label className="block text-sm font-medium mb-1">
+              최대 표시 수
+            </label>
             <input
               type="number"
               className={inputClass}
               value={maxItems}
+              disabled={showFeaturedOnly}
               onChange={(e) => {
                 const v = parseInt(e.target.value, 10);
                 if (!isNaN(v) && v >= 1 && v <= 20) setMaxItems(v);
@@ -58,6 +61,9 @@ export function ProjectsSectionEditor({ content, onSave, onClose }: ProjectsSect
               min={1}
               max={20}
             />
+            <p className="text-xs text-muted-foreground mt-1">
+              추천 프로젝트만 표시가 켜져 있으면 최대 표시 수 제한은 적용되지 않습니다.
+            </p>
           </div>
 
           <div>
