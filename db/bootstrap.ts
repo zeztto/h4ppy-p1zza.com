@@ -1,4 +1,5 @@
 import type { DatabaseClient } from './client.js';
+import { migrateSections } from './migrate-sections.js';
 
 const statements = [
   'PRAGMA foreign_keys = ON',
@@ -73,6 +74,8 @@ const statements = [
 ];
 
 export async function ensureDatabaseSchema(client: DatabaseClient) {
+  await migrateSections(client);
+
   for (const statement of statements) {
     await client.execute(statement);
   }
