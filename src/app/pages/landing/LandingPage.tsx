@@ -1,8 +1,16 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { usePublicData } from '@/app/hooks/usePublicData';
 import { useEditMode } from '@/app/components/inline-edit/EditModeProvider';
 import { InlineEditToolbar } from '@/app/components/inline-edit/InlineEditToolbar';
 import { SectionAdder } from '@/app/components/inline-edit/SectionAdder';
+import { SectionEditorModal } from '@/app/components/section-editors/SectionEditorModal';
+import { CustomSectionRenderer } from '@/app/components/section-editors/CustomSectionRenderer';
+import { CustomSectionEditor } from '@/app/components/section-editors/CustomSectionEditor';
+import { HeroEditor } from '@/app/components/section-editors/HeroEditor';
+import { ValuesEditor } from '@/app/components/section-editors/ValuesEditor';
+import { SkillsEditor } from '@/app/components/section-editors/SkillsEditor';
+import { ExperienceEditor } from '@/app/components/section-editors/ExperienceEditor';
+import { ProjectsSectionEditor } from '@/app/components/section-editors/ProjectsSectionEditor';
 import { updateSection, deleteSection } from '@/app/admin/services/api';
 import type { PublicProject, PublicProfile, PublicSection } from '@/app/lib/types';
 import type {
@@ -11,6 +19,8 @@ import type {
   ValuesContent,
   SkillsContent,
   ExperienceContent,
+  CustomSectionContent,
+  SectionContent,
 } from '@/app/lib/section-content-types';
 import { DEFAULT_SITE_PROFILE, DEFAULT_SITE_SECTIONS } from '@/data/site-content';
 import { HeroSection } from './HeroSection';
@@ -49,6 +59,9 @@ export function LandingPage() {
     usePublicData<PublicProfile>('profile', profileFallback);
   const { data: sections, loading: sectionsLoading, refetch: refetchSections } =
     usePublicData<PublicSection[]>('sections', sectionsFallback);
+
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [editingSection, setEditingSection] = useState<PublicSection | null>(null);
 
   const loading = projectsLoading || profileLoading || sectionsLoading;
 
@@ -118,12 +131,32 @@ export function LandingPage() {
     [refetchSections],
   );
 
-  const handleEdit = useCallback((_section: PublicSection) => {
-    // Placeholder: will open SectionEditorModal in a future task
+  const handleEdit = useCallback((section: PublicSection) => {
+    setEditingSection(section);
   }, []);
 
   const handleAdd = useCallback(() => {
-    // Placeholder: will open SectionEditorModal for new section in a future task
+    setAddModalOpen(true);
+  }, []);
+
+  const handleEditorSave = useCallback(
+    async (content: SectionContent) => {
+      if (!editingSection) return;
+      try {
+        await updateSection(editingSection.id, {
+          contentJson: JSON.stringify(content),
+        });
+        refetchSections();
+        setEditingSection(null);
+      } catch (err) {
+        console.error('Failed to save section:', err);
+      }
+    },
+    [editingSection, refetchSections],
+  );
+
+  const handleEditorClose = useCallback(() => {
+    setEditingSection(null);
   }, []);
 
   if (loading) {
@@ -192,6 +225,118 @@ export function LandingPage() {
           />
         );
       }
+      default: {
+        // Custom section or unknown template
+        if (section.sectionType === 'custom') {
+          const content = parseContentJson<CustomSectionContent>(section.contentJson);
+          if (content) {
+            return (
+              <CustomSectionRenderer
+                key={section.id}
+                content={content}
+                sectionId={section.id}
+              />
+            );
+          }
+        }
+        return null;
+      }
+    }
+  };
+
+  const renderEditor = () => {
+    if (!editingSection) return null;
+    const tplKey = editingSection.templateKey ?? editingSection.key;
+
+    if (editingSection.sectionType === 'custom') {
+      const content = parseContentJson<CustomSectionContent>(editingSection.contentJson) ?? {
+        markdown: '',
+        css: '',
+      };
+      return (
+        <CustomSectionEditor
+          content={content}
+          sectionId={editingSection.id}
+          onSave={(c) => void handleEditorSave(c)}
+          onClose={handleEditorClose}
+        />
+      );
+    }
+
+    switch (tplKey) {
+      case 'hero': {
+        const content = parseContentJson<HeroContent>(editingSection.contentJson) ?? {
+          ctaText: '',
+          ctaLink: '',
+          showAvatar: true,
+          layout: 'centered' as const,
+        };
+        return (
+          <HeroEditor
+            content={content}
+            sectionId={editingSection.id}
+            onSave={(c) => void handleEditorSave(c)}
+            onClose={handleEditorClose}
+          />
+        );
+      }
+      case 'projects': {
+        const content = parseContentJson<ProjectsSectionContent>(editingSection.contentJson) ?? {
+          title: 'Featured Projects',
+          maxItems: 6,
+          showFeaturedOnly: false,
+        };
+        return (
+          <ProjectsSectionEditor
+            content={content}
+            sectionId={editingSection.id}
+            onSave={(c) => void handleEditorSave(c)}
+            onClose={handleEditorClose}
+          />
+        );
+      }
+      case 'values': {
+        const content = parseContentJson<ValuesContent>(editingSection.contentJson) ?? {
+          title: '핵심 가치',
+          items: [],
+        };
+        return (
+          <ValuesEditor
+            content={content}
+            sectionId={editingSection.id}
+            onSave={(c) => void handleEditorSave(c)}
+            onClose={handleEditorClose}
+          />
+        );
+      }
+      case 'skills': {
+        const content = parseContentJson<SkillsContent>(editingSection.contentJson) ?? {
+          title: '기술 스택',
+          categories: [],
+        };
+        return (
+          <SkillsEditor
+            content={content}
+            sectionId={editingSection.id}
+            onSave={(c) => void handleEditorSave(c)}
+            onClose={handleEditorClose}
+          />
+        );
+      }
+      case 'experience': {
+        const content = parseContentJson<ExperienceContent>(editingSection.contentJson) ?? {
+          title: '주요 업무',
+          items: [],
+        };
+        return (
+          <ExperienceEditor
+            content={content}
+            sectionId={editingSection.id}
+            onSave={(c) => void handleEditorSave(c)}
+            onClose={handleEditorClose}
+          />
+        );
+      }
       default:
         return null;
     }
@@ -222,6 +367,16 @@ export function LandingPage() {
           {isEditMode && <SectionAdder onAdd={handleAdd} />}
         </div>
       ))}
+
+      {/* Add section modal */}
+      <SectionEditorModal
+        isOpen={addModalOpen}
+        onClose={() => setAddModalOpen(false)}
+        onCreated={() => refetchSections()}
+      />
+
+      {/* Editor panels */}
+      {renderEditor()}
     </>
   );
 }
