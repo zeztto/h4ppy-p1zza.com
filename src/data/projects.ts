@@ -6,12 +6,12 @@
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
- * - Tools (11): Utilities, converters, generators
+ * - Tools (10): Utilities, converters, generators
  * - Finance (5): Financial calculators and trackers
- * - Productivity (3): Notes, analytics, collaboration
+ * - Productivity (2): Notes, analytics, collaboration
  * - Games (5): Entertainment and games
- * - Websites (6): Client websites and web services
- * - Archive (7): Legacy and miscellaneous projects
+ * - Websites (7): Client websites and web services
+ * - Archive (8): Legacy and miscellaneous projects
  */
 
 export interface Project {
@@ -671,15 +671,15 @@ export const projects: Project[] = [
   {
     id: 'h4ppy-p1zza-portfolio',
     name: 'h4ppy p1zza 포트폴리오',
-    description: '36개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.',
+    description: '41개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.',
     url: 'https://h4ppy-p1zza.com/',
     tags: ['Portfolio', 'Meta'],
     category: 'Archive',
     year: '2026',
     longDescription:
-      '이 포트폴리오 웹사이트 자체도 하나의 프로젝트입니다. 성능 최적화(번들 크기 60% 감소), 보안 강화(CSP, TypeScript strict mode), SEO 최적화를 거쳐 완성되었습니다. 36개의 프로젝트를 인터랙티브하게 소개하며, 철학적 에세이 형식의 프로필 페이지를 포함합니다.',
+      '이 포트폴리오 웹사이트 자체도 하나의 프로젝트입니다. 성능 최적화(번들 크기 60% 감소), 보안 강화(CSP, TypeScript strict mode), SEO 최적화를 거쳐 완성되었습니다. 41개의 프로젝트를 인터랙티브하게 소개하며, 철학적 에세이 형식의 프로필 페이지를 포함합니다.',
     features: [
-      '36개 프로젝트 인터랙티브 iframe 미리보기',
+      '41개 프로젝트 인터랙티브 iframe 미리보기',
       '카테고리별 필터링 (Media, Tools, Finance, Productivity, Games, Archive)',
       '성능 최적화 (번들 60% 감소, 105개 의존성 제거)',
       '보안 강화 (CSP, 보안 헤더, TypeScript strict mode)',
@@ -700,8 +700,29 @@ export const projects: Project[] = [
   },
 
   // ============================================
-  // Websites (6)
+  // Websites (7)
   // ============================================
+  {
+    id: 'qqwe',
+    name: 'qqwe.kr',
+    description: '긴 주소를 짧은 링크로 변환하고 클릭 통계를 확인할 수 있는 URL 단축 서비스.',
+    url: 'https://qqwe.kr/',
+    tags: ['Short URL', 'Analytics', 'Utility'],
+    category: 'Websites',
+    year: '2026',
+    thumbnail: '/thumbnails/qqwe.jpg',
+    longDescription:
+      'qqwe.kr는 로그인 없이 긴 URL을 6자리 slug로 즉시 단축하고, 링크별 통계 페이지에서 최근 7일 또는 30일 기준 유입 현황을 확인할 수 있는 URL 단축 서비스입니다. Next.js App Router 기반 풀스택 구조 위에 Turso와 Drizzle ORM을 올려 링크 저장과 클릭 기록을 처리하며, 실제 리디렉션 이후 referer, 국가, 디바이스, 브라우저, OS 정보를 비동기로 수집합니다.',
+    features: [
+      '6자리 랜덤 slug 생성과 예약 경로 충돌 방지',
+      '302 리디렉션 이후 클릭 로그 비동기 기록',
+      '링크별 통계 페이지와 7일/30일 기간 전환',
+      '국가, 리퍼러, 디바이스, 브라우저, OS 분석',
+      'IP 기준 rate limit과 URL 유효성 검증',
+      'Turso 저장소와 Recharts 기반 통계 시각화',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Turso', 'Drizzle ORM', 'Tailwind CSS', 'Recharts', 'Railway'],
+  },
   {
     id: 'h4ppylabs',
     name: 'h4ppy Labs',
