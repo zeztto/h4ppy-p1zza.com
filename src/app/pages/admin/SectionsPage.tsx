@@ -129,7 +129,7 @@ export default function SectionsPage() {
         <div className="space-y-3 mt-6">
           {sections.map((section, index) => (
             <Card
-              key={section.key}
+              key={section.id}
               className={`flex items-center justify-between p-4 ${
                 !section.enabled ? 'opacity-60' : ''
               }`}

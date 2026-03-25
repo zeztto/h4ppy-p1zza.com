@@ -16,6 +16,7 @@ const profileFallback: PublicProfile = {
 
 const sectionsFallback: PublicSection[] = DEFAULT_SITE_SECTIONS.map((s) => ({
   ...s,
+  key: s.key ?? null,
   updatedAt: '',
 }));
 
@@ -45,15 +46,16 @@ export function LandingPage() {
     .sort((a, b) => a.sortOrder - b.sortOrder);
 
   const renderSection = (section: PublicSection) => {
-    switch (section.key) {
+    const tplKey = section.templateKey ?? section.key;
+    switch (tplKey) {
       case 'projects':
-        return <ProjectsSection key={section.key} projects={projects ?? []} />;
+        return <ProjectsSection key={section.id} projects={projects ?? []} />;
       case 'values':
-        return <ValuesSection key={section.key} />;
+        return <ValuesSection key={section.id} />;
       case 'skills':
-        return <SkillsSection key={section.key} />;
+        return <SkillsSection key={section.id} />;
       case 'experience':
-        return <ExperienceSection key={section.key} />;
+        return <ExperienceSection key={section.id} />;
       default:
         return null;
     }

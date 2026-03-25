@@ -22,9 +22,13 @@ export interface SiteProfileContent {
 }
 
 export interface SiteSectionContent {
+  id: string;
   key: string;
   name: string;
   description: string;
+  sectionType: string;
+  templateKey: string | null;
+  contentJson: string;
   enabled: boolean;
   sortOrder: number;
 }
@@ -95,37 +99,57 @@ export const DEFAULT_SITE_PROFILE: SiteProfileContent = {
 
 export const DEFAULT_SITE_SECTIONS: SiteSectionContent[] = [
   {
+    id: 'hero',
     key: 'hero',
     name: '히어로 섹션',
     description: '메인 소개 영역',
+    sectionType: 'template',
+    templateKey: 'hero',
+    contentJson: '{}',
     enabled: true,
     sortOrder: 0,
   },
   {
+    id: 'projects',
     key: 'projects',
     name: '프로젝트',
     description: '웹사이트와 주요 프로젝트',
+    sectionType: 'template',
+    templateKey: 'projects',
+    contentJson: '{}',
     enabled: true,
     sortOrder: 1,
   },
   {
+    id: 'values',
     key: 'values',
     name: '핵심 가치',
     description: '개발 철학 및 가치',
+    sectionType: 'template',
+    templateKey: 'values',
+    contentJson: '{}',
     enabled: true,
     sortOrder: 2,
   },
   {
+    id: 'skills',
     key: 'skills',
     name: '기술 스택',
     description: '보유 기술 및 도구',
+    sectionType: 'template',
+    templateKey: 'skills',
+    contentJson: '{}',
     enabled: true,
     sortOrder: 3,
   },
   {
+    id: 'experience',
     key: 'experience',
     name: '주요 업무',
     description: '제공하는 서비스와 경험',
+    sectionType: 'template',
+    templateKey: 'experience',
+    contentJson: '{}',
     enabled: true,
     sortOrder: 4,
   },
