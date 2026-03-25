@@ -8,6 +8,7 @@
     "build:server": "tsc -p tsconfig.server.json",
     "build:web": "vite build",
     "db:seed": "tsx scripts/seed.ts",
+    "db:seed:force": "tsx scripts/seed.ts --force",
     "dev": "concurrently -k -n web,api \"npm:dev:web\" \"npm:dev:server\"",
     "dev:server": "tsx watch server/index.ts",
     "dev:web": "vite",
