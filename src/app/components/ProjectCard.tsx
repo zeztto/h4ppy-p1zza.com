@@ -13,9 +13,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
       transition={{ duration: 0.2 }}
       className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow flex flex-col h-full"
     >
-      <div className="aspect-video rounded-t-xl overflow-hidden bg-muted">
+      <div className="relative rounded-t-xl overflow-hidden bg-muted" style={{ paddingBottom: '56.25%' }}>
         {project.thumbnailUrl === '' ? (
-          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
             <span className="text-lg font-medium text-foreground/60">
               {project.name}
             </span>
@@ -24,7 +24,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <img
             src={project.thumbnailUrl}
             alt={project.name}
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover object-top"
           />
         )}
       </div>
