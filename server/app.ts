@@ -77,9 +77,9 @@ export async function createApp() {
         [
           "default-src 'self'",
           `script-src ${scriptSrc}`,
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net",
           "img-src 'self' data: blob: https:",
-          "font-src 'self' data: https://fonts.gstatic.com",
+          "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net",
           "connect-src 'self' https://api.github.com https://api.cloudinary.com https://res.cloudinary.com",
           "frame-src 'self' https:",
           "object-src 'none'",
