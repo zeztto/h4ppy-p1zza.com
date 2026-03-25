@@ -13,7 +13,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       transition={{ duration: 0.2 }}
       className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow flex flex-col h-full"
     >
-      <div className="relative rounded-t-xl overflow-hidden bg-muted" style={{ paddingBottom: '56.25%' }}>
+      <div className="relative rounded-t-xl overflow-hidden bg-muted" style={{ paddingBottom: '52%' }}>
         {project.thumbnailUrl === '' ? (
           <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
             <span className="text-lg font-medium text-foreground/60">
@@ -24,7 +24,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <img
             src={project.thumbnailUrl}
             alt={project.name}
-            className="absolute inset-0 w-full h-full object-cover object-top"
+            className="absolute top-0 left-0 w-full object-cover object-top"
+            style={{ height: '115%' }}
           />
         )}
       </div>
