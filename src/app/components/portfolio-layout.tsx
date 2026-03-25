@@ -715,8 +715,16 @@ function PortfolioPage({
   );
   const categories = ['All', 'Websites', ...otherCategories];
 
+  const sortedProjects = [...projects].sort((a, b) => {
+    if (a.category === 'Websites' && b.category !== 'Websites') return -1;
+    if (a.category !== 'Websites' && b.category === 'Websites') return 1;
+    return 0;
+  });
+
   const filteredProjects =
-    selectedCategory === 'All' ? projects : projects.filter((p) => p.category === selectedCategory);
+    selectedCategory === 'All'
+      ? sortedProjects
+      : projects.filter((p) => p.category === selectedCategory);
 
   return (
     <div className="container px-4 py-16 mx-auto max-w-7xl">
