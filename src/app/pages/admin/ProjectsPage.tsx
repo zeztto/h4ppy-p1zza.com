@@ -14,14 +14,24 @@ import {
   updateProject,
   deleteProject,
   reorderProjects,
+  saveSetting,
 } from '@/app/admin/services/api';
 import type { AdminProject, AdminProjectInput } from '@/app/admin/types';
 import { Button } from '@/app/components/ui/button';
 import { Badge } from '@/app/components/ui/badge';
 import { KanbanBoard } from '@/app/components/kanban/KanbanBoard';
+import { GridPreview } from '@/app/components/portfolio-grid/GridPreview';
+import { GridColumnControl } from '@/app/components/portfolio-grid/GridColumnControl';
+import { useSettings } from '@/app/hooks/useSettings';
 
 type ViewTab = 'list' | 'kanban' | 'grid';
 type KanbanMode = 'status' | 'category';
+type GridSubTab = 'landing' | 'portfolio';
+
+interface GridSettings {
+  landingColumns: number;
+  portfolioPageColumns: number;
+}
 
 const TAB_ITEMS: { key: ViewTab; label: string }[] = [
   { key: 'list', label: '리스트' },
@@ -120,6 +130,23 @@ export default function ProjectsPage() {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<ViewTab>('list');
   const [kanbanMode, setKanbanMode] = useState<KanbanMode>('status');
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [gridSubTab, setGridSubTab] = useState<GridSubTab>('landing');
+  const { data: gridSettings } = useSettings<GridSettings>('portfolio_grid', {
+    landingColumns: 3,
+    portfolioPageColumns: 3,
+  });
+  const [landingCols, setLandingCols] = useState<number | null>(null);
+  const [portfolioCols, setPortfolioCols] = useState<number | null>(null);
+
+  // Sync settings when loaded
+  useEffect(() => {
+    if (landingCols === null) setLandingCols(gridSettings.landingColumns);
+    if (portfolioCols === null) setPortfolioCols(gridSettings.portfolioPageColumns);
+  }, [gridSettings, landingCols, portfolioCols]);
+
+  const effectiveLandingCols = landingCols ?? gridSettings.landingColumns;
+  const effectivePortfolioCols = portfolioCols ?? gridSettings.portfolioPageColumns;
 
   const fetchProjects = useCallback(async () => {
     setLoading(true);
@@ -256,6 +283,87 @@ export default function ProjectsPage() {
     p.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  const handleBulkPublish = useCallback(
+    async (publish: boolean) => {
+      try {
+        for (const id of selectedIds) {
+          const project = projects.find((p) => p.id === id);
+          if (project) {
+            await updateProject(id, { ...project, isPublished: publish });
+          }
+        }
+        setSelectedIds(new Set());
+        await fetchProjects();
+      } catch (err) {
+        alert(err instanceof Error ? err.message : '일괄 업데이트에 실패했습니다.');
+      }
+    },
+    [selectedIds, projects, fetchProjects],
+  );
+
+  const handleBulkDelete = useCallback(async () => {
+    if (!window.confirm(`${String(selectedIds.size)}개 프로젝트를 삭제하시겠습니까?`)) return;
+    try {
+      for (const id of selectedIds) {
+        await deleteProject(id);
+      }
+      setSelectedIds(new Set());
+      await fetchProjects();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : '일괄 삭제에 실패했습니다.');
+    }
+  }, [selectedIds, fetchProjects]);
+
+  const toggleSelected = useCallback((id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    setSelectedIds((prev) => {
+      if (prev.size === filtered.length) {
+        return new Set();
+      }
+      return new Set(filtered.map((p) => p.id));
+    });
+  }, [filtered]);
+
+  const handleGridColumnSave = useCallback(
+    async (field: 'landingColumns' | 'portfolioPageColumns', value: number) => {
+      const newSettings: GridSettings = {
+        landingColumns: field === 'landingColumns' ? value : effectiveLandingCols,
+        portfolioPageColumns: field === 'portfolioPageColumns' ? value : effectivePortfolioCols,
+      };
+      if (field === 'landingColumns') setLandingCols(value);
+      else setPortfolioCols(value);
+      try {
+        await saveSetting('portfolio_grid', JSON.stringify(newSettings));
+      } catch (err) {
+        alert(err instanceof Error ? err.message : '설정 저장에 실패했습니다.');
+      }
+    },
+    [effectiveLandingCols, effectivePortfolioCols],
+  );
+
+  const handleGridReorder = useCallback(
+    async (ids: string[]) => {
+      try {
+        await reorderProjects(ids);
+        await fetchProjects();
+      } catch (err) {
+        alert(err instanceof Error ? err.message : '정렬에 실패했습니다.');
+      }
+    },
+    [fetchProjects],
+  );
+
   const updateField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
@@ -350,10 +458,48 @@ export default function ProjectsPage() {
             </p>
           )}
 
+          {/* Bulk action bar */}
+          {selectedIds.size > 0 && (
+            <div className="mt-4 flex items-center gap-3 p-3 bg-muted/50 border border-border rounded-lg">
+              <span className="text-sm text-muted-foreground">
+                {selectedIds.size}개 선택됨
+              </span>
+              <Button size="sm" variant="outline" onClick={() => void handleBulkPublish(true)}>
+                공개
+              </Button>
+              <Button size="sm" variant="outline" onClick={() => void handleBulkPublish(false)}>
+                비공개
+              </Button>
+              <Button size="sm" variant="destructive" onClick={() => void handleBulkDelete()}>
+                삭제
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => setSelectedIds(new Set())}>
+                선택 해제
+              </Button>
+            </div>
+          )}
+
           {filtered.length > 0 && (
             <div className="mt-6 divide-y divide-border rounded-lg border border-border">
+              {/* Select all header */}
+              <div className="flex items-center gap-4 px-4 py-2 bg-muted/30">
+                <input
+                  type="checkbox"
+                  checked={selectedIds.size === filtered.length && filtered.length > 0}
+                  onChange={toggleSelectAll}
+                  className="rounded"
+                />
+                <span className="text-xs text-muted-foreground">전체 선택</span>
+              </div>
               {filtered.map((project, index) => (
                 <div key={project.id} className="flex items-center gap-4 p-4">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.has(project.id)}
+                    onChange={() => toggleSelected(project.id)}
+                    className="rounded shrink-0"
+                  />
+
                   {project.thumbnailUrl ? (
                     <img
                       src={project.thumbnailUrl}
@@ -440,6 +586,57 @@ export default function ProjectsPage() {
             onReorder={handleKanbanReorder}
             onEdit={openEdit}
             onToggle={handleToggleById}
+          />
+        </div>
+      )}
+
+      {/* Grid preview */}
+      {!loading && !error && activeTab === 'grid' && (
+        <div className="mt-6">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setGridSubTab('landing')}
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                  gridSubTab === 'landing'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                }`}
+              >
+                랜딩 페이지
+              </button>
+              <button
+                onClick={() => setGridSubTab('portfolio')}
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                  gridSubTab === 'portfolio'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                }`}
+              >
+                포트폴리오 페이지
+              </button>
+            </div>
+            <div className="ml-auto">
+              {gridSubTab === 'landing' ? (
+                <GridColumnControl
+                  label="열 수"
+                  value={effectiveLandingCols}
+                  onChange={(n) => void handleGridColumnSave('landingColumns', n)}
+                />
+              ) : (
+                <GridColumnControl
+                  label="열 수"
+                  value={effectivePortfolioCols}
+                  onChange={(n) => void handleGridColumnSave('portfolioPageColumns', n)}
+                />
+              )}
+            </div>
+          </div>
+          <GridPreview
+            projects={filtered.filter((p) => p.isPublished)}
+            columns={gridSubTab === 'landing' ? effectiveLandingCols : effectivePortfolioCols}
+            onReorder={handleGridReorder}
+            onEdit={openEdit}
           />
         </div>
       )}
