@@ -555,34 +555,34 @@ function LandingPage({
                 className="group cursor-pointer transition-all hover:shadow-lg hover:scale-105 hover:border-primary/50 overflow-hidden"
                 onClick={() => window.open(project.url, '_blank')}
               >
-                {project.thumbnail && (
-                  <div className="aspect-video overflow-hidden border-b border-border">
-                    <img
-                      src={project.thumbnail}
-                      alt={project.name}
-                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
-                    />
+                <div className="flex gap-4 p-4">
+                  {project.thumbnail && (
+                    <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border border-border">
+                      <img
+                        src={project.thumbnail}
+                        alt={project.name}
+                        className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <h4 className="font-semibold text-sm leading-tight">{project.name}</h4>
+                      <ExternalLink className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+                    </div>
+                    <p className="text-muted-foreground text-xs line-clamp-2 mb-2">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {project.tags.map((tag) => (
+                        <Badge key={tag} variant="outline" className="text-[10px] px-1.5 py-0">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                )}
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-2 mb-1">
-                    <CardTitle className="text-base">{project.name}</CardTitle>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
-                  </div>
-                  <CardDescription className="line-clamp-2">
-                    {project.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="flex flex-wrap gap-1">
-                    {project.tags.map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
+                </div>
               </Card>
             ))}
         </div>
@@ -742,23 +742,24 @@ function PortfolioPage({
       <div className="space-y-8 mb-12">
         {filteredProjects.map((project) => (
           <Card key={project.id} className="overflow-hidden">
-            {project.thumbnail && (
-              <div className="aspect-[21/9] overflow-hidden border-b border-border">
-                <img
-                  src={project.thumbnail}
-                  alt={project.name}
-                  className="w-full h-full object-cover object-top"
-                  loading="lazy"
-                />
-              </div>
-            )}
             <div className="grid md:grid-cols-3 gap-6 p-6">
               {/* Left: Basic Info */}
               <div className="md:col-span-1">
                 <div className="flex items-start gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Star className="h-6 w-6 text-primary" />
-                  </div>
+                  {project.thumbnail ? (
+                    <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-border">
+                      <img
+                        src={project.thumbnail}
+                        alt={project.name}
+                        className="w-full h-full object-cover object-top"
+                        loading="lazy"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Star className="h-6 w-6 text-primary" />
+                    </div>
+                  )}
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <Badge variant="secondary" className="text-xs">
