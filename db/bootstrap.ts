@@ -1,0 +1,70 @@
+import type { DatabaseClient } from './client.js';
+
+const statements = [
+  'PRAGMA foreign_keys = ON',
+  `CREATE TABLE IF NOT EXISTS admin_users (
+    id TEXT PRIMARY KEY NOT NULL,
+    github_id TEXT NOT NULL UNIQUE,
+    github_login TEXT NOT NULL UNIQUE,
+    role TEXT NOT NULL DEFAULT 'admin',
+    avatar_url TEXT,
+    display_name TEXT,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+  )`,
+  'CREATE UNIQUE INDEX IF NOT EXISTS admin_users_github_login_idx ON admin_users (github_login)',
+  `CREATE TABLE IF NOT EXISTS sessions (
+    id TEXT PRIMARY KEY NOT NULL,
+    session_hash TEXT NOT NULL UNIQUE,
+    user_id TEXT NOT NULL,
+    expires_at INTEGER NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES admin_users(id) ON DELETE CASCADE
+  )`,
+  'CREATE UNIQUE INDEX IF NOT EXISTS sessions_hash_idx ON sessions (session_hash)',
+  `CREATE TABLE IF NOT EXISTS projects (
+    id TEXT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    url TEXT NOT NULL,
+    category TEXT NOT NULL,
+    year TEXT,
+    thumbnail_url TEXT,
+    long_description TEXT,
+    tags_json TEXT NOT NULL DEFAULT '[]',
+    features_json TEXT NOT NULL DEFAULT '[]',
+    tech_stack_json TEXT NOT NULL DEFAULT '[]',
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    is_featured INTEGER NOT NULL DEFAULT 0,
+    is_published INTEGER NOT NULL DEFAULT 1,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+  )`,
+  `CREATE TABLE IF NOT EXISTS site_profile (
+    id TEXT PRIMARY KEY NOT NULL DEFAULT 'primary',
+    display_name TEXT NOT NULL,
+    headline TEXT NOT NULL,
+    bio_short TEXT NOT NULL,
+    avatar_url TEXT,
+    github_url TEXT,
+    instagram_url TEXT,
+    email TEXT,
+    essay_markdown TEXT NOT NULL,
+    updated_at INTEGER NOT NULL
+  )`,
+  `CREATE TABLE IF NOT EXISTS site_sections (
+    key TEXT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    enabled INTEGER NOT NULL DEFAULT 1,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    updated_at INTEGER NOT NULL
+  )`,
+];
+
+export async function ensureDatabaseSchema(client: DatabaseClient) {
+  for (const statement of statements) {
+    await client.execute(statement);
+  }
+}

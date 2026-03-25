@@ -8,7 +8,6 @@ import {
   FileText,
   Menu,
   X,
-  LogOut,
 } from 'lucide-react';
 import { useAuth } from '@/app/admin/AuthContext';
 

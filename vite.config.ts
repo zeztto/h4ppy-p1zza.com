@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig(({ mode }) => {
   const isDevelopment = mode === 'development'
+  const apiTarget = process.env['VITE_DEV_API_ORIGIN'] ?? 'http://localhost:3001'
 
   return {
     plugins: [
@@ -29,6 +30,12 @@ export default defineConfig(({ mode }) => {
         'X-XSS-Protection': '1; mode=block',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
         'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',
+      },
+      proxy: {
+        '/api': {
+          target: apiTarget,
+          changeOrigin: true,
+        },
       },
     },
 
