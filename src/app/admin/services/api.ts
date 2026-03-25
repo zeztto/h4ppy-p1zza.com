@@ -4,6 +4,7 @@ import type {
   AdminProjectInput,
   AdminProfile,
   AdminSection,
+  AdminSetting,
   AdminSessionResponse,
 } from '../types';
 
@@ -144,5 +145,40 @@ export async function saveSections(sections: AdminSection[]) {
   return adminRequest<AdminSection[]>('/api/admin/sections', {
     method: 'PUT',
     body: JSON.stringify({ sections }),
+  });
+}
+
+export async function createSection(payload: Partial<AdminSection>) {
+  return adminRequest<AdminSection>('/api/admin/sections', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateSection(sectionId: string, payload: Partial<AdminSection>) {
+  return adminRequest<AdminSection>(`/api/admin/sections/${sectionId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteSection(sectionId: string) {
+  await adminRequest<void>(`/api/admin/sections/${sectionId}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function getSettings() {
+  return adminRequest<AdminSetting[]>('/api/admin/settings');
+}
+
+export async function getSetting(key: string) {
+  return adminRequest<AdminSetting>(`/api/admin/settings/${key}`);
+}
+
+export async function saveSetting(key: string, value: string) {
+  return adminRequest<AdminSetting>(`/api/admin/settings/${key}`, {
+    method: 'PUT',
+    body: JSON.stringify({ value }),
   });
 }
