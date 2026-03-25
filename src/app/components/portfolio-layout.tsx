@@ -546,7 +546,7 @@ function LandingPage({
         <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
           다양한 분야의 클라이언트를 위해 기획, 디자인, 개발한 웹사이트입니다.
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {projects
             .filter((p) => p.category === 'Websites')
             .map((project) => (
