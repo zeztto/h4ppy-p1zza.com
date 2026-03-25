@@ -24,29 +24,39 @@
 
 ## 1. Data Model Changes
 
-### 1.1 `site_sections` table — extend existing
+### 1.1 `site_sections` table — migrate PK and extend
+
+**PK change:** The current `key` column (e.g., `'hero'`, `'projects'`) serves as PK but collides when multiple instances of the same template exist. Migrate to:
+- New `id` column (nanoid, 12 chars) as PK
+- Keep `key` as a non-unique legacy column (nullable, for backward compat during migration)
+
+Existing rows: `id` is set to the current `key` value (e.g., `'hero'`→ id `'hero'`). New sections get a nanoid.
 
 Add columns:
 | Column | Type | Default | Description |
 |--------|------|---------|-------------|
+| `id` | text (PK) | nanoid | Unique section identifier |
 | `section_type` | text | `'template'` | `'template'` or `'custom'` |
-| `template_key` | text | null | Template identifier (hero, projects, values, skills, experience) |
+| `template_key` | text | null | Template identifier (hero, projects, values, skills, experience). Multiple sections can share the same template_key. |
 | `content_json` | text | `'{}'` | Section content as JSON string |
 
 - For template sections, `template_key` identifies the template; `content_json` holds template-specific data.
 - For custom sections, `template_key` is null; `content_json` holds `{ markdown, css }`.
-- Existing rows get `section_type='template'`, `template_key` set to current `key` value.
+- Existing rows: `id` = current `key`, `section_type='template'`, `template_key` = current `key`.
+- API endpoints use `id` (not `key`) in URL paths: `/api/admin/sections/:id`.
 
 ### 1.2 Template contentJson schemas
 
 ```typescript
-// hero
+// hero — references site_profile for headline/bioShort/avatarUrl.
+// HeroContent stores ONLY hero-specific display settings.
+// The HeroSection component reads profile data from site_profile
+// and hero-specific settings from this content.
 interface HeroContent {
-  headline: string;
-  bioShort: string;
-  avatarUrl: string;
   ctaText: string;
   ctaLink: string;
+  showAvatar: boolean;   // whether to display avatar in hero
+  layout: 'centered' | 'left-aligned'; // hero layout variant
 }
 
 // projects
@@ -128,10 +138,16 @@ interface PortfolioGridSettings {
 
 ### 1.4 Migration strategy
 
-- Existing `site_sections` rows: populate `section_type='template'`, `template_key=key`, `content_json` from current hardcoded defaults in `site-content.ts`
-- Existing `site_profile` social URLs: copy to `site_settings` footer entry
-- `site_profile` table: keep as-is for profile-specific data (displayName, headline, bioShort, avatarUrl, essayMarkdown). Remove social URLs after migration.
-- Run migration as part of `db/bootstrap.ts` (idempotent).
+**Phase 1 (this PR):**
+- Existing `site_sections` rows: set `id` = current `key`, `section_type='template'`, `template_key` = current `key`, `content_json` from hardcoded defaults in `site-content.ts`
+- Create `site_settings` with default header/footer/grid values
+- Footer reads from `site_settings` with **fallback** to `site_profile` social URLs (backward compat)
+- `site_profile` social URL columns remain — no destructive changes
+
+**Phase 2 (future PR):**
+- Drop social URL columns from `site_profile` after confirming all data migrated to `site_settings`
+
+**Migration approach:** Since SQLite lacks `ALTER TABLE ... ADD COLUMN IF NOT EXISTS`, migrations use `PRAGMA table_info()` to check existing columns before adding. Wrapped in the existing `db/bootstrap.ts` idempotent pattern. No `drizzle-kit` migration system introduced yet — follow existing convention.
 
 ---
 
@@ -186,9 +202,21 @@ Appears above each section when in edit mode:
 ### 2.5 Auto-save
 
 - Each field change: debounce 1 second, then PATCH to API
+- **Request queue:** Only the latest pending state is sent. If a new edit arrives while a PATCH is in-flight, the in-flight request is NOT cancelled but the next PATCH sends the full latest `contentJson`. This prevents stale overwrites.
 - Visual feedback: small "저장 중..." / "저장됨" indicator near edited element
 - Optimistic updates: UI updates immediately, rolls back on API error
 - No explicit save button needed for inline edits
+
+### 2.6 Error handling UX
+
+- **Save failure:** Toast notification at bottom-right ("저장에 실패했습니다. 다시 시도해주세요.") + field border turns red briefly
+- **Field revert:** On API error, the contentEditable/textarea reverts to last-known-good value
+- **Network disconnect:** Edit mode shows yellow "오프라인" badge; edits queue locally and flush on reconnect
+- **Stale data:** If another tab updated the same section, the PATCH response returns fresh data and the UI reconciles
+
+### 2.7 Platform requirements
+
+Inline editing requires desktop (mouse hover for edit affordances). Mobile admin access redirects to the traditional admin panel at `/admin`. The inline edit FAB is hidden on viewports below 1024px.
 
 ---
 
@@ -210,9 +238,16 @@ Top of page: tab bar with three modes:
 |-------|-----------|----------|
 
 - A project in "Featured" is also published (Featured is a subset of Published)
-- Dragging from Draft → Published sets `isPublished=true`
-- Dragging from Published → Featured sets `isFeatured=true`
-- Dragging back reverses the flags
+
+**State transition table:**
+| Drag | isPublished | isFeatured |
+|------|-------------|------------|
+| Draft → Published | `true` | unchanged |
+| Draft → Featured | `true` | `true` |
+| Published → Featured | unchanged | `true` |
+| Published → Draft | `false` | `false` |
+| Featured → Published | unchanged | `false` |
+| Featured → Draft | `false` | `false` |
 
 **Category view columns:**
 - One column per unique category + "미분류" column
@@ -340,9 +375,9 @@ PUT    /api/admin/settings/:key         — Update single setting
 
 GET    /api/public/settings/:key        — Get public setting (header, footer, portfolio_grid)
 
-POST   /api/admin/sections              — Create new section
-DELETE /api/admin/sections/:key         — Delete section
-PATCH  /api/admin/sections/:key         — Update section (including contentJson)
+POST   /api/admin/sections              — Create new section (returns generated id)
+DELETE /api/admin/sections/:id          — Delete section by id
+PATCH  /api/admin/sections/:id          — Update section by id (including contentJson)
 ```
 
 ### 6.2 Modified endpoints
@@ -455,11 +490,14 @@ DB (contentJson) → API (PublicSection with content) → LandingPage
 ```
 
 `CustomSection` component:
-1. Parse markdown to HTML (using existing or new markdown parser)
-2. Find shortcode patterns in HTML
-3. Replace shortcodes with rendered React components
-4. Apply scoped CSS (via CSS modules or `<style>` with unique prefix)
-5. Render sanitized HTML with embedded React components
+1. Parse shortcode patterns FIRST (before markdown) — extract and replace with placeholder tokens
+2. Parse markdown to HTML (using `marked` or `react-markdown`)
+3. Replace placeholder tokens with rendered React components
+4. Apply scoped CSS via `<style>` tag with auto-generated class prefix (e.g., `.section-abc123 h1 { ... }`) — all user CSS selectors are prefixed at runtime using a simple regex rewriter
+5. HTML sanitization: admin-authored HTML is **trusted** (single-admin site). No DOMPurify needed. If CMS is later multi-tenant, add DOMPurify at that point.
+6. Render via `react-markdown` with custom components map for shortcode tokens
+
+**Shortcode parse order rationale:** Parsing shortcodes before markdown prevents the markdown parser from wrapping block-level shortcodes like `[project-grid]` in `<p>` tags.
 
 ---
 
