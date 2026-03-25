@@ -12,7 +12,7 @@ const chromeBinary = '/Applications/Google Chrome.app/Contents/MacOS/Google Chro
 const rawDir = path.join(rootDir, 'output', 'thumbnails', 'raw');
 const tempDir = path.join(rootDir, 'output', 'thumbnails', 'temp');
 const finalDir = path.join(rootDir, 'public', 'thumbnails');
-const rawViewport = { width: 1440, height: 900 };
+const rawViewport = { width: 1360, height: 820 };
 const finalViewport = { width: 1600, height: 900 };
 const finalSize = { width: 1200, height: 675 };
 
@@ -84,99 +84,31 @@ function buildCompositionHtml(target: ProjectThumbnailTarget, rawScreenshotPath:
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${escapeHtml(target.name)}</title>
     <style>
-      :root {
-        color-scheme: dark;
-      }
-
       * {
         box-sizing: border-box;
       }
 
       body {
         margin: 0;
-        min-height: 100vh;
+        width: 100vw;
+        height: 100vh;
         overflow: hidden;
-        background:
-          radial-gradient(circle at 18% 20%, rgba(96, 165, 250, 0.28), transparent 34%),
-          radial-gradient(circle at 82% 18%, rgba(244, 114, 182, 0.16), transparent 30%),
-          linear-gradient(135deg, #040814 0%, #09101f 45%, #0c1424 100%);
-        display: grid;
-        place-items: center;
-        font-family: "Pretendard", "SUIT", "Noto Sans KR", sans-serif;
-      }
-
-      .backdrop {
-        position: fixed;
-        inset: -5%;
-        background-image: url("${rawImageUrl}");
-        background-size: cover;
-        background-position: center;
-        filter: blur(40px) saturate(1.08);
-        opacity: 0.42;
-        transform: scale(1.08);
-      }
-
-      .noise {
-        position: fixed;
-        inset: 0;
-        background:
-          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-        background-size: 32px 32px;
-        mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent 88%);
-        opacity: 0.35;
-      }
-
-      .halo {
-        position: fixed;
-        inset: 0;
-        display: grid;
-        place-items: center;
-      }
-
-      .halo::before {
-        content: "";
-        width: 72vw;
-        height: 72vh;
-        border-radius: 999px;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 70%);
-        filter: blur(26px);
-      }
-
-      .frame {
-        position: relative;
-        z-index: 1;
-        padding: 18px;
-        border-radius: 34px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.06));
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        box-shadow:
-          0 42px 100px rgba(3, 8, 20, 0.48),
-          0 12px 32px rgba(9, 14, 28, 0.28);
-        backdrop-filter: blur(10px);
+        background: #0b0f19;
       }
 
       img {
         display: block;
-        width: auto;
-        max-width: min(1240px, 86vw);
-        max-height: 78vh;
-        height: auto;
-        border-radius: 24px;
-        background: #ffffff;
-        box-shadow:
-          0 18px 44px rgba(15, 23, 42, 0.32),
-          0 0 0 1px rgba(255, 255, 255, 0.12);
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        object-position: center top;
+        transform: scale(1.08);
+        transform-origin: center top;
       }
     </style>
   </head>
   <body>
-    <div class="backdrop"></div>
-    <div class="noise"></div>
-    <div class="halo"></div>
-    <div class="frame">
-      <img src="${rawImageUrl}" alt="${escapeHtml(target.name)}" />
-    </div>
+    <img src="${rawImageUrl}" alt="${escapeHtml(target.name)}" />
   </body>
 </html>`;
 }
