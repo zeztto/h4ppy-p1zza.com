@@ -1,42 +1,37 @@
-import { Users, Lightbulb, TrendingUp } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import * as icons from 'lucide-react';
 import { SectionHeading } from '@/app/components/SectionHeading';
+import type { ValuesContent } from '@/app/lib/section-content-types';
+import { DEFAULT_VALUES_CONTENT } from '@/data/site-content';
 
-const values = [
-  {
-    icon: Users,
-    title: '사용자 중심',
-    description:
-      '모든 결정의 중심에 사용자를 놓습니다. 기술은 도구일 뿐, 사람이 편하게 쓸 수 있어야 합니다.',
-  },
-  {
-    icon: Lightbulb,
-    title: '실용적 해결',
-    description:
-      '완벽보다 실용을 추구합니다. 일단 작동하는 것을 만들고, 그 다음 더 좋게 만듭니다.',
-  },
-  {
-    icon: TrendingUp,
-    title: '지속적 성장',
-    description:
-      '매일 조금씩 나아가는 것을 믿습니다. 어제보다 나은 코드를 쓰고, 어제보다 나은 서비스를 만듭니다.',
-  },
-];
+function getIcon(name: string): LucideIcon {
+  return (icons as unknown as Record<string, LucideIcon>)[name] ?? icons.HelpCircle;
+}
 
-export function ValuesSection() {
+interface ValuesSectionProps {
+  content?: ValuesContent;
+}
+
+export function ValuesSection({ content }: ValuesSectionProps) {
+  const data = content ?? DEFAULT_VALUES_CONTENT;
+
   return (
     <section className="py-24 bg-secondary/30">
       <div className="max-w-6xl mx-auto px-6">
-        <SectionHeading title="핵심 가치" />
+        <SectionHeading title={data.title} />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-          {values.map((value) => (
-            <div key={value.title}>
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <value.icon className="w-6 h-6" />
+          {data.items.map((item) => {
+            const Icon = getIcon(item.icon);
+            return (
+              <div key={item.title}>
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                  <Icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-semibold mt-4">{item.title}</h3>
+                <p className="text-muted-foreground mt-2">{item.description}</p>
               </div>
-              <h3 className="text-lg font-semibold mt-4">{value.title}</h3>
-              <p className="text-muted-foreground mt-2">{value.description}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
