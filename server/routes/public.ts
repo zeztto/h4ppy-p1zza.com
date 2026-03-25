@@ -1,7 +1,7 @@
 import { asc, eq } from 'drizzle-orm';
 import { Router } from 'express';
-import { projects, siteProfile, siteSections } from '../../db/schema.js';
-import { mapProfile, mapProject, mapSection } from '../lib/content.js';
+import { projects, siteProfile, siteSections, siteSettings } from '../../db/schema.js';
+import { mapProfile, mapProject, mapSection, mapSetting } from '../lib/content.js';
 import { asyncHandler, assert } from '../lib/http.js';
 
 export function createPublicRouter() {
@@ -50,10 +50,26 @@ export function createPublicRouter() {
     '/sections',
     asyncHandler(async (_req, res) => {
       const rows = await res.locals.db.query.siteSections.findMany({
+        where: eq(siteSections.enabled, true),
         orderBy: [asc(siteSections.sortOrder)],
       });
 
       res.status(200).json(rows.map(mapSection));
+    })
+  );
+
+  router.get(
+    '/settings/:key',
+    asyncHandler(async (req, res) => {
+      const key = req.params['key'];
+      assert(typeof key === 'string' && key.length > 0, 400, 'Setting key is required');
+
+      const row = await res.locals.db.query.siteSettings.findFirst({
+        where: eq(siteSettings.key, key),
+      });
+
+      assert(row, 404, 'Setting not found');
+      res.status(200).json(mapSetting(row));
     })
   );
 
