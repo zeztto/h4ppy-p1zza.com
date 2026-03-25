@@ -15,6 +15,7 @@ import {
   ChevronDown,
   Code2,
   ExternalLink,
+  Globe,
   Grid3x3,
   X,
   Home,
@@ -536,6 +537,57 @@ function LandingPage({
         </div>
       </div>
 
+      {/* Websites Section */}
+      <div className="mb-20">
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <Globe className="h-6 w-6 text-primary" />
+          <h2 className="text-center">웹사이트 제작</h2>
+        </div>
+        <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
+          다양한 분야의 클라이언트를 위해 기획, 디자인, 개발한 웹사이트입니다.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {projects
+            .filter((p) => p.category === 'Websites')
+            .map((project) => (
+              <Card
+                key={project.id}
+                className="group cursor-pointer transition-all hover:shadow-lg hover:scale-105 hover:border-primary/50 overflow-hidden"
+                onClick={() => window.open(project.url, '_blank')}
+              >
+                {project.thumbnail && (
+                  <div className="aspect-video overflow-hidden border-b border-border">
+                    <img
+                      src={project.thumbnail}
+                      alt={project.name}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <CardTitle className="text-base">{project.name}</CardTitle>
+                    <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+                  </div>
+                  <CardDescription className="line-clamp-2">
+                    {project.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="flex flex-wrap gap-1">
+                    {project.tags.map((tag) => (
+                      <Badge key={tag} variant="outline" className="text-xs">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+        </div>
+      </div>
+
       {/* Projects Grid */}
       <div className="mb-20">
         <h2 className="mb-8 text-center">주요 프로젝트</h2>
@@ -690,6 +742,16 @@ function PortfolioPage({
       <div className="space-y-8 mb-12">
         {filteredProjects.map((project) => (
           <Card key={project.id} className="overflow-hidden">
+            {project.thumbnail && (
+              <div className="aspect-[21/9] overflow-hidden border-b border-border">
+                <img
+                  src={project.thumbnail}
+                  alt={project.name}
+                  className="w-full h-full object-cover object-top"
+                  loading="lazy"
+                />
+              </div>
+            )}
             <div className="grid md:grid-cols-3 gap-6 p-6">
               {/* Left: Basic Info */}
               <div className="md:col-span-1">
@@ -722,10 +784,21 @@ function PortfolioPage({
                 </div>
 
                 <div className="flex gap-2">
-                  <Button size="sm" onClick={() => onSelectProject(project)} className="flex-1">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    열어보기
-                  </Button>
+                  {project.category === 'Websites' ? (
+                    <Button
+                      size="sm"
+                      onClick={() => window.open(project.url, '_blank')}
+                      className="flex-1"
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      방문하기
+                    </Button>
+                  ) : (
+                    <Button size="sm" onClick={() => onSelectProject(project)} className="flex-1">
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      열어보기
+                    </Button>
+                  )}
                 </div>
               </div>
 

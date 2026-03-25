@@ -25,6 +25,7 @@ export interface Project {
   features?: string[];
   techStack?: string[];
   year?: string;
+  thumbnail?: string;
 }
 
 export const projects: Project[] = [
@@ -709,6 +710,7 @@ export const projects: Project[] = [
     tags: ['Audio', 'Open Source', 'Music'],
     category: 'Websites',
     year: '2025',
+    thumbnail: '/thumbnails/h4ppylabs.jpg',
     longDescription:
       'h4ppy Labs는 기타리스트와 뮤지션을 위한 창의적인 가상악기 및 이펙터 플러그인을 제작합니다. 퍼즈 디스토션 플러그인 FUZZA와 원노브 덕킹 리버브 플러그인 DUCKAVERB를 무료로 제공하며, Windows와 macOS를 모두 지원합니다. DSP 기술을 기반으로 제로 레이턴시, 노이즈 게이트, 다양한 클리핑 모드 등 전문적인 기능을 갖추고 있습니다.',
     features: [
@@ -729,6 +731,7 @@ export const projects: Project[] = [
     tags: ['Service', 'Lifestyle', 'Matchmaking'],
     category: 'Websites',
     year: '2025',
+    thumbnail: '/thumbnails/meetgirls.jpg',
     longDescription:
       '밋걸은 특별한 순간에 함께할 파트너를 매칭해주는 프리미엄 컨시어지 서비스입니다. 가족 모임, 결혼식, 브랜드 행사 등의 동행 서비스부터 실전 데이트 연습, 메시지/통화 코칭, 풀데이 컨시어지까지 다양한 서비스를 운영합니다. 24시간 내 응답, 100% 프라이버시 보호, 서울 전역 대응이 가능합니다.',
     features: [
@@ -749,6 +752,7 @@ export const projects: Project[] = [
     tags: ['Food', 'Bakery', 'Cafe'],
     category: 'Websites',
     year: '2025',
+    thumbnail: '/thumbnails/srbbrs.jpg',
     longDescription:
       'SRBBRS는 서울 성동구 서울숲에 위치한 크로와상 전문 베이커리입니다. 매일 새벽 4시부터 프랑스 AOP 인증 버터와 국내산 유기농 밀가루로 72겹의 크로와상을 직접 만들며, 오랜 발효와 숙성을 거쳐 바삭함과 부드러움의 균형을 추구합니다.',
     features: [
@@ -768,6 +772,7 @@ export const projects: Project[] = [
     tags: ['Crypto', 'Fintech', 'Exchange'],
     category: 'Websites',
     year: '2025',
+    thumbnail: '/thumbnails/axmx.jpg',
     longDescription:
       'AXMX Exchange는 300개 이상의 거래쌍을 지원하며, 0.001초 이내 주문 체결과 초저수수료를 제공하는 암호화폐 거래소입니다. 95% 콜드스토리지 보관, SOC 2 Type II 인증, 다중서명 지갑 등 기관급 보안을 갖추고 있으며, REST/WebSocket/FIX API를 지원합니다.',
     features: [
@@ -788,6 +793,7 @@ export const projects: Project[] = [
     tags: ['Music', 'Studio', 'Recording'],
     category: 'Websites',
     year: '2025',
+    thumbnail: '/thumbnails/garlicton.jpg',
     longDescription:
       '갈릭톤 스튜디오는 인천 강화군에 위치한 K-메탈 음악 전문 레코딩 스튜디오로, 15년 이상 경력의 엔지니어가 운영합니다. 보컬 레코딩부터 믹싱, 마스터링, 프로듀싱까지 음악 제작의 전 과정을 지원하며, 아날로그 아웃보드와 디지털 프로세싱을 결합한 하이브리드 방식을 사용합니다.',
     features: [
@@ -807,6 +813,7 @@ export const projects: Project[] = [
     tags: ['Music', 'Hardware', 'Guitar'],
     category: 'Websites',
     year: '2025',
+    thumbnail: '/thumbnails/pedals.jpg',
     longDescription:
       'PEDALS는 한국의 공방에서 포인트 투 포인트 핸드 와이어링으로 하나하나 수작업 제작하는 부띠끄 기타 이펙터 페달 브랜드입니다. 디스토션, 퍼즈, 아날로그 코러스, 테이프 에코 등의 제품을 판매하며, 부품 선별부터 사운드 테스트까지 모든 공정을 수작업으로 진행합니다.',
     features: [
