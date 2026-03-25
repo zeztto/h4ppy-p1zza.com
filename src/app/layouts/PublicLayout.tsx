@@ -5,6 +5,7 @@ import { ThemeToggle } from '@/app/components/ThemeToggle';
 import { Footer } from '@/app/components/Footer';
 import { EditModeProvider } from '@/app/components/inline-edit/EditModeProvider';
 import { EditModeFAB } from '@/app/components/inline-edit/EditModeFAB';
+import { EditableWrapper } from '@/app/components/inline-edit/EditableWrapper';
 import { usePublicData } from '@/app/hooks/usePublicData';
 import { useSettings } from '@/app/hooks/useSettings';
 import type { PublicProfile } from '@/app/lib/types';
@@ -48,27 +49,31 @@ export function PublicLayout() {
         <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
           <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             {/* Left: Site name */}
-            <Link to="/" className="text-lg font-semibold text-foreground">
-              {headerSettings.siteName}
-            </Link>
+            <EditableWrapper onEdit={() => { /* placeholder: open header editor */ }}>
+              <Link to="/" className="text-lg font-semibold text-foreground">
+                {headerSettings.siteName}
+              </Link>
+            </EditableWrapper>
 
             {/* Right: Desktop nav */}
-            <nav className="hidden md:flex gap-6 items-center">
-              {headerSettings.navLinks.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={
-                    pathname === link.to || pathname.startsWith(link.to + '/')
-                      ? 'text-foreground font-medium'
-                      : 'text-muted-foreground hover:text-foreground transition-colors'
-                  }
-                >
-                  {link.label}
-                </Link>
-              ))}
-              {headerSettings.showThemeToggle && <ThemeToggle />}
-            </nav>
+            <EditableWrapper onEdit={() => { /* placeholder: open header editor */ }}>
+              <nav className="hidden md:flex gap-6 items-center">
+                {headerSettings.navLinks.map((link) => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={
+                      pathname === link.to || pathname.startsWith(link.to + '/')
+                        ? 'text-foreground font-medium'
+                        : 'text-muted-foreground hover:text-foreground transition-colors'
+                    }
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                {headerSettings.showThemeToggle && <ThemeToggle />}
+              </nav>
+            </EditableWrapper>
 
             {/* Right: Mobile hamburger */}
             <button
@@ -105,7 +110,9 @@ export function PublicLayout() {
           <Outlet />
         </main>
 
-        {profile ? <Footer profile={profile} /> : <Footer />}
+        <EditableWrapper onEdit={() => { /* placeholder: open footer editor */ }}>
+          {profile ? <Footer profile={profile} /> : <Footer />}
+        </EditableWrapper>
       </div>
 
       <EditModeFAB />
