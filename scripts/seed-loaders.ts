@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { projects } from '../src/data/projects.js';
 import { DEFAULT_SITE_PROFILE, DEFAULT_SITE_SECTIONS } from '../src/data/site-content.js';
 
@@ -34,6 +36,25 @@ export interface SeedSection {
   sortOrder: number;
 }
 
+function resolveThumbnail(projectId: string, thumbnail: string | undefined) {
+  if (thumbnail) {
+    return thumbnail;
+  }
+
+  const generatedThumbnailPath = path.join(
+    process.cwd(),
+    'public',
+    'thumbnails',
+    `${projectId}.jpg`
+  );
+
+  if (existsSync(generatedThumbnailPath)) {
+    return `/thumbnails/${projectId}.jpg`;
+  }
+
+  return undefined;
+}
+
 export async function loadSeedProjects(): Promise<SeedProject[]> {
   return projects.map((project) => ({
     id: project.id,
@@ -42,7 +63,7 @@ export async function loadSeedProjects(): Promise<SeedProject[]> {
     url: project.url,
     category: project.category,
     year: project.year,
-    thumbnail: project.thumbnail,
+    thumbnail: resolveThumbnail(project.id, project.thumbnail),
     longDescription: project.longDescription,
     tags: project.tags,
     features: project.features ?? [],
