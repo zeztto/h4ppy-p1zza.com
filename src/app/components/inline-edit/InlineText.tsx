@@ -1,5 +1,6 @@
-import { useRef, useState, useEffect, type KeyboardEvent, type createElement } from 'react';
+import { useRef, useState, useEffect, useCallback, type KeyboardEvent, type createElement } from 'react';
 import { useEditMode } from './EditModeProvider';
+import { useAutoSave } from '@/app/hooks/useAutoSave';
 
 type TagName = 'h1' | 'h2' | 'h3' | 'p' | 'span';
 
@@ -15,6 +16,14 @@ export function InlineText({ value, onSave, tag: Tag = 'span', className = '' }:
   const ref = useRef<HTMLElement>(null);
   const [editing, setEditing] = useState(false);
   const originalValue = useRef(value);
+
+  const asyncSave = useCallback(
+    async (v: string) => {
+      onSave(v);
+    },
+    [onSave],
+  );
+  const debouncedSave = useAutoSave(asyncSave, 1000);
 
   // Sync original value when value prop changes
   useEffect(() => {
@@ -36,7 +45,7 @@ export function InlineText({ value, onSave, tag: Tag = 'span', className = '' }:
     setEditing(false);
     const newValue = ref.current?.textContent ?? '';
     if (newValue !== originalValue.current) {
-      onSave(newValue);
+      debouncedSave(newValue);
     }
   };
 
