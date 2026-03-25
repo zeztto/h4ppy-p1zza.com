@@ -1,3 +1,15 @@
+import type {
+  ExperienceContent,
+  HeroContent,
+  ProjectsSectionContent,
+  SkillsContent,
+  TemplateKey,
+  ValuesContent,
+  SectionContent,
+} from '../app/lib/section-content-types.js';
+
+export type { SectionContent };
+
 export interface SiteProfileContent {
   displayName: string;
   headline: string;
@@ -118,3 +130,88 @@ export const DEFAULT_SITE_SECTIONS: SiteSectionContent[] = [
     sortOrder: 4,
   },
 ];
+
+export const DEFAULT_HERO_CONTENT: HeroContent = {
+  ctaText: '포트폴리오 보기',
+  ctaLink: '/portfolio',
+  showAvatar: true,
+  layout: 'left-aligned',
+};
+
+export const DEFAULT_PROJECTS_CONTENT: ProjectsSectionContent = {
+  title: 'Featured Projects',
+  maxItems: 6,
+  showFeaturedOnly: true,
+};
+
+export const DEFAULT_VALUES_CONTENT: ValuesContent = {
+  title: '핵심 가치',
+  items: [
+    {
+      icon: 'Users',
+      title: '사용자 중심',
+      description:
+        '모든 결정의 중심에 사용자를 놓습니다. 기술은 도구일 뿐, 사람이 편하게 쓸 수 있어야 합니다.',
+    },
+    {
+      icon: 'Lightbulb',
+      title: '실용적 해결',
+      description:
+        '완벽보다 실용을 추구합니다. 일단 작동하는 것을 만들고, 그 다음 더 좋게 만듭니다.',
+    },
+    {
+      icon: 'TrendingUp',
+      title: '지속적 성장',
+      description:
+        '매일 조금씩 나아가는 것을 믿습니다. 어제보다 나은 코드를 쓰고, 어제보다 나은 서비스를 만듭니다.',
+    },
+  ],
+};
+
+export const DEFAULT_SKILLS_CONTENT: SkillsContent = {
+  title: '기술 스택',
+  categories: [
+    {
+      name: 'Frontend',
+      items: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'HTML/CSS'],
+    },
+    {
+      name: 'Backend',
+      items: ['Node.js', 'Express', 'PostgreSQL', 'SQLite', 'REST API'],
+    },
+    {
+      name: 'Tools',
+      items: ['Git', 'Vite', 'Figma', 'Vercel', 'Railway', 'Cloudinary'],
+    },
+  ],
+};
+
+export const DEFAULT_EXPERIENCE_CONTENT: ExperienceContent = {
+  title: '주요 업무',
+  items: [
+    {
+      title: '웹 애플리케이션 개발',
+      description: 'React, TypeScript 기반의 풀스택 웹 앱 개발',
+    },
+    {
+      title: '마케팅 랜딩페이지 제작',
+      description: '전환율을 고려한 마케팅 페이지 기획 및 개발',
+    },
+    {
+      title: 'UI/UX 설계',
+      description: '사용자 경험을 최우선으로 한 인터페이스 설계',
+    },
+    {
+      title: '데이터 기반 의사결정',
+      description: '분석과 데이터를 활용한 서비스 개선',
+    },
+  ],
+};
+
+export const DEFAULT_SECTION_CONTENT: Record<TemplateKey, SectionContent> = {
+  hero: DEFAULT_HERO_CONTENT,
+  projects: DEFAULT_PROJECTS_CONTENT,
+  values: DEFAULT_VALUES_CONTENT,
+  skills: DEFAULT_SKILLS_CONTENT,
+  experience: DEFAULT_EXPERIENCE_CONTENT,
+};
