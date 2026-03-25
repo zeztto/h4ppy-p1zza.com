@@ -16,7 +16,7 @@ interface InlineEditToolbarProps {
 
 export function InlineEditToolbar({
   sectionName,
-  sectionId: _sectionId,
+  sectionId,
   enabled,
   isFirst,
   isLast,
@@ -37,7 +37,7 @@ export function InlineEditToolbar({
   };
 
   return (
-    <div className="flex items-center gap-2 px-3 py-1.5 mb-1 rounded-lg bg-white/90 dark:bg-zinc-900/90 backdrop-blur shadow-sm border border-border">
+    <div data-section-id={sectionId} className="flex items-center gap-2 px-3 py-1.5 mb-1 rounded-lg bg-white/90 dark:bg-zinc-900/90 backdrop-blur shadow-sm border border-border">
       <span className="text-xs font-medium text-muted-foreground mr-2 select-none">
         {sectionName}
       </span>

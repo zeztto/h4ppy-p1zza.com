@@ -230,7 +230,6 @@ export default function ProjectsPage() {
       const project = projects.find((p) => p.id === id);
       if (project) void handleToggle(project, field);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [projects],
   );
 

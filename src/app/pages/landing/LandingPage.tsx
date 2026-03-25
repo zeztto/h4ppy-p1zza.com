@@ -84,7 +84,6 @@ export function LandingPage() {
         console.error('Failed to move section up:', err);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [allSections, refetchSections],
   );
 
@@ -103,7 +102,6 @@ export function LandingPage() {
         console.error('Failed to move section down:', err);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [allSections, refetchSections],
   );
 

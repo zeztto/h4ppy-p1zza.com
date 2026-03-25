@@ -116,6 +116,7 @@ export function KanbanBoard({
     setActiveId(String(event.active.id));
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleDragOver = useCallback((_event: DragOverEvent) => {
     // Visual feedback handled by useDroppable's isOver
   }, []);
@@ -132,7 +133,7 @@ export function KanbanBoard({
       const sourceColId = findColumnForProject(activeIdStr);
 
       // Determine target column: if over.id is a column id, use it; otherwise find the column of the target card
-      let targetColId = columns.some((c) => c.id === overIdStr)
+      const targetColId = columns.some((c) => c.id === overIdStr)
         ? overIdStr
         : findColumnForProject(overIdStr);
 
