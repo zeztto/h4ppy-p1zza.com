@@ -18,6 +18,16 @@ import {
 import type { AdminProject, AdminProjectInput } from '@/app/admin/types';
 import { Button } from '@/app/components/ui/button';
 import { Badge } from '@/app/components/ui/badge';
+import { KanbanBoard } from '@/app/components/kanban/KanbanBoard';
+
+type ViewTab = 'list' | 'kanban' | 'grid';
+type KanbanMode = 'status' | 'category';
+
+const TAB_ITEMS: { key: ViewTab; label: string }[] = [
+  { key: 'list', label: '리스트' },
+  { key: 'kanban', label: '칸반' },
+  { key: 'grid', label: '그리드 프리뷰' },
+];
 
 const emptyForm: AdminProjectInput = {
   name: '',
@@ -108,6 +118,8 @@ export default function ProjectsPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [form, setForm] = useState<FormState>(projectToFormState(emptyForm));
   const [saving, setSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState<ViewTab>('list');
+  const [kanbanMode, setKanbanMode] = useState<KanbanMode>('status');
 
   const fetchProjects = useCallback(async () => {
     setLoading(true);
@@ -186,6 +198,15 @@ export default function ProjectsPage() {
     }
   };
 
+  const handleToggleById = useCallback(
+    (id: string, field: 'isPublished' | 'isFeatured') => {
+      const project = projects.find((p) => p.id === id);
+      if (project) void handleToggle(project, field);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [projects],
+  );
+
   const handleReorder = async (index: number, direction: 'up' | 'down') => {
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
     if (targetIndex < 0 || targetIndex >= projects.length) return;
@@ -204,6 +225,32 @@ export default function ProjectsPage() {
       await fetchProjects();
     }
   };
+
+  const handleKanbanReorder = useCallback(
+    async (ids: string[]) => {
+      try {
+        await reorderProjects(ids);
+        await fetchProjects();
+      } catch (err) {
+        alert(err instanceof Error ? err.message : '정렬에 실패했습니다.');
+      }
+    },
+    [fetchProjects],
+  );
+
+  const handleKanbanProjectUpdate = useCallback(
+    async (id: string, changes: Partial<AdminProject>) => {
+      const project = projects.find((p) => p.id === id);
+      if (!project) return;
+      try {
+        const updated = await updateProject(id, { ...project, ...changes });
+        setProjects((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+      } catch (err) {
+        alert(err instanceof Error ? err.message : '업데이트에 실패했습니다.');
+      }
+    },
+    [projects],
+  );
 
   const filtered = projects.filter((p) =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -234,6 +281,49 @@ export default function ProjectsPage() {
         </Button>
       </div>
 
+      {/* Tab bar */}
+      <div className="flex items-center gap-1 mt-4 border-b border-border">
+        {TAB_ITEMS.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key)}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === tab.key
+                ? 'border-primary text-primary'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+
+        {/* Kanban mode toggle */}
+        {activeTab === 'kanban' && (
+          <div className="ml-auto flex items-center gap-1 pb-1">
+            <button
+              onClick={() => setKanbanMode('status')}
+              className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                kanbanMode === 'status'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+              }`}
+            >
+              상태별
+            </button>
+            <button
+              onClick={() => setKanbanMode('category')}
+              className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                kanbanMode === 'category'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+              }`}
+            >
+              카테고리별
+            </button>
+          </div>
+        )}
+      </div>
+
       {loading && (
         <div className="mt-6 space-y-3">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -251,87 +341,106 @@ export default function ProjectsPage() {
         </div>
       )}
 
-      {!loading && !error && filtered.length === 0 && (
-        <p className="mt-6 text-muted-foreground">
-          {searchTerm ? '검색 결과가 없습니다.' : '프로젝트가 없습니다.'}
-        </p>
+      {/* List view */}
+      {!loading && !error && activeTab === 'list' && (
+        <>
+          {filtered.length === 0 && (
+            <p className="mt-6 text-muted-foreground">
+              {searchTerm ? '검색 결과가 없습니다.' : '프로젝트가 없습니다.'}
+            </p>
+          )}
+
+          {filtered.length > 0 && (
+            <div className="mt-6 divide-y divide-border rounded-lg border border-border">
+              {filtered.map((project, index) => (
+                <div key={project.id} className="flex items-center gap-4 p-4">
+                  {project.thumbnailUrl ? (
+                    <img
+                      src={project.thumbnailUrl}
+                      alt={project.name}
+                      className="h-10 w-10 rounded object-cover shrink-0"
+                    />
+                  ) : (
+                    <div className="h-10 w-10 rounded bg-muted shrink-0" />
+                  )}
+
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{project.name}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      {project.category && (
+                        <Badge variant="secondary" className="text-xs">
+                          {project.category}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+
+                  <label className="flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={project.isPublished}
+                      onChange={() => void handleToggle(project, 'isPublished')}
+                      className="rounded"
+                    />
+                    공개
+                  </label>
+
+                  <label className="flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={project.isFeatured}
+                      onChange={() => void handleToggle(project, 'isFeatured')}
+                      className="rounded"
+                    />
+                    추천
+                  </label>
+
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => void handleReorder(index, 'up')}
+                      disabled={index === 0}
+                    >
+                      <ChevronUp className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => void handleReorder(index, 'down')}
+                      disabled={index === filtered.length - 1}
+                    >
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => openEdit(project)}>
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => void handleDelete(project.id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
       )}
 
-      {!loading && !error && filtered.length > 0 && (
-        <div className="mt-6 divide-y divide-border rounded-lg border border-border">
-          {filtered.map((project, index) => (
-            <div key={project.id} className="flex items-center gap-4 p-4">
-              {project.thumbnailUrl ? (
-                <img
-                  src={project.thumbnailUrl}
-                  alt={project.name}
-                  className="h-10 w-10 rounded object-cover shrink-0"
-                />
-              ) : (
-                <div className="h-10 w-10 rounded bg-muted shrink-0" />
-              )}
-
-              <div className="flex-1 min-w-0">
-                <p className="font-medium truncate">{project.name}</p>
-                <div className="flex items-center gap-2 mt-0.5">
-                  {project.category && (
-                    <Badge variant="secondary" className="text-xs">
-                      {project.category}
-                    </Badge>
-                  )}
-                </div>
-              </div>
-
-              <label className="flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={project.isPublished}
-                  onChange={() => void handleToggle(project, 'isPublished')}
-                  className="rounded"
-                />
-                공개
-              </label>
-
-              <label className="flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={project.isFeatured}
-                  onChange={() => void handleToggle(project, 'isFeatured')}
-                  className="rounded"
-                />
-                추천
-              </label>
-
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => void handleReorder(index, 'up')}
-                  disabled={index === 0}
-                >
-                  <ChevronUp className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => void handleReorder(index, 'down')}
-                  disabled={index === filtered.length - 1}
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon" onClick={() => openEdit(project)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => void handleDelete(project.id)}
-                >
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                </Button>
-              </div>
-            </div>
-          ))}
+      {/* Kanban view */}
+      {!loading && !error && activeTab === 'kanban' && (
+        <div className="mt-6">
+          <KanbanBoard
+            projects={filtered}
+            mode={kanbanMode}
+            onProjectUpdate={handleKanbanProjectUpdate}
+            onReorder={handleKanbanReorder}
+            onEdit={openEdit}
+            onToggle={handleToggleById}
+          />
         </div>
       )}
 
