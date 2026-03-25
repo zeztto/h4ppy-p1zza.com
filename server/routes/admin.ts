@@ -369,19 +369,20 @@ export function createAdminRouter() {
       const payload = requireJsonObject(req.body);
       assert(Array.isArray(payload['sections']), 400, 'sections must be an array');
       const sectionsPayload = payload['sections'] as unknown[];
-      const incomingKeys = new Set<string>();
+      const incomingIds = new Set<string>();
       const now = new Date();
 
       await Promise.all(
         sectionsPayload.map(async (section, index) => {
           const record = requireJsonObject(section, 'Each section must be an object');
-          const key = stringField(record['key'], 'key');
-          incomingKeys.add(key);
+          const id = stringField(record['id'] ?? record['key'], 'id');
+          incomingIds.add(id);
 
           await res.locals.db
             .insert(siteSections)
             .values({
-              key,
+              id,
+              key: stringField(record['key'], 'key') || null,
               name: stringField(record['name'], 'name'),
               description: stringField(record['description'], 'description'),
               enabled: record['enabled'] !== false,
@@ -389,7 +390,7 @@ export function createAdminRouter() {
               updatedAt: now,
             })
             .onConflictDoUpdate({
-              target: siteSections.key,
+              target: siteSections.id,
               set: {
                 name: stringField(record['name'], 'name'),
                 description: stringField(record['description'], 'description'),
@@ -405,8 +406,8 @@ export function createAdminRouter() {
       const existingRows = await res.locals.db.query.siteSections.findMany();
       await Promise.all(
         existingRows
-          .filter((row) => !incomingKeys.has(row.key))
-          .map((row) => res.locals.db.delete(siteSections).where(eq(siteSections.key, row.key)))
+          .filter((row) => !incomingIds.has(row.id))
+          .map((row) => res.locals.db.delete(siteSections).where(eq(siteSections.id, row.id)))
       );
 
       const rows = await res.locals.db.query.siteSections.findMany({

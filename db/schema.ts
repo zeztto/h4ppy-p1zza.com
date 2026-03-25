@@ -68,11 +68,21 @@ export const siteProfile = sqliteTable('site_profile', {
 });
 
 export const siteSections = sqliteTable('site_sections', {
-  key: text('key').primaryKey(),
+  id: text('id').primaryKey(),
+  key: text('key'),
   name: text('name').notNull(),
   description: text('description').notNull(),
+  sectionType: text('section_type').notNull().default('template'),
+  templateKey: text('template_key'),
+  contentJson: text('content_json').notNull().default('{}'),
   enabled: integer('enabled', { mode: 'boolean' }).notNull().default(true),
   sortOrder: integer('sort_order').notNull().default(0),
+  updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+});
+
+export const siteSettings = sqliteTable('site_settings', {
+  key: text('key').primaryKey(),
+  value: text('value').notNull(),
   updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
 });
 
@@ -91,3 +101,4 @@ export type AdminUserRow = typeof adminUsers.$inferSelect;
 export type ProjectRow = typeof projects.$inferSelect;
 export type SiteProfileRow = typeof siteProfile.$inferSelect;
 export type SiteSectionRow = typeof siteSections.$inferSelect;
+export type SiteSettingsRow = typeof siteSettings.$inferSelect;

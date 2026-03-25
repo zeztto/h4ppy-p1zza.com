@@ -115,6 +115,7 @@ async function run() {
       db
         .insert(siteSections)
         .values({
+          id: section.key,
           key: section.key,
           name: section.name,
           description: section.description,
@@ -123,7 +124,7 @@ async function run() {
           updatedAt: now,
         })
         .onConflictDoUpdate({
-          target: siteSections.key,
+          target: siteSections.id,
           set: {
             name: section.name,
             description: section.description,

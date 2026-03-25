@@ -54,11 +54,20 @@ const statements = [
     updated_at INTEGER NOT NULL
   )`,
   `CREATE TABLE IF NOT EXISTS site_sections (
-    key TEXT PRIMARY KEY NOT NULL,
+    id TEXT PRIMARY KEY NOT NULL,
+    key TEXT,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
+    section_type TEXT NOT NULL DEFAULT 'template',
+    template_key TEXT,
+    content_json TEXT NOT NULL DEFAULT '{}',
     enabled INTEGER NOT NULL DEFAULT 1,
     sort_order INTEGER NOT NULL DEFAULT 0,
+    updated_at INTEGER NOT NULL
+  )`,
+  `CREATE TABLE IF NOT EXISTS site_settings (
+    key TEXT PRIMARY KEY NOT NULL,
+    value TEXT NOT NULL,
     updated_at INTEGER NOT NULL
   )`,
 ];
