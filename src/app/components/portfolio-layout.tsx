@@ -546,17 +546,17 @@ function LandingPage({
         <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
           다양한 분야의 클라이언트를 위해 기획, 디자인, 개발한 웹사이트입니다.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {projects
             .filter((p) => p.category === 'Websites')
             .map((project) => (
-              <div
+              <Card
                 key={project.id}
-                className="group cursor-pointer"
+                className="group cursor-pointer transition-all hover:shadow-lg hover:scale-105 hover:border-primary/50 overflow-hidden"
                 onClick={() => window.open(project.url, '_blank')}
               >
                 {project.thumbnail && (
-                  <div className="aspect-square rounded-lg overflow-hidden border border-border mb-3 group-hover:border-primary/50 group-hover:shadow-lg transition-all">
+                  <div className="aspect-square overflow-hidden">
                     <img
                       src={project.thumbnail}
                       alt={project.name}
@@ -565,14 +565,28 @@ function LandingPage({
                     />
                   </div>
                 )}
-                <div className="flex items-start justify-between gap-1">
-                  <h4 className="font-semibold text-sm leading-tight">{project.name}</h4>
-                  <ExternalLink className="h-3 w-3 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-0.5" />
-                </div>
-                <p className="text-muted-foreground text-xs line-clamp-1 mt-0.5">
-                  {project.description}
-                </p>
-              </div>
+                <CardHeader>
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <Badge variant="secondary" className="text-xs">
+                      {project.category}
+                    </Badge>
+                    <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                  </div>
+                  <CardTitle>{project.name}</CardTitle>
+                  <CardDescription className="line-clamp-2 min-h-[2.5rem]">
+                    {project.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-1">
+                    {project.tags.map((tag) => (
+                      <Badge key={tag} variant="outline" className="text-xs">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             ))}
         </div>
       </div>
