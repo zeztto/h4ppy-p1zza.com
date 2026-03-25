@@ -23,7 +23,7 @@ export function Footer() {
         </Button>
       </div>
       <p className="text-muted-foreground">
-        © 2025 h4ppy p1zza. All rights reserved.
+        © 2026 h4ppy p1zza. All rights reserved.
       </p>
     </footer>
   );
