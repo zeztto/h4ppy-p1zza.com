@@ -672,7 +672,7 @@ export const projects: Project[] = [
     id: 'h4ppy-p1zza-portfolio',
     name: 'h4ppy p1zza 포트폴리오',
     description: '36개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.',
-    url: 'https://www.h4ppy-p1zza.com/',
+    url: 'https://h4ppy-p1zza.com/',
     tags: ['Portfolio', 'Meta'],
     category: 'Archive',
     year: '2026',
