@@ -11,9 +11,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
-      className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow"
+      className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow flex flex-col h-full"
     >
-      <div className="aspect-video rounded-xl overflow-hidden bg-muted">
+      <div className="aspect-video rounded-t-xl overflow-hidden bg-muted">
         {project.thumbnailUrl === '' ? (
           <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
             <span className="text-lg font-medium text-foreground/60">
@@ -28,8 +28,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
           />
         )}
       </div>
-      <div className="p-4">
-        <Badge variant="secondary">{project.category}</Badge>
+      <div className="p-4 flex flex-col flex-1">
+        <Badge variant="secondary" className="w-fit">{project.category}</Badge>
         <h3 className="font-semibold text-foreground mt-2 line-clamp-1">
           {project.name}
         </h3>
@@ -37,7 +37,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           {project.description}
         </p>
         {project.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-3">
+          <div className="flex flex-wrap gap-1 mt-auto pt-3">
             {project.tags.map((tag) => (
               <Badge key={tag} variant="outline" className="text-xs">
                 {tag}

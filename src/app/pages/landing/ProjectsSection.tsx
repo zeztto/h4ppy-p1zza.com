@@ -58,8 +58,9 @@ export function ProjectsSection({ projects, content }: ProjectsSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
+              className="h-full"
             >
-              <Link to={`/portfolio/${p.id}`} className="block">
+              <Link to={`/portfolio/${p.id}`} className="block h-full">
                 <ProjectCard project={p} />
               </Link>
             </motion.div>

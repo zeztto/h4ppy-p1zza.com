@@ -100,8 +100,9 @@ export function PortfolioPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
+              className="h-full"
             >
-              <Link to={`/portfolio/${p.id}`} className="block">
+              <Link to={`/portfolio/${p.id}`} className="block h-full">
                 <ProjectCard project={p} />
               </Link>
             </motion.div>
