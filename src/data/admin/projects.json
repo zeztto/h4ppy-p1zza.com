@@ -829,7 +829,7 @@
       "K-Beauty",
       "Trust Signals"
     ],
-    "category": "Websites",
+    "category": "Services",
     "year": "2026",
     "thumbnail": "/thumbnails/trve.jpg",
     "longDescription": "trveKR는 한국 쇼핑몰 URL을 입력하면 사업자 정보, 정책 페이지, 국제 결제 준비도, 도메인 신뢰도, 위험 신호를 구조화된 리포트로 보여주는 사전 검증 서비스입니다. AI API에 의존하지 않고 공개 HTML과 규칙 기반 분석만으로 결과를 만들며, fallback recheck와 Turso 저장을 통해 반복 점검과 이력 비교도 지원합니다.",
@@ -861,7 +861,7 @@
       "Analytics",
       "Utility"
     ],
-    "category": "Websites",
+    "category": "Services",
     "year": "2026",
     "thumbnail": "/thumbnails/qqwe.jpg",
     "longDescription": "99i.kr는 로그인 없이 긴 URL을 6자리 slug로 즉시 단축하고, 링크별 통계 페이지에서 최근 7일 또는 30일 기준 유입 현황을 확인할 수 있는 URL 단축 서비스입니다. 현재 기존 URL 단축기 코드베이스를 바탕으로 99i.kr 브랜드로 전환 중이며, Next.js App Router 기반 풀스택 구조 위에 Turso와 Drizzle ORM을 올려 링크 저장과 클릭 기록을 처리하고, 실제 리디렉션 이후 referer, 국가, 디바이스, 브라우저, OS 정보를 비동기로 수집합니다.",
@@ -893,7 +893,7 @@
       "AI",
       "Product Management"
     ],
-    "category": "Websites",
+    "category": "Services",
     "year": "2026",
     "thumbnail": "/thumbnails/prd-ai.jpg",
     "longDescription": "prd.ai는 PRD 작성 경험이 많지 않은 기획자나 PM도 질문 기반 플로우를 따라가며 제품 요구사항 문서를 구조적으로 완성할 수 있도록 설계된 한국어 AI PRD 작성 서비스입니다. 프로젝트 설정, 배경, 목표, 타깃 사용자, 기능, 범위를 단계별로 입력하면 DeepSeek 기반 AI가 문장을 보강하고, 품질 점수와 리뷰 피드백으로 문서 완성도를 점검할 수 있습니다. 계정 기반 대시보드, 문서 저장, 중복 생성, 미리보기와 Markdown 내보내기까지 하나의 워크플로우로 연결되어 있습니다.",
@@ -925,7 +925,7 @@
       "Creator Tools",
       "Analytics"
     ],
-    "category": "Websites",
+    "category": "Services",
     "year": "2026",
     "thumbnail": "/thumbnails/qwee.jpg",
     "longDescription": "qwee.kr은 사용자명 기반 공개 링크 페이지를 만들고, 대시보드에서 링크 CRUD, 링크 순서 변경, 소셜 아이콘 관리, 테마 커스터마이징, 클릭 분석을 처리할 수 있는 한국어 link-in-bio 서비스입니다. Next.js 16 App Router 프론트엔드와 Railway 배포를 전제로 한 Express + Turso 백엔드를 함께 구성했고, Google OAuth 로그인 흐름과 공개 프로필 API를 묶어 하나의 제품 경험으로 연결했습니다.",

@@ -34,7 +34,12 @@ function escapeHtml(value: string) {
 
 function getTargets(): ProjectThumbnailTarget[] {
   return projects
-    .filter((project) => project.category !== 'Websites' && project.id !== 'h4ppy-p1zza-portfolio')
+    .filter(
+      (project) =>
+        project.category !== 'Websites' &&
+        project.category !== 'Services' &&
+        project.id !== 'h4ppy-p1zza-portfolio'
+    )
     .map((project) => ({
       id: project.id,
       name: project.name,

@@ -2,7 +2,7 @@
  * Project Data
  *
  * Centralized project data for the portfolio website.
- * Total: 44 projects across 7 categories
+ * Total: 44 projects across 8 categories
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
@@ -10,7 +10,8 @@
  * - Finance (5): Financial calculators and trackers
  * - Productivity (2): Notes, analytics, collaboration
  * - Games (5): Entertainment and games
- * - Websites (10): Client websites and web services
+ * - Services (4): Productized web services
+ * - Websites (6): Client websites and brand sites
  * - Archive (8): Legacy and miscellaneous projects
  */
 
@@ -701,7 +702,7 @@ export const projects: Project[] = [
   },
 
   // ============================================
-  // Websites (10)
+  // Services (4) + Websites (6)
   // ============================================
   {
     id: 'trve',
@@ -709,7 +710,7 @@ export const projects: Project[] = [
     description: '해외 사용자가 한국 쇼핑몰 구매 전에 신뢰 신호와 위험 신호를 점검할 수 있는 Korean Shop Checker.',
     url: 'https://trve.kr/',
     tags: ['Verification', 'K-Beauty', 'Trust Signals'],
-    category: 'Websites',
+    category: 'Services',
     year: '2026',
     thumbnail: '/thumbnails/trve.jpg',
     longDescription:
@@ -730,7 +731,7 @@ export const projects: Project[] = [
     description: '긴 주소를 짧은 링크로 변환하고 클릭 통계를 확인할 수 있는 URL 단축 서비스.',
     url: 'https://99i.kr/',
     tags: ['Short URL', 'Analytics', 'Utility'],
-    category: 'Websites',
+    category: 'Services',
     year: '2026',
     thumbnail: '/thumbnails/qqwe.jpg',
     longDescription:
@@ -751,7 +752,7 @@ export const projects: Project[] = [
     description: '질문에 답하면 AI가 한국어 PRD를 단계별로 완성해주는 제품 요구사항 문서 작성 서비스.',
     url: 'https://prd.ai.kr/',
     tags: ['PRD', 'AI', 'Product Management'],
-    category: 'Websites',
+    category: 'Services',
     year: '2026',
     thumbnail: '/thumbnails/prd-ai.jpg',
     longDescription:
@@ -772,7 +773,7 @@ export const projects: Project[] = [
     description: '개인 프로필, 링크 모음, 소셜 아이콘, 테마를 한 페이지에 담아 공유하는 한국어 link-in-bio 서비스.',
     url: 'https://qwee.kr/',
     tags: ['Link-in-Bio', 'Creator Tools', 'Analytics'],
-    category: 'Websites',
+    category: 'Services',
     year: '2026',
     thumbnail: '/thumbnails/qwee.jpg',
     longDescription:
