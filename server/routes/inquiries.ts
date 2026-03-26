@@ -2,6 +2,7 @@ import { desc, eq } from 'drizzle-orm';
 import { Router } from 'express';
 import { nanoid } from 'nanoid';
 import { inquiries } from '../../db/schema.js';
+import { isValidKoreanPhoneNumber, PHONE_ERROR_MESSAGE } from '../../src/shared/phone.js';
 import { mapInquiry } from '../lib/content.js';
 import { env, isProduction } from '../env.js';
 import { asyncHandler, assert, requireJsonObject } from '../lib/http.js';
@@ -63,6 +64,11 @@ export function createPublicInquiryRouter() {
       assert(description, 400, '프로젝트 설명은 필수 입력 항목입니다.');
       assert(validateEmail(email), 400, '유효한 이메일 주소를 입력해주세요.');
 
+      const phone = toOptionalString(payload['phone'], 'phone');
+      if (phone) {
+        assert(isValidKoreanPhoneNumber(phone), 400, PHONE_ERROR_MESSAGE);
+      }
+
       if (isProduction || env.turnstileSecretKey) {
         assert(turnstileToken, 400, '보안 인증을 완료해주세요.');
 
@@ -75,7 +81,7 @@ export function createPublicInquiryRouter() {
         id: nanoid(),
         name,
         email,
-        phone: toOptionalString(payload['phone'], 'phone'),
+        phone,
         company: toOptionalString(payload['company'], 'company'),
         projectType: toOptionalString(payload['projectType'], 'projectType'),
         budget: toOptionalString(payload['budget'], 'budget'),

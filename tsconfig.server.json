@@ -24,6 +24,6 @@
     "rootDir": ".",
     "types": ["node"]
   },
-  "include": ["server/**/*.ts", "db/**/*.ts", "scripts/**/*.ts", "src/data/**/*.ts"],
+  "include": ["server/**/*.ts", "db/**/*.ts", "scripts/**/*.ts", "src/data/**/*.ts", "src/shared/**/*.ts"],
   "exclude": ["node_modules", "dist", "build"]
 }

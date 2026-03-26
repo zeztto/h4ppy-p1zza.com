@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'motion/react';
 import { Send, CheckCircle, AlertCircle, Building2, Mail, Phone, User, FileText, Clock, Wallet } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
+import { hasPhoneInput, isValidKoreanPhoneNumber, PHONE_ERROR_MESSAGE } from '@/shared/phone';
 
 const TURNSTILE_SITE_KEY = import.meta.env['VITE_TURNSTILE_SITE_KEY'] ?? '';
 
@@ -144,6 +145,11 @@ export function InquiryPage() {
 
     if (!form.name.trim() || !form.email.trim() || !form.description.trim()) {
       setErrorMsg('이름, 이메일, 프로젝트 설명은 필수 입력 항목입니다.');
+      return;
+    }
+
+    if (hasPhoneInput(form.phone) && !isValidKoreanPhoneNumber(form.phone)) {
+      setErrorMsg(PHONE_ERROR_MESSAGE);
       return;
     }
 
