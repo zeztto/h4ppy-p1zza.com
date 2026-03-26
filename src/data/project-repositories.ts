@@ -26,6 +26,7 @@ export const PROJECT_REPOSITORY_URLS: Record<string, string> = {
   'tarot-card': 'https://github.com/zeztto/tarot-card',
   'card-puzzle': 'https://github.com/zeztto/card-puzzle',
   'h4ppy-p1zza-portfolio': 'https://github.com/zeztto/h4ppy-p1zza.com',
+  trve: 'https://github.com/zeztto/trve-kr-landing',
   qqwe: 'https://github.com/zeztto/qqwe.kr-url-short',
   h4ppylabs: 'https://github.com/zeztto/h4ppylabs.com',
   meetgirls: 'https://github.com/zeztto/meetgirls-kr-landing',
