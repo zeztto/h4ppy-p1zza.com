@@ -14,7 +14,7 @@ import { DEFAULT_SITE_PROFILE } from '@/data/site-content';
 
 interface HeaderSettings {
   siteName: string;
-  navLinks: Array<{ label: string; to: string }>;
+  navLinks: Array<{ label: string; to?: string; path?: string }>;
   showThemeToggle: boolean;
 }
 
@@ -56,11 +56,21 @@ function NavLink({ to, label, isActive }: { to: string; label: string; isActive:
   );
 }
 
+function normalizeNavLinks(links: HeaderSettings['navLinks']) {
+  return links
+    .map((link) => ({
+      label: link.label,
+      to: link.to ?? link.path ?? '',
+    }))
+    .filter((link) => link.label.trim() && link.to.trim());
+}
+
 export function PublicLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const { data: profile } = usePublicData<PublicProfile>('profile', fallbackProfile);
   const { data: headerSettings } = useSettings<HeaderSettings>('header', DEFAULT_HEADER_SETTINGS);
+  const navLinks = normalizeNavLinks(headerSettings.navLinks);
 
   // Close mobile menu on route change
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -84,7 +94,7 @@ export function PublicLayout() {
             {/* Right: Desktop nav */}
             <EditableWrapper onEdit={() => { /* placeholder: open header editor */ }}>
               <nav className="hidden md:flex items-center gap-8">
-                {headerSettings.navLinks.map((link) => (
+                {navLinks.map((link) => (
                   <NavLink
                     key={link.to}
                     to={link.to}
@@ -124,7 +134,7 @@ export function PublicLayout() {
                 className="overflow-hidden border-t border-border/50 bg-background md:hidden"
               >
                 <div className="px-6 py-4 flex flex-col gap-1">
-                  {headerSettings.navLinks.map((link) => (
+                  {navLinks.map((link) => (
                     <Link
                       key={link.to}
                       to={link.to}

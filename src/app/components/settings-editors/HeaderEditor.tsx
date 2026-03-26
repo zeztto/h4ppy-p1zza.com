@@ -8,7 +8,8 @@ const inputClass =
 
 interface NavLink {
   label: string;
-  path: string;
+  to: string;
+  path?: string;
 }
 
 interface HeaderData {
@@ -26,14 +27,17 @@ interface HeaderEditorProps {
 export function HeaderEditor({ data, onSaved, onClose }: HeaderEditorProps) {
   const [siteName, setSiteName] = useState(data.siteName);
   const [navLinks, setNavLinks] = useState<NavLink[]>(
-    data.navLinks.map((link) => ({ ...link })),
+    data.navLinks.map((link) => ({
+      label: link.label,
+      to: link.to ?? link.path ?? '',
+    })),
   );
   const [showThemeToggle, setShowThemeToggle] = useState(data.showThemeToggle);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleAddLink = () => {
-    setNavLinks([...navLinks, { label: '', path: '' }]);
+    setNavLinks([...navLinks, { label: '', to: '' }]);
   };
 
   const handleRemoveLink = (index: number) => {
@@ -50,7 +54,14 @@ export function HeaderEditor({ data, onSaved, onClose }: HeaderEditorProps) {
     setSaving(true);
     setError(null);
     try {
-      const headerData: HeaderData = { siteName, navLinks, showThemeToggle };
+      const headerData: HeaderData = {
+        siteName,
+        navLinks: navLinks.map((link) => ({
+          label: link.label.trim(),
+          to: link.to.trim(),
+        })),
+        showThemeToggle,
+      };
       await saveSetting('header', JSON.stringify(headerData));
       onSaved();
       onClose();
@@ -105,8 +116,8 @@ export function HeaderEditor({ data, onSaved, onClose }: HeaderEditorProps) {
                 <input
                   type="text"
                   className={inputClass}
-                  value={link.path}
-                  onChange={(e) => handleUpdateLink(index, 'path', e.target.value)}
+                  value={link.to}
+                  onChange={(e) => handleUpdateLink(index, 'to', e.target.value)}
                   placeholder="/경로"
                 />
                 <Button
