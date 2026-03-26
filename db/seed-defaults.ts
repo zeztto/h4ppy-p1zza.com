@@ -8,7 +8,7 @@ import {
 } from '../src/data/site-content.js';
 
 const DEFAULT_HEADER_SETTINGS = {
-  siteName: 'h4ppy p1zza',
+  siteName: 'p1zza.kr',
   navLinks: [
     { label: 'Portfolio', to: '/portfolio' },
     { label: 'Profile', to: '/profile' },
@@ -17,8 +17,8 @@ const DEFAULT_HEADER_SETTINGS = {
 };
 
 const DEFAULT_FOOTER_SETTINGS = {
-  siteName: 'h4ppy p1zza',
-  copyright: '\u00a9 2026 h4ppy p1zza',
+  siteName: 'p1zza.kr',
+  copyright: '\u00a9 2026 p1zza.kr. All rights reserved.',
   socialLinks: [
     { type: 'github', url: 'https://github.com/zeztto' },
     { type: 'instagram', url: 'https://instagram.com/h4ppy_p1zza' },
