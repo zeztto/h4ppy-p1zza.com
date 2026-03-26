@@ -6,6 +6,7 @@ export interface PublicProject {
   name: string;
   description: string;
   url: string;
+  repoUrl: string;
   category: string;
   year: string;
   thumbnailUrl: string;       // server defaults to '' via ?? ''

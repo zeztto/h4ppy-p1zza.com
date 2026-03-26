@@ -38,6 +38,7 @@ export interface AdminProject {
   name: string;
   description: string;
   url: string;
+  repoUrl: string;
   tags: string[];
   category: string;
   longDescription: string;

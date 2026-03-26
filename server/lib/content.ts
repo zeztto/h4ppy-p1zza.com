@@ -1,4 +1,5 @@
 import type { ProjectRow, SiteProfileRow, SiteSectionRow, SiteSettingsRow } from '../../db/schema.js';
+import { getProjectRepositoryUrl } from '../../src/data/project-repositories.js';
 
 const PORTFOLIO_PROJECT_ID = 'h4ppy-p1zza-portfolio';
 
@@ -31,6 +32,7 @@ export function mapProject(row: ProjectRow, publishedProjectCount?: number) {
     name: row.name,
     description: row.description,
     url: row.url,
+    repoUrl: getProjectRepositoryUrl(row.id),
     category: row.category,
     year: row.year ?? '',
     sortOrder: row.sortOrder,

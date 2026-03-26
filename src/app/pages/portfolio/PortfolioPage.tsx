@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
+import { Github } from 'lucide-react';
 import { usePublicData } from '@/app/hooks/usePublicData';
 import { useSettings } from '@/app/hooks/useSettings';
 import type { PublicProject } from '@/app/lib/types';
 import { ProjectCard } from '@/app/components/ProjectCard';
+import { Button } from '@/app/components/ui/button';
+import { sortPortfolioProjects } from '@/app/lib/project-order';
 
 const gridColsClass: Record<number, string> = {
   1: 'grid-cols-1',
@@ -49,7 +52,7 @@ export function PortfolioPage() {
     );
   }
 
-  const allProjects = projects ?? [];
+  const allProjects = sortPortfolioProjects(projects ?? []);
   const categories = [
     'All',
     ...new Set(allProjects.map((p) => p.category).filter(Boolean)),
@@ -102,9 +105,29 @@ export function PortfolioPage() {
               transition={{ duration: 0.2 }}
               className="h-full"
             >
-              <Link to={`/portfolio/${p.id}`} className="block h-full">
+              <div className="relative h-full">
+                <Link
+                  to={`/portfolio/${p.id}`}
+                  aria-label={`${p.name} 상세 보기`}
+                  className="absolute inset-0 z-10 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                />
                 <ProjectCard project={p} />
-              </Link>
+                {p.repoUrl && (
+                  <div className="absolute right-4 top-4 z-20">
+                    <Button asChild variant="secondary" size="icon" className="h-9 w-9 rounded-xl shadow-sm">
+                      <a
+                        href={p.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${p.name} GitHub 저장소`}
+                        onClick={(event) => event.stopPropagation()}
+                      >
+                        <Github className="h-4 w-4" />
+                      </a>
+                    </Button>
+                  </div>
+                )}
+              </div>
             </motion.div>
           ))}
         </AnimatePresence>

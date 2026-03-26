@@ -1,10 +1,11 @@
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
 import { usePublicData } from '@/app/hooks/usePublicData';
 import type { PublicProject } from '@/app/lib/types';
 import { Badge } from '@/app/components/ui/badge';
 import { Button } from '@/app/components/ui/button';
+import { sortPortfolioProjects } from '@/app/lib/project-order';
 
 export function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -39,7 +40,7 @@ export function ProjectDetailPage() {
     );
   }
 
-  const projects = allProjects ?? [];
+  const projects = sortPortfolioProjects(allProjects ?? []);
   const currentIndex = projects.findIndex((p) => p.id === id);
   const prevProject = currentIndex > 0 ? projects[currentIndex - 1] : null;
   const nextProject =
@@ -90,6 +91,14 @@ export function ProjectDetailPage() {
             <a href={project.url} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="w-4 h-4" />
               방문하기
+            </a>
+          </Button>
+        )}
+        {project.repoUrl && (
+          <Button asChild variant="ghost" size="sm">
+            <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+              <Github className="w-4 h-4" />
+              GitHub
             </a>
           </Button>
         )}
