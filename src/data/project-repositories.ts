@@ -28,6 +28,7 @@ export const PROJECT_REPOSITORY_URLS: Record<string, string> = {
   'h4ppy-p1zza-portfolio': 'https://github.com/zeztto/h4ppy-p1zza.com',
   trve: 'https://github.com/zeztto/trve-kr-landing',
   qqwe: 'https://github.com/zeztto/qqwe.kr-url-short',
+  'prd-ai': 'https://github.com/zeztto/prd-generator',
   h4ppylabs: 'https://github.com/zeztto/h4ppylabs.com',
   meetgirls: 'https://github.com/zeztto/meetgirls-kr-landing',
   srbbrs: 'https://github.com/zeztto/srbbrs-com',

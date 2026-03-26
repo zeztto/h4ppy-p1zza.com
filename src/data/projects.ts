@@ -2,7 +2,7 @@
  * Project Data
  *
  * Centralized project data for the portfolio website.
- * Total: 42 projects across 7 categories
+ * Total: 43 projects across 7 categories
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
@@ -10,7 +10,7 @@
  * - Finance (5): Financial calculators and trackers
  * - Productivity (2): Notes, analytics, collaboration
  * - Games (5): Entertainment and games
- * - Websites (8): Client websites and web services
+ * - Websites (9): Client websites and web services
  * - Archive (8): Legacy and miscellaneous projects
  */
 
@@ -743,6 +743,27 @@ export const projects: Project[] = [
       'Turso 저장소와 Recharts 기반 통계 시각화',
     ],
     techStack: ['Next.js', 'TypeScript', 'Turso', 'Drizzle ORM', 'Tailwind CSS', 'Recharts', 'Railway'],
+  },
+  {
+    id: 'prd-ai',
+    name: 'prd.ai',
+    description: '질문에 답하면 AI가 한국어 PRD를 단계별로 완성해주는 제품 요구사항 문서 작성 서비스.',
+    url: 'https://prd.ai.kr/',
+    tags: ['PRD', 'AI', 'Product Management'],
+    category: 'Websites',
+    year: '2026',
+    thumbnail: '/thumbnails/prd-ai.jpg',
+    longDescription:
+      'prd.ai는 PRD 작성 경험이 많지 않은 기획자나 PM도 질문 기반 플로우를 따라가며 제품 요구사항 문서를 구조적으로 완성할 수 있도록 설계된 한국어 AI PRD 작성 서비스입니다. 프로젝트 설정, 배경, 목표, 타깃 사용자, 기능, 범위를 단계별로 입력하면 DeepSeek 기반 AI가 문장을 보강하고, 품질 점수와 리뷰 피드백으로 문서 완성도를 점검할 수 있습니다. 계정 기반 대시보드, 문서 저장, 중복 생성, 미리보기와 Markdown 내보내기까지 하나의 워크플로우로 연결되어 있습니다.',
+    features: [
+      '6단계 질문 플로우로 프로젝트 개요부터 범위 정의까지 구조화된 PRD 작성',
+      'DeepSeek 기반 AI 문장 보강, 페르소나 생성, KPI 제안, 품질 리뷰',
+      '품질 점수와 섹션별 피드백으로 문서 완성도 실시간 점검',
+      '계정 기반 대시보드에서 PRD 저장, 수정, 상태 변경, 복제 관리',
+      'Markdown 미리보기와 복사, 파일 다운로드 중심의 내보내기 지원',
+      'Turso 기반 인증, 세션, 워크스페이스, PRD 문서 저장 구조',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Turso', 'DeepSeek API', 'Zustand', 'Zod'],
   },
   {
     id: 'h4ppylabs',
