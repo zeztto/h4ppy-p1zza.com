@@ -2,7 +2,7 @@
  * Project Data
  *
  * Centralized project data for the portfolio website.
- * Total: 43 projects across 7 categories
+ * Total: 44 projects across 7 categories
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
@@ -10,7 +10,7 @@
  * - Finance (5): Financial calculators and trackers
  * - Productivity (2): Notes, analytics, collaboration
  * - Games (5): Entertainment and games
- * - Websites (9): Client websites and web services
+ * - Websites (10): Client websites and web services
  * - Archive (8): Legacy and miscellaneous projects
  */
 
@@ -701,7 +701,7 @@ export const projects: Project[] = [
   },
 
   // ============================================
-  // Websites (8)
+  // Websites (10)
   // ============================================
   {
     id: 'trve',
@@ -765,6 +765,27 @@ export const projects: Project[] = [
       'Turso 기반 인증, 세션, 워크스페이스, PRD 문서 저장 구조',
     ],
     techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Turso', 'DeepSeek API', 'Zustand', 'Zod'],
+  },
+  {
+    id: 'qwee',
+    name: 'qwee.kr',
+    description: '개인 프로필, 링크 모음, 소셜 아이콘, 테마를 한 페이지에 담아 공유하는 한국어 link-in-bio 서비스.',
+    url: 'https://qwee.kr/',
+    tags: ['Link-in-Bio', 'Creator Tools', 'Analytics'],
+    category: 'Websites',
+    year: '2026',
+    thumbnail: '/thumbnails/qwee.jpg',
+    longDescription:
+      'qwee.kr은 사용자명 기반 공개 링크 페이지를 만들고, 대시보드에서 링크 CRUD, 링크 순서 변경, 소셜 아이콘 관리, 테마 커스터마이징, 클릭 분석을 처리할 수 있는 한국어 link-in-bio 서비스입니다. Next.js 16 App Router 프론트엔드와 Railway 배포를 전제로 한 Express + Turso 백엔드를 함께 구성했고, Google OAuth 로그인 흐름과 공개 프로필 API를 묶어 하나의 제품 경험으로 연결했습니다.',
+    features: [
+      '사용자명 기반 공개 링크 페이지 생성',
+      '대시보드에서 링크 CRUD 및 드래그 순서 변경',
+      '프리셋과 커스텀 색상 기반 테마 설정',
+      'Instagram, YouTube, TikTok 등 소셜 아이콘 관리',
+      '링크 클릭 수 기반 분석 대시보드',
+      'Google OAuth 로그인과 Railway + Turso 배포 구조',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Express', 'Turso', 'Google OAuth', 'Tailwind CSS', 'Zustand'],
   },
   {
     id: 'h4ppylabs',
