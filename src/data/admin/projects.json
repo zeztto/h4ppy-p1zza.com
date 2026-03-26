@@ -852,9 +852,9 @@
   },
   {
     "id": "qqwe",
-    "name": "qqwe.kr",
+    "name": "99i.kr",
     "description": "긴 주소를 짧은 링크로 변환하고 클릭 통계를 확인할 수 있는 URL 단축 서비스.",
-    "url": "https://qqwe.kr/",
+    "url": "https://99i.kr/",
     "tags": [
       "Short URL",
       "Analytics",
@@ -863,7 +863,7 @@
     "category": "Websites",
     "year": "2026",
     "thumbnail": "/thumbnails/qqwe.jpg",
-    "longDescription": "qqwe.kr는 로그인 없이 긴 URL을 6자리 slug로 즉시 단축하고, 링크별 통계 페이지에서 최근 7일 또는 30일 기준 유입 현황을 확인할 수 있는 URL 단축 서비스입니다. Next.js App Router 기반 풀스택 구조 위에 Turso와 Drizzle ORM을 올려 링크 저장과 클릭 기록을 처리하며, 실제 리디렉션 이후 referer, 국가, 디바이스, 브라우저, OS 정보를 비동기로 수집합니다.",
+    "longDescription": "99i.kr는 로그인 없이 긴 URL을 6자리 slug로 즉시 단축하고, 링크별 통계 페이지에서 최근 7일 또는 30일 기준 유입 현황을 확인할 수 있는 URL 단축 서비스입니다. 현재 기존 URL 단축기 코드베이스를 바탕으로 99i.kr 브랜드로 전환 중이며, Next.js App Router 기반 풀스택 구조 위에 Turso와 Drizzle ORM을 올려 링크 저장과 클릭 기록을 처리하고, 실제 리디렉션 이후 referer, 국가, 디바이스, 브라우저, OS 정보를 비동기로 수집합니다.",
     "features": [
       "6자리 랜덤 slug 생성과 예약 경로 충돌 방지",
       "302 리디렉션 이후 클릭 로그 비동기 기록",
