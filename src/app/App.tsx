@@ -18,6 +18,7 @@ import AdminProjectsPage from '@/app/pages/admin/ProjectsPage';
 import AdminProfilePage from '@/app/pages/admin/ProfilePage';
 import SectionsPage from '@/app/pages/admin/SectionsPage';
 import BlogPage from '@/app/pages/admin/BlogPage';
+import InquiriesPage from '@/app/pages/admin/InquiriesPage';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path="projects" element={<AdminProjectsPage />} />
           <Route path="profile" element={<AdminProfilePage />} />
           <Route path="sections" element={<SectionsPage />} />
+          <Route path="inquiries" element={<InquiriesPage />} />
           <Route path="blog" element={<BlogPage />} />
         </Route>
       </Routes>

@@ -3,7 +3,19 @@ import { motion } from 'motion/react';
 import { Send, CheckCircle, AlertCircle, Building2, Mail, Phone, User, FileText, Clock, Wallet } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '';
+const TURNSTILE_SITE_KEY = import.meta.env['VITE_TURNSTILE_SITE_KEY'] ?? '';
+
+interface TurnstileApi {
+  render: (container: HTMLElement, options: Record<string, unknown>) => string;
+  reset: (widgetId?: string) => void;
+}
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+    onTurnstileLoad?: () => void;
+  }
+}
 
 const PROJECT_TYPES = [
   '웹사이트 제작',
@@ -64,9 +76,28 @@ export function InquiryPage() {
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
 
+  const renderTurnstile = useCallback(() => {
+    if (!TURNSTILE_SITE_KEY || !turnstileRef.current || widgetIdRef.current || !window.turnstile) {
+      return;
+    }
+
+    widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+      sitekey: TURNSTILE_SITE_KEY,
+      callback: (token: string) => setTurnstileToken(token),
+      'expired-callback': () => setTurnstileToken(''),
+      'error-callback': () => setTurnstileToken(''),
+      theme: 'auto',
+    });
+  }, []);
+
   // Load Turnstile script
   useEffect(() => {
     if (!TURNSTILE_SITE_KEY) return;
+    if (window.turnstile) {
+      renderTurnstile();
+      return;
+    }
+
     if (document.getElementById('cf-turnstile-script')) return;
 
     const script = document.createElement('script');
@@ -75,26 +106,16 @@ export function InquiryPage() {
     script.async = true;
     script.defer = true;
 
-    (window as Record<string, unknown>).onTurnstileLoad = () => {
-      if (turnstileRef.current && !widgetIdRef.current) {
-        widgetIdRef.current = (window as { turnstile?: { render: (el: HTMLElement, opts: Record<string, unknown>) => string } }).turnstile?.render(
-          turnstileRef.current,
-          {
-            sitekey: TURNSTILE_SITE_KEY,
-            callback: (token: string) => setTurnstileToken(token),
-            'expired-callback': () => setTurnstileToken(''),
-            theme: 'auto',
-          },
-        ) ?? null;
-      }
+    window.onTurnstileLoad = () => {
+      renderTurnstile();
     };
 
     document.head.appendChild(script);
 
     return () => {
-      delete (window as Record<string, unknown>).onTurnstileLoad;
+      delete window.onTurnstileLoad;
     };
-  }, []);
+  }, [renderTurnstile]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -125,6 +146,7 @@ export function InquiryPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
+          sourceUrl: window.location.href,
           turnstileToken,
         }),
       });
@@ -136,9 +158,17 @@ export function InquiryPage() {
 
       setStatus('success');
       setForm(initialForm);
+      setTurnstileToken('');
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.reset(widgetIdRef.current);
+      }
     } catch (err) {
       setStatus('error');
       setErrorMsg(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.reset(widgetIdRef.current);
+      }
+      setTurnstileToken('');
     }
   };
 

@@ -1,5 +1,6 @@
 import type {
   AdminDashboardResponse,
+  AdminInquiry,
   AdminProject,
   AdminProjectInput,
   AdminProfile,
@@ -180,5 +181,16 @@ export async function saveSetting(key: string, value: string) {
   return adminRequest<AdminSetting>(`/api/admin/settings/${key}`, {
     method: 'PUT',
     body: JSON.stringify({ value }),
+  });
+}
+
+export async function getInquiries() {
+  return adminRequest<AdminInquiry[]>('/api/admin/inquiries');
+}
+
+export async function updateInquiryStatus(inquiryId: string, status: AdminInquiry['status']) {
+  return adminRequest<AdminInquiry>(`/api/admin/inquiries/${inquiryId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status }),
   });
 }

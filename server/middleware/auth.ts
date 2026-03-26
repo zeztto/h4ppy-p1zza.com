@@ -2,7 +2,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import type { Database } from '../../db/client.js';
 import type { AdminUserRow } from '../../db/schema.js';
-import { env } from '../env.js';
+import { env, isProduction } from '../env.js';
 import { HttpError } from '../lib/errors.js';
 import { readSessionUser } from '../lib/session.js';
 
@@ -43,6 +43,20 @@ export function requireSameOrigin(req: Request, _res: Response, next: NextFuncti
   if (!origin || origin === env.appOrigin) {
     next();
     return;
+  }
+
+  if (!isProduction) {
+    const host = req.get('host');
+    const requestOrigin = host ? `${req.protocol}://${host}` : '';
+
+    if (
+      origin === requestOrigin ||
+      origin === requestOrigin.replace('127.0.0.1', 'localhost') ||
+      origin === requestOrigin.replace('localhost', '127.0.0.1')
+    ) {
+      next();
+      return;
+    }
   }
 
   next(new HttpError(403, 'Cross-origin request rejected'));

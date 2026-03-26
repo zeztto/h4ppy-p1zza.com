@@ -40,6 +40,7 @@ export const env = {
   cloudinaryApiKey: process.env['CLOUDINARY_API_KEY'] ?? '',
   cloudinaryApiSecret: process.env['CLOUDINARY_API_SECRET'] ?? '',
   cloudinaryUrl: process.env['CLOUDINARY_URL'] ?? '',
+  turnstileSecretKey: process.env['TURNSTILE_SECRET_KEY'] ?? '',
 } as const;
 
 export const isProduction = env.nodeEnv === 'production';

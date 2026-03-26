@@ -9,6 +9,7 @@ import { HttpError } from './lib/errors.js';
 import { attachSessionUser, requireAdmin, requireSameOrigin } from './middleware/auth.js';
 import { createAdminRouter } from './routes/admin.js';
 import { createAuthRouter } from './routes/auth.js';
+import { createAdminInquiryRouter, createPublicInquiryRouter } from './routes/inquiries.js';
 import { createPublicRouter } from './routes/public.js';
 import { createSettingsRouter } from './routes/settings.js';
 
@@ -98,9 +99,11 @@ export async function createApp() {
     res.status(200).json({ ok: true });
   });
   app.use('/api/auth', createAuthRouter());
+  app.use('/api/inquiries', requireSameOrigin, createPublicInquiryRouter());
   app.use('/api/public', createPublicRouter());
   const adminRouter = createAdminRouter();
   adminRouter.use('/settings', createSettingsRouter());
+  adminRouter.use('/inquiries', createAdminInquiryRouter());
   app.use('/api/admin', requireSameOrigin, requireAdmin, adminRouter);
 
   if (distPath) {

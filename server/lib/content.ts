@@ -1,4 +1,4 @@
-import type { ProjectRow, SiteProfileRow, SiteSectionRow, SiteSettingsRow } from '../../db/schema.js';
+import type { InquiryRow, ProjectRow, SiteProfileRow, SiteSectionRow, SiteSettingsRow } from '../../db/schema.js';
 import { getProjectRepositoryUrl } from '../../src/data/project-repositories.js';
 
 const PORTFOLIO_PROJECT_ID = 'h4ppy-p1zza-portfolio';
@@ -97,5 +97,26 @@ export function mapSetting(row: SiteSettingsRow) {
     key: row.key,
     value: row.value,
     updatedAt: row.updatedAt.toISOString(),
+  };
+}
+
+export function mapInquiry(row: InquiryRow) {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    phone: row.phone ?? '',
+    company: row.company ?? '',
+    projectType: row.projectType ?? '',
+    budget: row.budget ?? '',
+    timeline: row.timeline ?? '',
+    description: row.description,
+    status: row.status,
+    sourceUrl: row.sourceUrl ?? '',
+    userAgent: row.userAgent ?? '',
+    ipAddress: row.ipAddress ?? '',
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
+    resolvedAt: row.resolvedAt?.toISOString() ?? null,
   };
 }

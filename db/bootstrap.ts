@@ -72,6 +72,26 @@ const statements = [
     value TEXT NOT NULL,
     updated_at INTEGER NOT NULL
   )`,
+  `CREATE TABLE IF NOT EXISTS inquiries (
+    id TEXT PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT,
+    company TEXT,
+    project_type TEXT,
+    budget TEXT,
+    timeline TEXT,
+    description TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'new',
+    source_url TEXT,
+    user_agent TEXT,
+    ip_address TEXT,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    resolved_at INTEGER
+  )`,
+  'CREATE INDEX IF NOT EXISTS inquiries_status_idx ON inquiries (status)',
+  'CREATE INDEX IF NOT EXISTS inquiries_created_at_idx ON inquiries (created_at DESC)',
 ];
 
 export async function ensureDatabaseSchema(client: DatabaseClient) {

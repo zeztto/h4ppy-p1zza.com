@@ -12,6 +12,7 @@ const DEFAULT_HEADER_SETTINGS = {
   navLinks: [
     { label: 'Portfolio', to: '/portfolio' },
     { label: 'Profile', to: '/profile' },
+    { label: '제작 의뢰', to: '/inquiry' },
   ],
   showThemeToggle: true,
 };

@@ -100,3 +100,22 @@ export interface AdminSetting {
   value: string;
   updatedAt: string;
 }
+
+export interface AdminInquiry {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  projectType: string;
+  budget: string;
+  timeline: string;
+  description: string;
+  status: 'new' | 'contacted' | 'closed';
+  sourceUrl: string;
+  userAgent: string;
+  ipAddress: string;
+  createdAt: string;
+  updatedAt: string;
+  resolvedAt: string | null;
+}

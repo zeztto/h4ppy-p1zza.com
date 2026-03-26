@@ -6,6 +6,7 @@ import {
   User,
   Layers,
   FileText,
+  Inbox,
   Menu,
   X,
 } from 'lucide-react';
@@ -16,6 +17,7 @@ const navItems = [
   { label: 'Projects', path: '/admin/projects', icon: FolderKanban },
   { label: 'Profile', path: '/admin/profile', icon: User },
   { label: 'Sections', path: '/admin/sections', icon: Layers },
+  { label: 'Inquiries', path: '/admin/inquiries', icon: Inbox },
   { label: 'Blog', path: '/admin/blog', icon: FileText, disabled: true },
 ];
 

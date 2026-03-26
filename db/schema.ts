@@ -86,6 +86,25 @@ export const siteSettings = sqliteTable('site_settings', {
   updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
 });
 
+export const inquiries = sqliteTable('inquiries', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  phone: text('phone'),
+  company: text('company'),
+  projectType: text('project_type'),
+  budget: text('budget'),
+  timeline: text('timeline'),
+  description: text('description').notNull(),
+  status: text('status').notNull().default('new'),
+  sourceUrl: text('source_url'),
+  userAgent: text('user_agent'),
+  ipAddress: text('ip_address'),
+  createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+  resolvedAt: integer('resolved_at', { mode: 'timestamp_ms' }),
+});
+
 export const adminUsersRelations = relations(adminUsers, ({ many }) => ({
   sessions: many(sessions),
 }));
@@ -102,3 +121,4 @@ export type ProjectRow = typeof projects.$inferSelect;
 export type SiteProfileRow = typeof siteProfile.$inferSelect;
 export type SiteSectionRow = typeof siteSections.$inferSelect;
 export type SiteSettingsRow = typeof siteSettings.$inferSelect;
+export type InquiryRow = typeof inquiries.$inferSelect;
