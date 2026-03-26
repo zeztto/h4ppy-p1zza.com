@@ -67,7 +67,7 @@ export function ProfilePage() {
         </p>
         <p className="text-center mt-2">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted text-xs font-medium text-muted-foreground">
-            쓰리더블유(ThreeW) 소속
+            쓰리더블유(3W) 소속
           </span>
         </p>
         <div className="flex justify-center gap-4 mt-4">

@@ -222,7 +222,7 @@ export function InquiryPage() {
             <Building2 className="size-5 text-primary" />
           </div>
           <div>
-            <h2 className="font-semibold text-foreground">쓰리더블유 (ThreeW)</h2>
+            <h2 className="font-semibold text-foreground">쓰리더블유 (3W)</h2>
             <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
               20년 이상 경력의 시니어 개발자가 CTO로 이끄는 웹, 솔루션, 앱 전문 개발사입니다.
               AI 퍼스트 원칙으로 제품을 개발합니다.
