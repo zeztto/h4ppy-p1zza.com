@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://h4ppy-p1zza.com/sitemap.xml
+Sitemap: https://p1zza.kr/sitemap.xml
 
 User-agent: *
 Disallow: /api/

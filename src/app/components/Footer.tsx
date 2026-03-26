@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import type { PublicProfile } from '@/app/lib/types';
 import { useSettings } from '@/app/hooks/useSettings';
 import { Github, Instagram, Mail, Twitter, Linkedin } from 'lucide-react';
@@ -17,7 +18,7 @@ interface FooterSettings {
 
 const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
   siteName: 'h4ppy p1zza',
-  copyright: '\u00A9 2026 h4ppy p1zza',
+  copyright: '\u00A9 2026 h4ppy p1zza. All rights reserved.',
   socialLinks: [],
 };
 
@@ -36,39 +37,70 @@ interface FooterProps {
 export function Footer({ profile }: FooterProps) {
   const { data: footerSettings } = useSettings<FooterSettings>('footer', DEFAULT_FOOTER_SETTINGS);
 
-  // Build social links: use settings if non-empty, otherwise fall back to profile
   const socialLinks: SocialLink[] =
     footerSettings.socialLinks.length > 0
       ? footerSettings.socialLinks
       : buildProfileSocialLinks(profile);
 
   return (
-    <footer className="py-12 border-t border-border">
+    <footer className="border-t border-border/50 bg-muted/30">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="flex items-center justify-between">
-          <span className="font-semibold text-foreground">{footerSettings.siteName}</span>
-          <div className="flex items-center gap-4">
-            {socialLinks.map((link) => {
-              const Icon = SOCIAL_ICON_MAP[link.type];
-              if (!Icon) return null;
-              const href = link.type === 'email' ? `mailto:${link.url}` : link.url;
-              return (
-                <a
-                  key={link.type}
-                  href={href}
-                  target={link.type === 'email' ? undefined : '_blank'}
-                  rel={link.type === 'email' ? undefined : 'noopener noreferrer'}
-                  aria-label={link.label ?? link.type}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Icon className="size-5" />
-                </a>
-              );
-            })}
+        {/* Main footer content */}
+        <div className="py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Brand column */}
+          <div className="space-y-3">
+            <Link to="/" className="text-lg font-bold tracking-tight text-foreground hover:text-primary transition-colors">
+              {footerSettings.siteName}
+            </Link>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+              {profile?.bioShort ?? 'Web Developer & Creative Maker'}
+            </p>
+          </div>
+
+          {/* Navigation column */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-foreground">Pages</h3>
+            <nav className="flex flex-col gap-2">
+              <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">
+                Home
+              </Link>
+              <Link to="/portfolio" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">
+                Portfolio
+              </Link>
+              <Link to="/profile" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">
+                Profile
+              </Link>
+            </nav>
+          </div>
+
+          {/* Social column */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-foreground">Connect</h3>
+            <div className="flex gap-3">
+              {socialLinks.map((link) => {
+                const Icon = SOCIAL_ICON_MAP[link.type];
+                if (!Icon) return null;
+                const href = link.type === 'email' ? `mailto:${link.url}` : link.url;
+                return (
+                  <a
+                    key={link.type}
+                    href={href}
+                    target={link.type === 'email' ? undefined : '_blank'}
+                    rel={link.type === 'email' ? undefined : 'noopener noreferrer'}
+                    aria-label={link.label ?? link.type}
+                    className="flex items-center justify-center size-9 rounded-lg bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <Icon className="size-4" />
+                  </a>
+                );
+              })}
+            </div>
           </div>
         </div>
-        <div className="mt-8">
-          <p className="text-sm text-muted-foreground">
+
+        {/* Bottom bar */}
+        <div className="border-t border-border/50 py-6">
+          <p className="text-xs text-muted-foreground">
             {footerSettings.copyright}
           </p>
         </div>
