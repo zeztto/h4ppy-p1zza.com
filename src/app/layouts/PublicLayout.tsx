@@ -22,7 +22,6 @@ const DEFAULT_HEADER_SETTINGS: HeaderSettings = {
   siteName: 'p1zza.kr',
   navLinks: [
     { label: 'Portfolio', to: '/portfolio' },
-    { label: 'Hire', to: '/hire' },
     { label: 'Profile', to: '/profile' },
   ],
   showThemeToggle: true,

@@ -6,7 +6,6 @@ import { PublicLayout } from '@/app/layouts/PublicLayout';
 import { AdminLayout } from '@/app/layouts/AdminLayout';
 
 import { LandingPage } from '@/app/pages/landing/LandingPage';
-import { HirePage } from '@/app/pages/hire/HirePage';
 import { PortfolioPage } from '@/app/pages/portfolio/PortfolioPage';
 import { ProjectDetailPage } from '@/app/pages/portfolio/ProjectDetailPage';
 import { ProfilePage } from '@/app/pages/profile/ProfilePage';
@@ -26,7 +25,6 @@ function App() {
         {/* Public routes */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/hire" element={<HirePage />} />
           <Route path="/portfolio" element={<PortfolioPage />} />
           <Route path="/portfolio/:id" element={<ProjectDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
