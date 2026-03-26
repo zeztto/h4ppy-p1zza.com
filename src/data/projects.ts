@@ -2,7 +2,7 @@
  * Project Data
  *
  * Centralized project data for the portfolio website.
- * Total: 41 projects across 7 categories
+ * Total: 42 projects across 7 categories
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
@@ -10,7 +10,7 @@
  * - Finance (5): Financial calculators and trackers
  * - Productivity (2): Notes, analytics, collaboration
  * - Games (5): Entertainment and games
- * - Websites (7): Client websites and web services
+ * - Websites (8): Client websites and web services
  * - Archive (8): Legacy and miscellaneous projects
  */
 
@@ -671,15 +671,15 @@ export const projects: Project[] = [
   {
     id: 'h4ppy-p1zza-portfolio',
     name: 'h4ppy p1zza 포트폴리오',
-    description: '41개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.',
+    description: '42개 프로젝트를 소개하는 이 포트폴리오 사이트 자체입니다.',
     url: 'https://p1zza.kr/',
     tags: ['Portfolio', 'Meta'],
     category: 'Archive',
     year: '2026',
     longDescription:
-      '이 포트폴리오 웹사이트 자체도 하나의 프로젝트입니다. 성능 최적화(번들 크기 60% 감소), 보안 강화(CSP, TypeScript strict mode), SEO 최적화를 거쳐 완성되었습니다. 41개의 프로젝트를 인터랙티브하게 소개하며, 철학적 에세이 형식의 프로필 페이지를 포함합니다.',
+      '이 포트폴리오 웹사이트 자체도 하나의 프로젝트입니다. 성능 최적화(번들 크기 60% 감소), 보안 강화(CSP, TypeScript strict mode), SEO 최적화를 거쳐 완성되었습니다. 42개의 프로젝트를 인터랙티브하게 소개하며, 철학적 에세이 형식의 프로필 페이지를 포함합니다.',
     features: [
-      '41개 프로젝트 인터랙티브 iframe 미리보기',
+      '42개 프로젝트 인터랙티브 iframe 미리보기',
       '카테고리별 필터링 (Media, Tools, Finance, Productivity, Games, Archive)',
       '성능 최적화 (번들 60% 감소, 105개 의존성 제거)',
       '보안 강화 (CSP, 보안 헤더, TypeScript strict mode)',
@@ -700,8 +700,29 @@ export const projects: Project[] = [
   },
 
   // ============================================
-  // Websites (7)
+  // Websites (8)
   // ============================================
+  {
+    id: 'trve',
+    name: 'trveKR',
+    description: '해외 사용자가 한국 쇼핑몰 구매 전에 신뢰 신호와 위험 신호를 점검할 수 있는 Korean Shop Checker.',
+    url: 'https://trve.kr/',
+    tags: ['Verification', 'K-Beauty', 'Trust Signals'],
+    category: 'Websites',
+    year: '2026',
+    thumbnail: '/thumbnails/trve.jpg',
+    longDescription:
+      'trveKR는 한국 쇼핑몰 URL을 입력하면 사업자 정보, 정책 페이지, 국제 결제 준비도, 도메인 신뢰도, 위험 신호를 구조화된 리포트로 보여주는 사전 검증 서비스입니다. AI API에 의존하지 않고 공개 HTML과 규칙 기반 분석만으로 결과를 만들며, fallback recheck와 Turso 저장을 통해 반복 점검과 이력 비교도 지원합니다.',
+    features: [
+      '한국 쇼핑몰 URL 기반 rule-based trust report 생성',
+      '사업자 정보, 정책 페이지, 국제 배송/결제 준비도 점검',
+      'pass, caution, high_risk, insufficient_data 4단계 결과',
+      '정적 demo scenario와 fallback recheck 흐름 제공',
+      'Turso 기반 리포트 저장 및 이력 diff 계산',
+      'AI-free explainable analysis 구조',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Turso', 'Cheerio', 'Vitest', 'Zod'],
+  },
   {
     id: 'qqwe',
     name: 'qqwe.kr',
