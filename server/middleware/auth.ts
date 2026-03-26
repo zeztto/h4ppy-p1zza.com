@@ -40,23 +40,44 @@ export function requireSameOrigin(req: Request, _res: Response, next: NextFuncti
   }
 
   const origin = req.headers.origin;
-  if (!origin || origin === env.appOrigin) {
+  if (!origin) {
     next();
     return;
   }
 
-  if (!isProduction) {
-    const host = req.get('host');
-    const requestOrigin = host ? `${req.protocol}://${host}` : '';
+  const allowedOrigins = new Set<string>([env.appOrigin]);
+  const forwardedHost = req.get('x-forwarded-host');
+  const host = forwardedHost || req.get('host');
+  const forwardedProto = req.get('x-forwarded-proto');
 
-    if (
-      origin === requestOrigin ||
-      origin === requestOrigin.replace('127.0.0.1', 'localhost') ||
-      origin === requestOrigin.replace('localhost', '127.0.0.1')
-    ) {
-      next();
-      return;
+  if (host) {
+    const normalizedHosts = new Set([
+      host,
+      host.replace('127.0.0.1', 'localhost'),
+      host.replace('localhost', '127.0.0.1'),
+    ]);
+
+    const protocols = new Set([
+      req.protocol,
+      forwardedProto || req.protocol,
+      'https',
+      !isProduction ? 'http' : '',
+    ]);
+
+    for (const normalizedHost of normalizedHosts) {
+      for (const protocol of protocols) {
+        if (!protocol) {
+          continue;
+        }
+
+        allowedOrigins.add(`${protocol}://${normalizedHost}`);
+      }
     }
+  }
+
+  if (allowedOrigins.has(origin)) {
+    next();
+    return;
   }
 
   next(new HttpError(403, 'Cross-origin request rejected'));
