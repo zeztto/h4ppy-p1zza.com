@@ -9,6 +9,7 @@ import { LandingPage } from '@/app/pages/landing/LandingPage';
 import { PortfolioPage } from '@/app/pages/portfolio/PortfolioPage';
 import { ProjectDetailPage } from '@/app/pages/portfolio/ProjectDetailPage';
 import { ProfilePage } from '@/app/pages/profile/ProfilePage';
+import { InquiryPage } from '@/app/pages/inquiry/InquiryPage';
 import { NotFoundPage } from '@/app/pages/NotFoundPage';
 
 import LoginPage from '@/app/pages/admin/LoginPage';
@@ -28,6 +29,7 @@ function App() {
           <Route path="/portfolio" element={<PortfolioPage />} />
           <Route path="/portfolio/:id" element={<ProjectDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/inquiry" element={<InquiryPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 

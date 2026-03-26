@@ -27,6 +27,11 @@ export function HeroSection({ profile, content }: HeroSectionProps) {
           <p className="text-xl text-muted-foreground mt-4">
             {profile.headline}
           </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted text-xs font-medium">
+              쓰리더블유(ThreeW) 소속
+            </span>
+          </p>
           <p className="text-muted-foreground mt-6 max-w-lg">
             {profile.bioShort}
           </p>
