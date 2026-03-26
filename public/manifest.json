@@ -1,7 +1,7 @@
 {
-  "name": "h4ppy p1zza - 웹 개발자 포트폴리오",
-  "short_name": "h4ppy p1zza",
-  "description": "React, TypeScript를 활용한 웹 애플리케이션 개발자의 포트폴리오. 27개 프로젝트와 철학적 에세이.",
+  "name": "p1zza.kr | 웹 개발 포트폴리오",
+  "short_name": "p1zza.kr",
+  "description": "React, Next.js, TypeScript 기반 웹 애플리케이션 개발 포트폴리오와 프로필, 제작 의뢰 정보를 제공하는 개인 사이트입니다.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#030213",
