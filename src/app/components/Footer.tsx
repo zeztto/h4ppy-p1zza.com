@@ -67,6 +67,9 @@ export function Footer({ profile }: FooterProps) {
               <Link to="/portfolio" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">
                 Portfolio
               </Link>
+              <Link to="/hire" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">
+                Hire
+              </Link>
               <Link to="/profile" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">
                 Profile
               </Link>
