@@ -58,6 +58,11 @@ function resolveIndexPath(distPath?: string) {
   return candidates.find((candidate) => fs.existsSync(candidate));
 }
 
+function isStaticAssetRequest(requestPath: string) {
+  const normalizedPath = requestPath.split('?')[0]?.split('#')[0] ?? requestPath;
+  return path.extname(normalizedPath) !== '';
+}
+
 function readStructuredDataHashes(indexPath?: string) {
   if (!indexPath || !fs.existsSync(indexPath)) {
     return [];
@@ -142,7 +147,12 @@ export async function createApp() {
   if (distPath) {
     app.use(express.static(distPath, { index: false }));
 
-    app.get(/^(?!\/api).*/, (_req, res, next) => {
+    app.get(/^(?!\/api).*/, (req, res, next) => {
+      if (isStaticAssetRequest(req.path)) {
+        next();
+        return;
+      }
+
       const indexPath = path.join(distPath, 'index.html');
       if (!fs.existsSync(indexPath)) {
         next();
