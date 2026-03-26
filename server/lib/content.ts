@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import type { InquiryRow, ProjectRow, SiteProfileRow, SiteSectionRow, SiteSettingsRow } from '../../db/schema.js';
 import { getProjectRepositoryUrl } from '../../src/data/project-repositories.js';
 
@@ -26,7 +28,30 @@ function replacePortfolioProjectCount(value: string, publishedProjectCount: numb
     .replace(/\d+개의 프로젝트/g, `${publishedProjectCount}개의 프로젝트`);
 }
 
+function resolveExistingStaticAssetUrl(assetUrl: string | null | undefined) {
+  if (!assetUrl) {
+    return '';
+  }
+
+  if (!assetUrl.startsWith('/')) {
+    return assetUrl;
+  }
+
+  const relativeAssetPath = assetUrl.replace(/^\/+/, '');
+  const candidates = [
+    path.resolve(process.cwd(), 'dist', relativeAssetPath),
+    path.resolve(process.cwd(), 'public', relativeAssetPath),
+    path.resolve(process.cwd(), '..', 'dist', relativeAssetPath),
+    path.resolve(process.cwd(), '..', 'public', relativeAssetPath),
+    path.resolve(process.cwd(), '..', '..', 'dist', relativeAssetPath),
+    path.resolve(process.cwd(), '..', '..', 'public', relativeAssetPath),
+  ];
+
+  return candidates.some((candidate) => fs.existsSync(candidate)) ? assetUrl : '';
+}
+
 export function mapProject(row: ProjectRow, publishedProjectCount?: number) {
+  const thumbnailUrl = resolveExistingStaticAssetUrl(row.thumbnailUrl);
   const project = {
     id: row.id,
     name: row.name,
@@ -36,8 +61,8 @@ export function mapProject(row: ProjectRow, publishedProjectCount?: number) {
     category: row.category,
     year: row.year ?? '',
     sortOrder: row.sortOrder,
-    thumbnailUrl: row.thumbnailUrl ?? '',
-    thumbnail: row.thumbnailUrl ?? '',
+    thumbnailUrl,
+    thumbnail: thumbnailUrl,
     longDescription: row.longDescription ?? '',
     tags: parseArray(row.tagsJson),
     features: parseArray(row.featuresJson),
