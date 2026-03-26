@@ -72,7 +72,7 @@ export async function createApp() {
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
     if (isProduction) {
-      const scriptSrc = ["'self'", ...structuredDataHashes].join(' ');
+      const scriptSrc = ["'self'", 'https://challenges.cloudflare.com', ...structuredDataHashes].join(' ');
 
       res.setHeader(
         'Content-Security-Policy',
@@ -82,7 +82,7 @@ export async function createApp() {
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net",
           "img-src 'self' data: blob: https:",
           "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net",
-          "connect-src 'self' https://api.github.com https://api.cloudinary.com https://res.cloudinary.com",
+          "connect-src 'self' https://api.github.com https://api.cloudinary.com https://res.cloudinary.com https://challenges.cloudflare.com",
           "frame-src 'self' https:",
           "object-src 'none'",
           "base-uri 'self'",
