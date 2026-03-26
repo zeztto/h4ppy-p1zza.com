@@ -21,8 +21,8 @@ interface HeaderSettings {
 const DEFAULT_HEADER_SETTINGS: HeaderSettings = {
   siteName: 'p1zza.kr',
   navLinks: [
-    { label: 'Portfolio', to: '/portfolio' },
-    { label: 'Profile', to: '/profile' },
+    { label: '포트폴리오', to: '/portfolio' },
+    { label: '프로필', to: '/profile' },
     { label: '제작 의뢰', to: '/inquiry' },
   ],
   showThemeToggle: true,
