@@ -13,6 +13,30 @@ import { createAdminInquiryRouter, createPublicInquiryRouter } from './routes/in
 import { createPublicRouter } from './routes/public.js';
 import { createSettingsRouter } from './routes/settings.js';
 
+function normalizeHost(host: string) {
+  return host.trim().toLowerCase().replace(/\.$/, '').replace(/:\d+$/, '');
+}
+
+function resolveCanonicalRedirectUrl(req: express.Request) {
+  if (!isProduction) {
+    return null;
+  }
+
+  const requestHost = normalizeHost(req.get('x-forwarded-host') || req.get('host') || '');
+  const canonicalHost = normalizeHost(new URL(env.appOrigin).host);
+
+  if (!requestHost || requestHost === canonicalHost) {
+    return null;
+  }
+
+  const redirectHosts = new Set(env.canonicalRedirectHosts.map(normalizeHost));
+  if (!redirectHosts.has(requestHost)) {
+    return null;
+  }
+
+  return new URL(req.originalUrl, env.appOrigin).toString();
+}
+
 function resolveDistPath() {
   const candidates = [
     path.resolve(process.cwd(), 'dist'),
@@ -61,6 +85,15 @@ export async function createApp() {
   await ensureDatabaseSchema(client);
 
   app.disable('x-powered-by');
+  app.use((req, res, next) => {
+    const redirectUrl = resolveCanonicalRedirectUrl(req);
+    if (redirectUrl) {
+      res.redirect(308, redirectUrl);
+      return;
+    }
+
+    next();
+  });
   app.use(express.json({ limit: '2mb' }));
   app.use(express.urlencoded({ extended: false }));
 

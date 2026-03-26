@@ -4,6 +4,7 @@ loadEnv({ path: '.env.local', override: false });
 loadEnv();
 
 const DEFAULT_APP_ORIGIN = 'http://localhost:5173';
+const DEFAULT_CANONICAL_REDIRECT_HOSTS = 'h4ppy-p1zza.com,www.h4ppy-p1zza.com';
 
 function readEnv(key: string, fallback?: string) {
   const value = process.env[key];
@@ -28,6 +29,7 @@ function readCsvEnv(key: string, fallback = '') {
 
 export const env = {
   appOrigin: readEnv('APP_ORIGIN', DEFAULT_APP_ORIGIN),
+  canonicalRedirectHosts: readCsvEnv('CANONICAL_REDIRECT_HOSTS', DEFAULT_CANONICAL_REDIRECT_HOSTS),
   nodeEnv: readEnv('NODE_ENV', 'development'),
   port: Number.parseInt(readEnv('PORT', '3001'), 10),
   githubClientId: readEnv('GITHUB_CLIENT_ID'),
