@@ -90,6 +90,18 @@ export function InquiryPage() {
     });
   }, []);
 
+  const readTurnstileResponse = useCallback(() => {
+    if (!turnstileRef.current) {
+      return '';
+    }
+
+    const responseInput = turnstileRef.current.querySelector<HTMLInputElement>(
+      'input[name="cf-turnstile-response"]'
+    );
+
+    return responseInput?.value?.trim() ?? '';
+  }, []);
+
   // Load Turnstile script
   useEffect(() => {
     if (!TURNSTILE_SITE_KEY) return;
@@ -128,12 +140,14 @@ export function InquiryPage() {
     e.preventDefault();
     setErrorMsg('');
 
+    const resolvedTurnstileToken = turnstileToken || readTurnstileResponse();
+
     if (!form.name.trim() || !form.email.trim() || !form.description.trim()) {
       setErrorMsg('이름, 이메일, 프로젝트 설명은 필수 입력 항목입니다.');
       return;
     }
 
-    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+    if (TURNSTILE_SITE_KEY && !resolvedTurnstileToken) {
       setErrorMsg('보안 인증을 완료해주세요.');
       return;
     }
@@ -147,7 +161,7 @@ export function InquiryPage() {
         body: JSON.stringify({
           ...form,
           sourceUrl: window.location.href,
-          turnstileToken,
+          turnstileToken: resolvedTurnstileToken,
         }),
       });
 
