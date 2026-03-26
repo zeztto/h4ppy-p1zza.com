@@ -19,7 +19,7 @@ interface HeaderSettings {
 }
 
 const DEFAULT_HEADER_SETTINGS: HeaderSettings = {
-  siteName: 'h4ppy p1zza',
+  siteName: 'p1zza.kr',
   navLinks: [
     { label: 'Portfolio', to: '/portfolio' },
     { label: 'Profile', to: '/profile' },

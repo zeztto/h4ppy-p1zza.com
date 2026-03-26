@@ -17,8 +17,8 @@ interface FooterSettings {
 }
 
 const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
-  siteName: 'h4ppy p1zza',
-  copyright: '\u00A9 2026 h4ppy p1zza. All rights reserved.',
+  siteName: 'p1zza.kr',
+  copyright: '\u00A9 2026 p1zza.kr. All rights reserved.',
   socialLinks: [],
 };
 
