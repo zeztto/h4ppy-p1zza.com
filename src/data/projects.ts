@@ -620,6 +620,7 @@ export const projects: Project[] = [
       'Web Crypto API',
       'Vitest',
     ],
+    thumbnail: '/thumbnails/lottery-roulette-v2.jpg',
   },
   // NEW: Tarot Card - Games
   {

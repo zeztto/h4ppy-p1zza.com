@@ -723,7 +723,8 @@
       "shadcn/ui",
       "Web Crypto API",
       "Vitest"
-    ]
+    ],
+    "thumbnail": "/thumbnails/lottery-roulette-v2.jpg"
   },
   {
     "id": "tarot-card",
