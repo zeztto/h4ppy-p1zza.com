@@ -2,7 +2,7 @@
  * Project Data
  *
  * Centralized project data for the portfolio website.
- * Total: 44 projects across 8 categories
+ * Total: 45 projects across 8 categories
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
@@ -11,7 +11,7 @@
  * - Productivity (2): Notes, analytics, collaboration
  * - Games (5): Entertainment and games
  * - Services (4): Productized web services
- * - Websites (6): Client websites and brand sites
+ * - Websites (7): Client websites and brand sites
  * - Archive (8): Legacy and miscellaneous projects
  */
 
@@ -702,7 +702,7 @@ export const projects: Project[] = [
   },
 
   // ============================================
-  // Services (4) + Websites (6)
+  // Services (4) + Websites (7)
   // ============================================
   {
     id: 'trve',
@@ -910,6 +910,36 @@ export const projects: Project[] = [
       '시리얼 넘버 개별 부여',
     ],
     techStack: ['Next.js', 'TypeScript', 'Tailwind CSS'],
+  },
+  {
+    id: 'onkura',
+    name: 'ONKURA',
+    description:
+      '도쿄 언더그라운드 스트릿 무드와 룩북형 상품 탐색을 결합한 패션 스토어 쇼케이스.',
+    url: 'https://onkura.com/',
+    tags: ['Fashion', 'Streetwear', 'E-commerce'],
+    category: 'Websites',
+    year: '2026',
+    thumbnail: '/thumbnails/onkura.jpg',
+    longDescription:
+      'ONKURA는 도쿄 스트릿 패션과 한국어 카피를 결합한 컨셉 스토어 웹사이트입니다. 히어로 룩북, 디자이너 스토리, 상품 카탈로그, 주문 요청, 뉴스레터 구독 흐름을 하나의 브랜드 경험으로 묶었고, Next.js 16 App Router 위에 Prisma + PostgreSQL 기반 API 계층을 연결해 정적 쇼케이스를 풀스택 스토어 데모로 확장했습니다.',
+    features: [
+      '룩북 중심의 히어로와 주간 스타일 큐레이션 섹션',
+      '스토리, 디자이너, 샵으로 이어지는 브랜드 탐색 구조',
+      '상품 목록 및 상세 API 연동 기반 카탈로그 화면',
+      '주문 요청과 드롭 알림 뉴스레터 수집 API',
+      'Prisma 기반 Postgres 스키마와 시드 데이터 구성',
+      '관리자 요약 API로 주문 및 구독 현황 확인 지원',
+    ],
+    techStack: [
+      'Next.js',
+      'React 19',
+      'Tailwind CSS',
+      'Prisma',
+      'PostgreSQL',
+      'Framer Motion',
+      'Zod',
+    ],
   },
 
   // ============================================

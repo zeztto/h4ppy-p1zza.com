@@ -36,6 +36,7 @@ export const PROJECT_REPOSITORY_URLS: Record<string, string> = {
   axmx: 'https://github.com/zeztto/axiom-exchange',
   garlicton: 'https://github.com/zeztto/garlicton-studio-landing',
   pedals: 'https://github.com/zeztto/pedals-kr-shop',
+  onkura: 'https://github.com/zeztto/onkura-store',
   'qr-ing': 'https://github.com/zeztto/qr-ing',
   'keyframe-generator': 'https://github.com/zeztto/keyframe-generator',
   'endless-blood': 'https://github.com/zeztto/endless-blood',
