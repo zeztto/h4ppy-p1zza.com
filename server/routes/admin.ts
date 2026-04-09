@@ -73,12 +73,12 @@ export function createAdminRouter() {
     asyncHandler(async (_req, res) => {
       const [projectCountRow, publishedCountRow, sectionCountRow, profileRow, latestProject, latestSection] =
         await Promise.all([
-          res.locals.db.select({ count: sql<number>`count(*)` }).from(projects),
+          res.locals.db.select({ count: sql<number>`cast(count(*) as integer)` }).from(projects),
           res.locals.db
-            .select({ count: sql<number>`count(*)` })
+            .select({ count: sql<number>`cast(count(*) as integer)` })
             .from(projects)
             .where(eq(projects.isPublished, true)),
-          res.locals.db.select({ count: sql<number>`count(*)` }).from(siteSections),
+          res.locals.db.select({ count: sql<number>`cast(count(*) as integer)` }).from(siteSections),
           res.locals.db.query.siteProfile.findFirst({
             where: eq(siteProfile.id, 'primary'),
           }),

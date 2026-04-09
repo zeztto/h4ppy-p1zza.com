@@ -5,12 +5,11 @@ loadEnv({ path: '.env.local', override: false });
 loadEnv();
 
 export default defineConfig({
-  dialect: 'sqlite',
+  dialect: 'postgresql',
   schema: './db/schema.ts',
   out: './db/migrations',
   dbCredentials: {
-    url: process.env['TURSO_DATABASE_URL'] ?? '',
-    authToken: process.env['TURSO_AUTH_TOKEN'] ?? '',
+    url: process.env['DATABASE_URL'] ?? '',
   },
   strict: true,
   verbose: true,

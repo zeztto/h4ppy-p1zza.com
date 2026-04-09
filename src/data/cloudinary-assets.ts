@@ -1,0 +1,62 @@
+export const STATIC_CLOUDINARY_ASSET_MAP = {
+  "/thumbnails/axmx.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750698/p1zza/static/thumbnails/axmx.jpg",
+  "/thumbnails/card-puzzle.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750699/p1zza/static/thumbnails/card-puzzle.jpg",
+  "/thumbnails/color-palette.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750700/p1zza/static/thumbnails/color-palette.jpg",
+  "/thumbnails/compound-calculator.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750701/p1zza/static/thumbnails/compound-calculator.jpg",
+  "/thumbnails/crypto-tracker.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750702/p1zza/static/thumbnails/crypto-tracker.jpg",
+  "/thumbnails/deafroom.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750704/p1zza/static/thumbnails/deafroom.jpg",
+  "/thumbnails/dopameme.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750705/p1zza/static/thumbnails/dopameme.jpg",
+  "/thumbnails/eazy-youtube-share.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750707/p1zza/static/thumbnails/eazy-youtube-share.jpg",
+  "/thumbnails/emoji-list.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750709/p1zza/static/thumbnails/emoji-list.jpg",
+  "/thumbnails/endless-blood.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750710/p1zza/static/thumbnails/endless-blood.jpg",
+  "/thumbnails/file-converter.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750711/p1zza/static/thumbnails/file-converter.jpg",
+  "/thumbnails/finance-converter.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750712/p1zza/static/thumbnails/finance-converter.jpg",
+  "/thumbnails/garlicton.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750714/p1zza/static/thumbnails/garlicton.jpg",
+  "/thumbnails/h4ppy-board.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750715/p1zza/static/thumbnails/h4ppy-board.jpg",
+  "/thumbnails/h4ppylabs.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750716/p1zza/static/thumbnails/h4ppylabs.jpg",
+  "/thumbnails/insta-follower-check.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750717/p1zza/static/thumbnails/insta-follower-check.jpg",
+  "/thumbnails/keyframe-generator.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750718/p1zza/static/thumbnails/keyframe-generator.jpg",
+  "/thumbnails/lmml.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750719/p1zza/static/thumbnails/lmml.jpg",
+  "/thumbnails/lorem-ipsum.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750720/p1zza/static/thumbnails/lorem-ipsum.jpg",
+  "/thumbnails/lottery-roulette-v2.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750721/p1zza/static/thumbnails/lottery-roulette-v2.jpg",
+  "/thumbnails/lottery-roulette.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750723/p1zza/static/thumbnails/lottery-roulette.jpg",
+  "/thumbnails/lotto-generator.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750724/p1zza/static/thumbnails/lotto-generator.jpg",
+  "/thumbnails/meetgirls.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750725/p1zza/static/thumbnails/meetgirls.jpg",
+  "/thumbnails/memomome.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750726/p1zza/static/thumbnails/memomome.jpg",
+  "/thumbnails/nvidia-q3.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750727/p1zza/static/thumbnails/nvidia-q3.jpg",
+  "/thumbnails/onkura.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750728/p1zza/static/thumbnails/onkura.jpg",
+  "/thumbnails/password-generator.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750729/p1zza/static/thumbnails/password-generator.jpg",
+  "/thumbnails/pedals.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750730/p1zza/static/thumbnails/pedals.jpg",
+  "/thumbnails/phopic.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750732/p1zza/static/thumbnails/phopic.jpg",
+  "/thumbnails/prd-ai.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750733/p1zza/static/thumbnails/prd-ai.jpg",
+  "/thumbnails/prime-distribution.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750734/p1zza/static/thumbnails/prime-distribution.jpg",
+  "/thumbnails/qqwe.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750735/p1zza/static/thumbnails/qqwe.jpg",
+  "/thumbnails/qr-ing.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750736/p1zza/static/thumbnails/qr-ing.jpg",
+  "/thumbnails/qwee.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750738/p1zza/static/thumbnails/qwee.jpg",
+  "/thumbnails/realtime-exchange.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750739/p1zza/static/thumbnails/realtime-exchange.jpg",
+  "/thumbnails/row-kr.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750740/p1zza/static/thumbnails/row-kr.jpg",
+  "/thumbnails/salary-calculator.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750741/p1zza/static/thumbnails/salary-calculator.jpg",
+  "/thumbnails/server-time-sync.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750742/p1zza/static/thumbnails/server-time-sync.jpg",
+  "/thumbnails/short-generator.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750744/p1zza/static/thumbnails/short-generator.jpg",
+  "/thumbnails/simple-calculator.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750746/p1zza/static/thumbnails/simple-calculator.jpg",
+  "/thumbnails/srbbrs.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750748/p1zza/static/thumbnails/srbbrs.jpg",
+  "/thumbnails/sudoku.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750749/p1zza/static/thumbnails/sudoku.jpg",
+  "/thumbnails/super-normalizer.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750750/p1zza/static/thumbnails/super-normalizer.jpg",
+  "/thumbnails/tarot-card.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750751/p1zza/static/thumbnails/tarot-card.jpg",
+  "/thumbnails/tetrix.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750752/p1zza/static/thumbnails/tetrix.jpg",
+  "/thumbnails/text-counter.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750753/p1zza/static/thumbnails/text-counter.jpg",
+  "/thumbnails/trve.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750754/p1zza/static/thumbnails/trve.jpg",
+  "/thumbnails/unit-converter.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750755/p1zza/static/thumbnails/unit-converter.jpg",
+  "/thumbnails/wyz.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750756/p1zza/static/thumbnails/wyz.jpg",
+  "/thumbnails/youtube-downloader.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750757/p1zza/static/thumbnails/youtube-downloader.jpg",
+  "/profile.jpg": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750758/p1zza/static/identity/profile.jpg",
+  "/og-image.png": "https://res.cloudinary.com/dnlcuy2aj/image/upload/v1775750759/p1zza/static/meta/og-image.png"
+} as const;
+
+export function resolveStaticAssetUrl(assetUrl: string | null | undefined) {
+  if (!assetUrl) {
+    return '';
+  }
+
+  return STATIC_CLOUDINARY_ASSET_MAP[assetUrl as keyof typeof STATIC_CLOUDINARY_ASSET_MAP] ?? assetUrl;
+}

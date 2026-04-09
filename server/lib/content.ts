@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { InquiryRow, ProjectRow, SiteProfileRow, SiteSectionRow, SiteSettingsRow } from '../../db/schema.js';
+import { resolveStaticAssetUrl } from '../../src/data/cloudinary-assets.js';
 import { getProjectRepositoryUrl } from '../../src/data/project-repositories.js';
 
 const PORTFOLIO_PROJECT_ID = 'h4ppy-p1zza-portfolio';
@@ -31,6 +32,11 @@ function replacePortfolioProjectCount(value: string, publishedProjectCount: numb
 function resolveExistingStaticAssetUrl(assetUrl: string | null | undefined) {
   if (!assetUrl) {
     return '';
+  }
+
+  const resolvedCloudinaryAssetUrl = resolveStaticAssetUrl(assetUrl);
+  if (resolvedCloudinaryAssetUrl !== assetUrl) {
+    return resolvedCloudinaryAssetUrl;
   }
 
   if (!assetUrl.startsWith('/')) {
@@ -93,7 +99,7 @@ export function mapProfile(row: SiteProfileRow) {
     displayName: row.displayName,
     headline: row.headline,
     bioShort: row.bioShort,
-    avatarUrl: row.avatarUrl ?? '',
+    avatarUrl: resolveExistingStaticAssetUrl(row.avatarUrl),
     githubUrl: row.githubUrl ?? '',
     instagramUrl: row.instagramUrl ?? '',
     email: row.email ?? '',

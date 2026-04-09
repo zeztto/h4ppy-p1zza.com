@@ -7,6 +7,7 @@ import type {
   ValuesContent,
   SectionContent,
 } from '../app/lib/section-content-types.js';
+import { resolveStaticAssetUrl } from './cloudinary-assets.js';
 
 export type { SectionContent };
 
@@ -38,7 +39,7 @@ export const DEFAULT_SITE_PROFILE: SiteProfileContent = {
   headline: 'Full-stack Web Developer',
   bioShort:
     '웹 애플리케이션 개발을 전문으로 하는 개발자입니다. 사용자 경험을 최우선으로 생각하며, 실용적이고 아름다운 웹 서비스를 만듭니다.',
-  avatarUrl: '/profile.jpg',
+  avatarUrl: resolveStaticAssetUrl('/profile.jpg'),
   githubUrl: 'https://github.com/zeztto',
   instagramUrl: 'https://instagram.com/h4ppy_p1zza',
   email: '',

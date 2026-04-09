@@ -4,7 +4,7 @@ import { projects } from '../../db/schema.js';
 
 export async function countPublishedProjects(db: Database) {
   const [row] = await db
-    .select({ count: sql<number>`count(*)` })
+    .select({ count: sql<number>`cast(count(*) as integer)` })
     .from(projects)
     .where(eq(projects.isPublished, true));
 

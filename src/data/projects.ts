@@ -2,7 +2,7 @@
  * Project Data
  *
  * Centralized project data for the portfolio website.
- * Total: 45 projects across 8 categories
+ * Total: 50 projects across 8 categories
  *
  * Categories:
  * - Media (4): Video, Audio, Image editing
@@ -10,10 +10,12 @@
  * - Finance (5): Financial calculators and trackers
  * - Productivity (2): Notes, analytics, collaboration
  * - Games (5): Entertainment and games
- * - Services (4): Productized web services
+ * - Services (9): Productized web services
  * - Websites (7): Client websites and brand sites
  * - Archive (8): Legacy and miscellaneous projects
  */
+
+import { resolveStaticAssetUrl } from './cloudinary-assets.js';
 
 export interface Project {
   id: string;
@@ -43,6 +45,7 @@ export const projects: Project[] = [
     tags: ['Utility', 'Emoji', 'Clipboard'],
     category: 'Tools',
     year: '2026',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/emoji-list.jpg'),
     longDescription:
       '11개 카테고리로 분류된 이모지를 검색하고 클릭 한 번으로 클립보드에 복사할 수 있는 서버리스 웹 애플리케이션입니다. 즐겨찾기와 최근 사용 기록이 로컬 스토리지에 저장되어 자주 쓰는 이모지에 빠르게 접근할 수 있습니다.',
     features: [
@@ -621,7 +624,7 @@ export const projects: Project[] = [
       'Web Crypto API',
       'Vitest',
     ],
-    thumbnail: '/thumbnails/lottery-roulette-v2.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/lottery-roulette-v2.jpg'),
   },
   // NEW: Tarot Card - Games
   {
@@ -702,7 +705,7 @@ export const projects: Project[] = [
   },
 
   // ============================================
-  // Services (4) + Websites (7)
+  // Services (9) + Websites (7)
   // ============================================
   {
     id: 'trve',
@@ -712,7 +715,7 @@ export const projects: Project[] = [
     tags: ['Verification', 'K-Beauty', 'Trust Signals'],
     category: 'Services',
     year: '2026',
-    thumbnail: '/thumbnails/trve.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/trve.jpg'),
     longDescription:
       'trveKR는 한국 쇼핑몰 URL을 입력하면 사업자 정보, 정책 페이지, 국제 결제 준비도, 도메인 신뢰도, 위험 신호를 구조화된 리포트로 보여주는 사전 검증 서비스입니다. AI API에 의존하지 않고 공개 HTML과 규칙 기반 분석만으로 결과를 만들며, fallback recheck와 Turso 저장을 통해 반복 점검과 이력 비교도 지원합니다.',
     features: [
@@ -733,7 +736,7 @@ export const projects: Project[] = [
     tags: ['Short URL', 'Analytics', 'Utility'],
     category: 'Services',
     year: '2026',
-    thumbnail: '/thumbnails/qqwe.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/qqwe.jpg'),
     longDescription:
       '99i.kr는 로그인 없이 긴 URL을 6자리 slug로 즉시 단축하고, 링크별 통계 페이지에서 최근 7일 또는 30일 기준 유입 현황을 확인할 수 있는 URL 단축 서비스입니다. 현재 기존 URL 단축기 코드베이스를 바탕으로 99i.kr 브랜드로 전환 중이며, Next.js App Router 기반 풀스택 구조 위에 Turso와 Drizzle ORM을 올려 링크 저장과 클릭 기록을 처리하고, 실제 리디렉션 이후 referer, 국가, 디바이스, 브라우저, OS 정보를 비동기로 수집합니다.',
     features: [
@@ -754,7 +757,7 @@ export const projects: Project[] = [
     tags: ['PRD', 'AI', 'Product Management'],
     category: 'Services',
     year: '2026',
-    thumbnail: '/thumbnails/prd-ai.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/prd-ai.jpg'),
     longDescription:
       'prd.ai는 PRD 작성 경험이 많지 않은 기획자나 PM도 질문 기반 플로우를 따라가며 제품 요구사항 문서를 구조적으로 완성할 수 있도록 설계된 한국어 AI PRD 작성 서비스입니다. 프로젝트 설정, 배경, 목표, 타깃 사용자, 기능, 범위를 단계별로 입력하면 DeepSeek 기반 AI가 문장을 보강하고, 품질 점수와 리뷰 피드백으로 문서 완성도를 점검할 수 있습니다. 계정 기반 대시보드, 문서 저장, 중복 생성, 미리보기와 Markdown 내보내기까지 하나의 워크플로우로 연결되어 있습니다.',
     features: [
@@ -775,7 +778,7 @@ export const projects: Project[] = [
     tags: ['Link-in-Bio', 'Creator Tools', 'Analytics'],
     category: 'Services',
     year: '2026',
-    thumbnail: '/thumbnails/qwee.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/qwee.jpg'),
     longDescription:
       'qwee.kr은 사용자명 기반 공개 링크 페이지를 만들고, 대시보드에서 링크 CRUD, 링크 순서 변경, 소셜 아이콘 관리, 테마 커스터마이징, 클릭 분석을 처리할 수 있는 한국어 link-in-bio 서비스입니다. Next.js 16 App Router 프론트엔드와 Railway 배포를 전제로 한 Express + Turso 백엔드를 함께 구성했고, Google OAuth 로그인 흐름과 공개 프로필 API를 묶어 하나의 제품 경험으로 연결했습니다.',
     features: [
@@ -789,6 +792,143 @@ export const projects: Project[] = [
     techStack: ['Next.js', 'TypeScript', 'Express', 'Turso', 'Google OAuth', 'Tailwind CSS', 'Zustand'],
   },
   {
+    id: 'h4ppy-board',
+    name: 'h4ppy',
+    description: 'Google 로그인 후 바로 사용할 수 있는 한국어 칸반보드 협업 서비스.',
+    url: 'https://h4ppy.kr/',
+    tags: ['Kanban', 'Productivity', 'Collaboration'],
+    category: 'Services',
+    year: '2026',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/h4ppy-board.jpg'),
+    longDescription:
+      'h4ppy는 한국어 사용자를 위한 칸반보드 서비스로, 멀티보드 운영, 카드/컬럼 드래그앤드롭, 하위 카드, 핀 고정, 보드 공유, JSON 내보내기까지 하나의 워크스페이스 흐름으로 묶은 생산성 도구입니다. Google OAuth 기반 로그인과 플랜별 제한, 관리자 대시보드, 모바일 대응 UI를 포함하고 있으며, PostgreSQL과 Drizzle ORM 위에서 클라우드 데이터를 관리합니다.',
+    features: [
+      'Google OAuth 로그인 후 즉시 보드 시작',
+      '멀티보드, 컬럼/카드 인라인 편집, 드래그앤드롭 관리',
+      '하위 카드, 핀 고정, 읽기/편집 공유 링크 지원',
+      '플랜 시스템과 관리자 대시보드 제공',
+      'JSON 내보내기와 모바일 탭 기반 보드 UI 지원',
+      'PostgreSQL 기반 클라우드 저장 구조',
+    ],
+    techStack: [
+      'Next.js',
+      'TypeScript',
+      'Tailwind CSS',
+      'NextAuth.js',
+      'PostgreSQL',
+      'Drizzle ORM',
+      'Zustand',
+    ],
+  },
+  {
+    id: 'lmml',
+    name: 'LMML.KR',
+    description: '한국 메탈 공연 정보를 수집하고 게시하는 공연 아카이브 및 운영 서비스.',
+    url: 'https://lmml.kr/',
+    tags: ['Music', 'Concerts', 'Admin CMS'],
+    category: 'Services',
+    year: '2026',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/lmml.jpg'),
+    longDescription:
+      'LMML.KR은 한국 메탈 공연 정보를 구조화해 게시하는 Next.js 기반 서비스입니다. 관리자가 소셜 게시물 URL을 입력하면 포스터와 캡션을 가져오고, Gemini가 텍스트를 파싱해 공연 날짜, 장소, 라인업 같은 정보를 구조화된 데이터로 변환합니다. 포스터 영속화, 관리자 인증, 공연 CRUD, 헬스체크 API까지 포함된 운영형 아카이브 서비스입니다.',
+    features: [
+      '소셜 게시물 URL 기반 공연 포스터/캡션 수집',
+      'Gemini 기반 공연 정보 파싱과 구조화',
+      '관리자 인증 기반 공연 생성, 수정, 삭제',
+      'Cloudinary 포스터 복사 및 영속화 지원',
+      '공개 공연 API와 관리자 세션 API 제공',
+      'Next.js standalone 빌드 기반 서비스 배포',
+    ],
+    techStack: [
+      'Next.js',
+      'TypeScript',
+      'Gemini API',
+      'Drizzle ORM',
+      'SQLite',
+      'Turso',
+      'Cloudinary',
+    ],
+  },
+  {
+    id: 'wyz',
+    name: 'Wyz',
+    description: '완전 익명, 완전 랜덤 1:1 텍스트 채팅을 제공하는 실시간 매칭 서비스.',
+    url: 'https://wyz.kr/',
+    tags: ['Chat', 'Matching', 'Realtime'],
+    category: 'Services',
+    year: '2026',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/wyz.jpg'),
+    longDescription:
+      'Wyz는 Google 로그인 후 닉네임을 설정하고 버튼 한 번으로 랜덤 상대와 즉시 채팅을 시작하는 1:1 텍스트 매칭 서비스입니다. Express와 Next.js 커스텀 서버 위에 Socket.io를 결합해 실시간 매칭과 채팅을 처리하며, JWT 인증, 인메모리 FIFO 매칭 큐, 접속자 수 표시, 메시지 저장까지 하나의 단일 서비스 배포 구조로 묶었습니다.',
+    features: [
+      'Google OAuth 로그인과 닉네임 설정',
+      '완전 랜덤 1:1 매칭과 실시간 Socket.io 채팅',
+      '인메모리 FIFO 매칭 큐와 채팅 룸 관리',
+      '실시간 접속자 수 표시와 상대 퇴장 감지',
+      '메시지 500자 제한과 채팅 이력 저장',
+      'Express + Next.js 단일 프로세스 배포 구조',
+    ],
+    techStack: [
+      'Next.js',
+      'TypeScript',
+      'Express',
+      'Socket.io',
+      'NextAuth.js',
+      'Turso',
+      'Drizzle ORM',
+    ],
+  },
+  {
+    id: 'deafroom',
+    name: 'deafroom.com code chat',
+    description: 'Next.js와 Socket.io를 결합한 실시간 코드 채팅 서비스.',
+    url: 'https://deafroom.com/',
+    tags: ['Code Chat', 'Realtime', 'PostgreSQL'],
+    category: 'Services',
+    year: '2026',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/deafroom.jpg'),
+    longDescription:
+      'deafroom.com code chat은 Next.js와 Socket.io 기반의 실시간 채팅 서비스입니다. Prisma와 PostgreSQL을 사용해 데이터를 관리하고, Docker Compose와 Caddy gateway를 통해 Vultr 서버에 직접 배포하는 운영 구조를 갖췄습니다. 새 릴리스를 서버에 업로드하고 Prisma migration까지 포함한 수동 배포 플로우가 정리된 실서비스 프로젝트입니다.',
+    features: [
+      'Socket.io 기반 실시간 코드 채팅',
+      'Next.js 16 기반 웹 클라이언트와 라우팅',
+      'Prisma + PostgreSQL 데이터 계층',
+      'Docker Compose 기반 Vultr 운영 구조',
+      'Caddy gateway 연동 reverse proxy 구성',
+      '릴리스 업로드와 migration을 포함한 수동 배포 플로우',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Socket.io', 'Prisma', 'PostgreSQL', 'Docker Compose'],
+  },
+  {
+    id: 'row-kr',
+    name: 'row.kr',
+    description: '드래그앤드롭으로 공개 범위를 제어하는 칸반보드 기반 소셜 로깅 서비스.',
+    url: 'https://row.kr/',
+    tags: ['Social', 'Kanban', 'Logging'],
+    category: 'Services',
+    year: '2026',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/row-kr.jpg'),
+    longDescription:
+      'row.kr은 짧은 로그를 작성하되 칸반보드 형태로 공개 범위를 관리하는 소셜 로깅 서비스입니다. 비공개, 친구공개, 전체공개 3개 컬럼 사이로 카드를 드래그해 공개 범위를 즉시 바꿀 수 있고, 인스턴스 로그, 팔로잉 피드, 리포스트/인용, 친구 정책, 모바일 탭 보드 UI까지 결합해 보드와 피드를 하나의 인터랙션 모델로 설계했습니다.',
+    features: [
+      '비공개, 친구공개, 전체공개 3컬럼 칸반 보드',
+      '드래그앤드롭 기반 공개 범위 변경과 fractional indexing 정렬',
+      '4시간~48시간 만료 인스턴스 로그와 개인 아카이브',
+      '최신순/팔로잉 피드와 리포스트, 인용 기능',
+      '팔로우, 상호 팔로우, 승인제 친구 정책 지원',
+      '모바일 탭 전환과 카드-탭 드롭까지 포함한 반응형 UI',
+    ],
+    techStack: [
+      'Next.js',
+      'TypeScript',
+      'Turso',
+      'Drizzle ORM',
+      'NextAuth.js',
+      '@hello-pangea/dnd',
+      'TanStack Query',
+    ],
+  },
+  {
     id: 'h4ppylabs',
     name: 'h4ppy Labs',
     description: '뮤지션을 위한 무료 VST3/AU 오디오 플러그인을 개발하는 크리에이티브 오디오 도구 스튜디오.',
@@ -796,7 +936,7 @@ export const projects: Project[] = [
     tags: ['Audio', 'Open Source', 'Music'],
     category: 'Websites',
     year: '2025',
-    thumbnail: '/thumbnails/h4ppylabs.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/h4ppylabs.jpg'),
     longDescription:
       'h4ppy Labs는 기타리스트와 뮤지션을 위한 창의적인 가상악기 및 이펙터 플러그인을 제작합니다. 퍼즈 디스토션 플러그인 FUZZA와 원노브 덕킹 리버브 플러그인 DUCKAVERB를 무료로 제공하며, Windows와 macOS를 모두 지원합니다. DSP 기술을 기반으로 제로 레이턴시, 노이즈 게이트, 다양한 클리핑 모드 등 전문적인 기능을 갖추고 있습니다.',
     features: [
@@ -817,7 +957,7 @@ export const projects: Project[] = [
     tags: ['Service', 'Lifestyle', 'Matchmaking'],
     category: 'Websites',
     year: '2025',
-    thumbnail: '/thumbnails/meetgirls.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/meetgirls.jpg'),
     longDescription:
       '밋걸은 특별한 순간에 함께할 파트너를 매칭해주는 프리미엄 컨시어지 서비스입니다. 가족 모임, 결혼식, 브랜드 행사 등의 동행 서비스부터 실전 데이트 연습, 메시지/통화 코칭, 풀데이 컨시어지까지 다양한 서비스를 운영합니다. 24시간 내 응답, 100% 프라이버시 보호, 서울 전역 대응이 가능합니다.',
     features: [
@@ -838,7 +978,7 @@ export const projects: Project[] = [
     tags: ['Food', 'Bakery', 'Cafe'],
     category: 'Websites',
     year: '2025',
-    thumbnail: '/thumbnails/srbbrs.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/srbbrs.jpg'),
     longDescription:
       'SRBBRS는 서울 성동구 서울숲에 위치한 크로와상 전문 베이커리입니다. 매일 새벽 4시부터 프랑스 AOP 인증 버터와 국내산 유기농 밀가루로 72겹의 크로와상을 직접 만들며, 오랜 발효와 숙성을 거쳐 바삭함과 부드러움의 균형을 추구합니다.',
     features: [
@@ -858,7 +998,7 @@ export const projects: Project[] = [
     tags: ['Crypto', 'Fintech', 'Exchange'],
     category: 'Websites',
     year: '2025',
-    thumbnail: '/thumbnails/axmx.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/axmx.jpg'),
     longDescription:
       'AXMX Exchange는 300개 이상의 거래쌍을 지원하며, 0.001초 이내 주문 체결과 초저수수료를 제공하는 암호화폐 거래소입니다. 95% 콜드스토리지 보관, SOC 2 Type II 인증, 다중서명 지갑 등 기관급 보안을 갖추고 있으며, REST/WebSocket/FIX API를 지원합니다.',
     features: [
@@ -879,7 +1019,7 @@ export const projects: Project[] = [
     tags: ['Music', 'Studio', 'Recording'],
     category: 'Websites',
     year: '2025',
-    thumbnail: '/thumbnails/garlicton.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/garlicton.jpg'),
     longDescription:
       '갈릭톤 스튜디오는 인천 강화군에 위치한 K-메탈 음악 전문 레코딩 스튜디오로, 15년 이상 경력의 엔지니어가 운영합니다. 보컬 레코딩부터 믹싱, 마스터링, 프로듀싱까지 음악 제작의 전 과정을 지원하며, 아날로그 아웃보드와 디지털 프로세싱을 결합한 하이브리드 방식을 사용합니다.',
     features: [
@@ -899,7 +1039,7 @@ export const projects: Project[] = [
     tags: ['Music', 'Hardware', 'Guitar'],
     category: 'Websites',
     year: '2025',
-    thumbnail: '/thumbnails/pedals.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/pedals.jpg'),
     longDescription:
       'PEDALS는 한국의 공방에서 포인트 투 포인트 핸드 와이어링으로 하나하나 수작업 제작하는 부띠끄 기타 이펙터 페달 브랜드입니다. 디스토션, 퍼즈, 아날로그 코러스, 테이프 에코 등의 제품을 판매하며, 부품 선별부터 사운드 테스트까지 모든 공정을 수작업으로 진행합니다.',
     features: [
@@ -920,7 +1060,7 @@ export const projects: Project[] = [
     tags: ['Fashion', 'Streetwear', 'E-commerce'],
     category: 'Websites',
     year: '2026',
-    thumbnail: '/thumbnails/onkura.jpg',
+    thumbnail: resolveStaticAssetUrl('/thumbnails/onkura.jpg'),
     longDescription:
       'ONKURA는 도쿄 스트릿 패션과 한국어 카피를 결합한 컨셉 스토어 웹사이트입니다. 히어로 룩북, 디자이너 스토리, 상품 카탈로그, 주문 요청, 뉴스레터 구독 흐름을 하나의 브랜드 경험으로 묶었고, Next.js 16 App Router 위에 Prisma + PostgreSQL 기반 API 계층을 연결해 정적 쇼케이스를 풀스택 스토어 데모로 확장했습니다.',
     features: [
