@@ -4,7 +4,7 @@ loadEnv({ path: '.env.local', override: false });
 loadEnv();
 
 const DEFAULT_APP_ORIGIN = 'http://localhost:5173';
-const DEFAULT_CANONICAL_REDIRECT_HOSTS = 'h4ppy-p1zza.com,www.h4ppy-p1zza.com';
+const DEFAULT_CANONICAL_REDIRECT_HOSTS = 'www.p1zza.kr';
 
 function readEnv(key: string, fallback?: string) {
   const value = process.env[key];
@@ -36,8 +36,7 @@ export const env = {
   githubClientSecret: readEnv('GITHUB_CLIENT_SECRET'),
   adminGithubLogins: readCsvEnv('ADMIN_GITHUB_LOGINS'),
   sessionSecret: readEnv('SESSION_SECRET'),
-  tursoDatabaseUrl: readEnv('TURSO_DATABASE_URL'),
-  tursoAuthToken: readEnv('TURSO_AUTH_TOKEN'),
+  databaseUrl: readEnv('DATABASE_URL'),
   cloudinaryCloudName: process.env['CLOUDINARY_CLOUD_NAME'] ?? '',
   cloudinaryApiKey: process.env['CLOUDINARY_API_KEY'] ?? '',
   cloudinaryApiSecret: process.env['CLOUDINARY_API_SECRET'] ?? '',

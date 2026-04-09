@@ -1,21 +1,20 @@
-import { createClient, type Client } from '@libsql/client';
-import { drizzle } from 'drizzle-orm/libsql';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 import * as schema from './schema.js';
 
-export function createLibsqlClient(url: string, authToken: string) {
-  return createClient({
-    url,
-    authToken,
+export function createDatabaseClient(url: string) {
+  const client = new Pool({
+    connectionString: url,
+    max: 10,
   });
-}
-
-export function createDatabaseClient(url: string, authToken: string) {
-  const client = createLibsqlClient(url, authToken);
   return drizzle(client, { schema });
 }
 
-export function createDatabase(url: string, authToken: string) {
-  const client = createLibsqlClient(url, authToken);
+export function createDatabase(url: string) {
+  const client = new Pool({
+    connectionString: url,
+    max: 10,
+  });
   return {
     client,
     db: drizzle(client, { schema }),
@@ -23,4 +22,4 @@ export function createDatabase(url: string, authToken: string) {
 }
 
 export type Database = ReturnType<typeof createDatabaseClient>;
-export type DatabaseClient = Client;
+export type DatabaseClient = Pool;

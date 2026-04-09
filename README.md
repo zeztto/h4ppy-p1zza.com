@@ -1,4 +1,4 @@
-# h4ppy p1zza - Portfolio Website
+# p1zza.kr - Portfolio Website
 
 > 웹 개발자 포트폴리오 웹사이트 | Web Developer Portfolio Website
 
@@ -9,9 +9,9 @@
 
 ## 📖 Overview | 개요
 
-React 18.3.1과 TypeScript로 구축된 현대적인 포트폴리오 웹사이트입니다. 36개의 웹 애플리케이션 프로젝트를 소개하며, 인터랙티브한 iframe 미리보기, 철학적 에세이 프로필 페이지, 블로그 섹션을 포함합니다.
+React 18.3.1, TypeScript, Express로 구축된 개인 포트폴리오 서비스입니다. 공개 포트폴리오 페이지와 admin 편집 화면을 함께 제공하며, Vultr 이전을 위해 Docker + PostgreSQL 배포 구조를 준비하고 있습니다.
 
-A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 36 web application projects with interactive iframe previews, philosophical essay profile, and a blog section.
+A personal portfolio service built with React 18.3.1, TypeScript, and Express. It serves public portfolio pages and an admin editing surface, and is being prepared for Docker + PostgreSQL deployment on Vultr.
 
 ## ✨ Features | 주요 기능
 
@@ -23,6 +23,9 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 36
 - 🚀 **Performance Optimized** - 번들 크기 최적화 및 lazy loading
 - 🔒 **Security Hardened** - CSP, 보안 헤더, TypeScript strict mode
 - 🔍 **SEO Optimized** - 완전한 메타 태그, sitemap, robots.txt
+- 🛠️ **Admin CMS** - 프로젝트/섹션/프로필/문의 관리 기능
+- 🐳 **Docker Ready** - container image와 `compose.yml` 제공
+- 🐘 **PostgreSQL Ready** - `DATABASE_URL` 기반 runtime과 Turso migration script 지원
 
 ## 🎯 Showcased Projects | 프로젝트 소개
 
@@ -87,6 +90,12 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 36
 - **TypeScript** 5.x - 타입 안전성
 - **Vite** 6.4.1 - 빌드 도구
 
+### Backend
+
+- **Express** 5.x - API 서버
+- **Drizzle ORM** - 타입 안전한 데이터 접근
+- **PostgreSQL** - 배포 대상 데이터베이스
+
 ### UI Framework
 
 - **shadcn/ui** - UI 컴포넌트 라이브러리
@@ -110,7 +119,7 @@ A modern portfolio website built with React 18.3.1 and TypeScript, showcasing 36
 
 ```
 h4ppy-p1zza.com/
-├── public/                     # 정적 파일
+├── public/                     # 루트 정적 파일만 유지
 │   ├── robots.txt              # 검색 엔진 크롤링 설정
 │   └── sitemap.xml             # 사이트맵
 ├── src/
@@ -146,6 +155,11 @@ h4ppy-p1zza.com/
 ├── package.json                # 의존성
 └── README.md                   # 이 파일
 ```
+
+정적 이미지 자산 정책:
+- 포트폴리오 썸네일, 프로필 이미지, OG 이미지는 Cloudinary에서 관리합니다.
+- `public/`에는 favicon, manifest, robots, sitemap 같은 origin-root 자산만 유지합니다.
+- 썸네일 생성 후에는 `npm run assets:cloudinary:sync`로 Cloudinary에 업로드하고, 레포에는 바이너리 파일을 남기지 않습니다.
 
 ## 🚀 Getting Started | 시작하기
 
@@ -203,30 +217,27 @@ npm run type-check   # TypeScript 타입 체크
 
 ## 📦 Deployment | 배포
 
-### Vercel (권장)
+### Docker Compose
 
 ```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
+cp .env.example .env.local
+docker compose --env-file .env.local up --build
 ```
 
-### Netlify
+- app port: `3001`
+- database: `postgres:17-alpine`
+- required runtime env: `DATABASE_URL`, `APP_ORIGIN`, GitHub OAuth, session secret
+- compose는 `.env.local` 전체를 통째로 주입하지 않고 필요한 변수만 선택적으로 전달합니다.
+- local `docker compose`로 GitHub OAuth까지 테스트하려면 `APP_ORIGIN=http://localhost:3001` 로 바꿔서 사용하세요.
 
-- Build command: `npm run build`
-- Publish directory: `dist`
+### Vultr + Caddy
 
-### GitHub Pages
-
-- Configure base in `vite.config.ts`
-- Use gh-pages branch deployment
-
-### Other Platforms
-
-- Build output: `dist/` directory
-- Serve as static site
+- compose project name: `p1zza-kr`
+- canonical domain: `https://p1zza.kr`
+- redirect host: `www.p1zza.kr`
+- `h4ppy-p1zza.com`은 이 서비스에 연결하지 않습니다.
+- 배포 메모: [deploy/vultr/README.md](/Users/sungwoonjeon/dev/h4ppy-p1zza.com/deploy/vultr/README.md)
+- Caddy site file: [deploy/vultr/p1zza.kr.caddy](/Users/sungwoonjeon/dev/h4ppy-p1zza.com/deploy/vultr/p1zza.kr.caddy)
 
 ## 🔒 Security Features | 보안 기능
 

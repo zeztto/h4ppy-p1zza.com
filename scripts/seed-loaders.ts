@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { projects } from '../src/data/projects.js';
+import { resolveStaticAssetUrl } from '../src/data/cloudinary-assets.js';
 import { DEFAULT_SITE_PROFILE, DEFAULT_SITE_SECTIONS } from '../src/data/site-content.js';
 
 export interface SeedProject {
@@ -38,17 +39,30 @@ export interface SeedSection {
 
 function resolveThumbnail(projectId: string, thumbnail: string | undefined) {
   if (thumbnail) {
-    return thumbnail;
+    return resolveStaticAssetUrl(thumbnail);
+  }
+
+  const cloudinaryThumbnailUrl = resolveStaticAssetUrl(`/thumbnails/${projectId}.jpg`);
+  if (cloudinaryThumbnailUrl !== `/thumbnails/${projectId}.jpg`) {
+    return cloudinaryThumbnailUrl;
   }
 
   const generatedThumbnailPath = path.join(
+    process.cwd(),
+    'output',
+    'thumbnails',
+    'final',
+    `${projectId}.jpg`
+  );
+
+  const legacyGeneratedThumbnailPath = path.join(
     process.cwd(),
     'public',
     'thumbnails',
     `${projectId}.jpg`
   );
 
-  if (existsSync(generatedThumbnailPath)) {
+  if (existsSync(generatedThumbnailPath) || existsSync(legacyGeneratedThumbnailPath)) {
     return `/thumbnails/${projectId}.jpg`;
   }
 

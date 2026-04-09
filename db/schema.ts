@@ -1,7 +1,7 @@
 import { relations } from 'drizzle-orm';
-import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
+import { boolean, index, integer, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
 
-export const adminUsers = sqliteTable(
+export const adminUsers = pgTable(
   'admin_users',
   {
     id: text('id').primaryKey(),
@@ -10,15 +10,15 @@ export const adminUsers = sqliteTable(
     role: text('role').notNull().default('admin'),
     avatarUrl: text('avatar_url'),
     displayName: text('display_name'),
-    createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
-    updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull(),
   },
   (table) => ({
     githubLoginIdx: uniqueIndex('admin_users_github_login_idx').on(table.githubLogin),
   })
 );
 
-export const sessions = sqliteTable(
+export const sessions = pgTable(
   'sessions',
   {
     id: text('id').primaryKey(),
@@ -26,16 +26,16 @@ export const sessions = sqliteTable(
     userId: text('user_id')
       .notNull()
       .references(() => adminUsers.id, { onDelete: 'cascade' }),
-    expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
-    createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
-    updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull(),
   },
   (table) => ({
     sessionHashIdx: uniqueIndex('sessions_hash_idx').on(table.sessionHash),
   })
 );
 
-export const projects = sqliteTable('projects', {
+export const projects = pgTable('projects', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   description: text('description').notNull(),
@@ -48,13 +48,13 @@ export const projects = sqliteTable('projects', {
   featuresJson: text('features_json').notNull().default('[]'),
   techStackJson: text('tech_stack_json').notNull().default('[]'),
   sortOrder: integer('sort_order').notNull().default(0),
-  isFeatured: integer('is_featured', { mode: 'boolean' }).notNull().default(false),
-  isPublished: integer('is_published', { mode: 'boolean' }).notNull().default(true),
-  createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+  isFeatured: boolean('is_featured').notNull().default(false),
+  isPublished: boolean('is_published').notNull().default(true),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull(),
 });
 
-export const siteProfile = sqliteTable('site_profile', {
+export const siteProfile = pgTable('site_profile', {
   id: text('id').primaryKey().default('primary'),
   displayName: text('display_name').notNull(),
   headline: text('headline').notNull(),
@@ -64,10 +64,10 @@ export const siteProfile = sqliteTable('site_profile', {
   instagramUrl: text('instagram_url'),
   email: text('email'),
   essayMarkdown: text('essay_markdown').notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull(),
 });
 
-export const siteSections = sqliteTable('site_sections', {
+export const siteSections = pgTable('site_sections', {
   id: text('id').primaryKey(),
   key: text('key'),
   name: text('name').notNull(),
@@ -75,18 +75,20 @@ export const siteSections = sqliteTable('site_sections', {
   sectionType: text('section_type').notNull().default('template'),
   templateKey: text('template_key'),
   contentJson: text('content_json').notNull().default('{}'),
-  enabled: integer('enabled', { mode: 'boolean' }).notNull().default(true),
+  enabled: boolean('enabled').notNull().default(true),
   sortOrder: integer('sort_order').notNull().default(0),
-  updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull(),
 });
 
-export const siteSettings = sqliteTable('site_settings', {
+export const siteSettings = pgTable('site_settings', {
   key: text('key').primaryKey(),
   value: text('value').notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull(),
 });
 
-export const inquiries = sqliteTable('inquiries', {
+export const inquiries = pgTable(
+  'inquiries',
+  {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').notNull(),
@@ -100,10 +102,15 @@ export const inquiries = sqliteTable('inquiries', {
   sourceUrl: text('source_url'),
   userAgent: text('user_agent'),
   ipAddress: text('ip_address'),
-  createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
-  resolvedAt: integer('resolved_at', { mode: 'timestamp_ms' }),
-});
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull(),
+  resolvedAt: timestamp('resolved_at', { withTimezone: true, mode: 'date' }),
+  },
+  (table) => ({
+    statusIdx: index('inquiries_status_idx').on(table.status),
+    createdAtIdx: index('inquiries_created_at_idx').on(table.createdAt.desc()),
+  })
+);
 
 export const adminUsersRelations = relations(adminUsers, ({ many }) => ({
   sessions: many(sessions),

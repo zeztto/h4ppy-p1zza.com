@@ -13,20 +13,19 @@ loadEnv();
 const isForceMode = process.argv.includes('--force');
 
 async function run() {
-  const databaseUrl = process.env['TURSO_DATABASE_URL'];
-  const authToken = process.env['TURSO_AUTH_TOKEN'];
+  const databaseUrl = process.env['DATABASE_URL'];
 
-  if (!databaseUrl || !authToken) {
-    throw new Error('TURSO_DATABASE_URL and TURSO_AUTH_TOKEN are required');
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL is required');
   }
 
-  const { client, db } = createDatabase(databaseUrl, authToken);
+  const { client, db } = createDatabase(databaseUrl);
   const now = new Date();
   await ensureDatabaseSchema(client);
 
   const [projectCountRow, sectionCountRow, existingProfile] = await Promise.all([
-    db.select({ count: sql<number>`count(*)` }).from(projects),
-    db.select({ count: sql<number>`count(*)` }).from(siteSections),
+    db.select({ count: sql<number>`cast(count(*) as integer)` }).from(projects),
+    db.select({ count: sql<number>`cast(count(*) as integer)` }).from(siteSections),
     db.query.siteProfile.findFirst({
       where: eq(siteProfile.id, 'primary'),
     }),
@@ -178,8 +177,8 @@ async function run() {
     );
   }
 
-  const [finalProjectCountRow] = await db.select({ count: sql<number>`count(*)` }).from(projects);
-  const [finalSectionCountRow] = await db.select({ count: sql<number>`count(*)` }).from(siteSections);
+  const [finalProjectCountRow] = await db.select({ count: sql<number>`cast(count(*) as integer)` }).from(projects);
+  const [finalSectionCountRow] = await db.select({ count: sql<number>`cast(count(*) as integer)` }).from(siteSections);
   const profileRow = await db.query.siteProfile.findFirst({
     where: eq(siteProfile.id, 'primary'),
   });

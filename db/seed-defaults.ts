@@ -40,7 +40,7 @@ const SECTION_CONTENT: Record<string, unknown> = {
 };
 
 export async function seedDefaults(client: DatabaseClient): Promise<void> {
-  const now = Date.now();
+  const now = new Date();
 
   // Seed default settings using INSERT OR IGNORE (won't overwrite existing)
   const settings = [
@@ -50,17 +50,20 @@ export async function seedDefaults(client: DatabaseClient): Promise<void> {
   ];
 
   for (const setting of settings) {
-    await client.execute({
-      sql: 'INSERT OR IGNORE INTO site_settings (key, value, updated_at) VALUES (?, ?, ?)',
-      args: [setting.key, setting.value, now],
-    });
+    await client.query(
+      `INSERT INTO site_settings (key, value, updated_at)
+       VALUES ($1, $2, $3)
+       ON CONFLICT (key) DO NOTHING`,
+      [setting.key, setting.value, now]
+    );
   }
 
-  // Seed default section content — only update rows where content_json is still '{}'
   for (const [templateKey, content] of Object.entries(SECTION_CONTENT)) {
-    await client.execute({
-      sql: `UPDATE site_sections SET content_json = ?, template_key = ?, section_type = 'template' WHERE id = ? AND content_json = '{}'`,
-      args: [JSON.stringify(content), templateKey, templateKey],
-    });
+    await client.query(
+      `UPDATE site_sections
+       SET content_json = $1, template_key = $2, section_type = 'template'
+       WHERE id = $3 AND content_json = '{}'`,
+      [JSON.stringify(content), templateKey, templateKey]
+    );
   }
 }

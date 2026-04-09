@@ -11,7 +11,7 @@ const rootDir = path.resolve(scriptDir, '..');
 const chromeBinary = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const rawDir = path.join(rootDir, 'output', 'thumbnails', 'raw');
 const tempDir = path.join(rootDir, 'output', 'thumbnails', 'temp');
-const finalDir = path.join(rootDir, 'public', 'thumbnails');
+const finalDir = path.join(rootDir, 'output', 'thumbnails', 'final');
 const rawViewport = { width: 1360, height: 820 };
 const finalViewport = { width: 1600, height: 900 };
 const finalSize = { width: 1200, height: 675 };
@@ -23,6 +23,10 @@ interface ProjectThumbnailTarget {
   category: string;
 }
 
+function parseSelectedIds() {
+  return new Set(process.argv.slice(2).filter(Boolean));
+}
+
 function escapeHtml(value: string) {
   return value
     .replaceAll('&', '&amp;')
@@ -32,12 +36,15 @@ function escapeHtml(value: string) {
     .replaceAll("'", '&#39;');
 }
 
-function getTargets(): ProjectThumbnailTarget[] {
+function getTargets(selectedIds: Set<string>): ProjectThumbnailTarget[] {
   return projects
     .filter(
       (project) =>
-        project.category !== 'Websites' &&
-        project.category !== 'Services' &&
+        (selectedIds.size > 0 ||
+          (project.category !== 'Websites' &&
+            project.category !== 'Services' &&
+            project.id !== 'h4ppy-p1zza-portfolio')) &&
+        (selectedIds.size === 0 || selectedIds.has(project.id)) &&
         project.id !== 'h4ppy-p1zza-portfolio'
     )
     .map((project) => ({
@@ -182,7 +189,8 @@ async function generateThumbnail(target: ProjectThumbnailTarget) {
 }
 
 async function main() {
-  const targets = getTargets();
+  const selectedIds = parseSelectedIds();
+  const targets = getTargets(selectedIds);
   await ensureDirectories();
 
   const failures: string[] = [];

@@ -83,7 +83,7 @@ function readStructuredDataHashes(indexPath?: string) {
 
 export async function createApp() {
   const app = express();
-  const { client, db } = createDatabase(env.tursoDatabaseUrl, env.tursoAuthToken);
+  const { client, db } = createDatabase(env.databaseUrl);
   const distPath = resolveDistPath();
   const structuredDataHashes = readStructuredDataHashes(resolveIndexPath(distPath));
 
