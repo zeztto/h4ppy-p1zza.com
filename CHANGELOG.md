@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Switched runtime/database configuration toward PostgreSQL via `DATABASE_URL`
 - Added Dockerfile, `.dockerignore`, and `compose.yml` for containerized deployment
 - Added Vultr deployment notes and `p1zza.kr` Caddy site template
+- Updated deployment notes and staging defaults for the `p1zza-2nd` shared Docker/Caddy host
 - Added `scripts/migrate-turso-to-postgres.ts` for legacy Turso data migration
 - Updated canonical domain defaults to `p1zza.kr` and removed `h4ppy-p1zza.com` from service defaults
 - Added new portfolio service entries for `h4ppy`, `LMML.KR`, `Wyz`, `deafroom.com code chat`, and `row.kr`

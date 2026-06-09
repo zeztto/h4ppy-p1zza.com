@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-REMOTE_HOST="p1zza-1st"
+REMOTE_HOST="p1zza-2nd"
 REMOTE_DIR="/opt/p1zza-kr"
 ENV_FILE=""
 DELETE_FLAG=0
@@ -13,9 +13,9 @@ usage() {
 Usage: bash deploy/vultr/stage.sh [options]
 
 Options:
-  --host <ssh-host>          SSH host alias (default: p1zza-1st)
+  --host <ssh-host>          SSH host alias (default: p1zza-2nd)
   --remote-dir <path>        Remote app directory (default: /opt/p1zza-kr)
-  --env-file <path>          Local env file to upload as .env.local
+  --env-file <path>          Local env file to upload as .env.vultr
   --no-build                 Skip docker compose --build
   --delete                   Delete remote files that no longer exist locally
   --help                     Show this help
@@ -94,10 +94,10 @@ fi
 rsync "${RSYNC_ARGS[@]}" "$ROOT_DIR"/ "$REMOTE_HOST:$REMOTE_DIR/"
 
 if [[ -n "$ENV_FILE" ]]; then
-  rsync -az "$ENV_FILE" "$REMOTE_HOST:$REMOTE_DIR/.env.local"
+  rsync -az "$ENV_FILE" "$REMOTE_HOST:$REMOTE_DIR/.env.vultr"
 fi
 
-ssh "$REMOTE_HOST" "test -f '$REMOTE_DIR/.env.local'"
-ssh "$REMOTE_HOST" "cd '$REMOTE_DIR' && docker compose --env-file .env.local up -d $BUILD_FLAG"
+ssh "$REMOTE_HOST" "test -f '$REMOTE_DIR/.env.vultr'"
+ssh "$REMOTE_HOST" "cd '$REMOTE_DIR' && docker compose --env-file .env.vultr up -d $BUILD_FLAG"
 ssh "$REMOTE_HOST" "cd '$REMOTE_DIR' && docker compose ps"
 ssh "$REMOTE_HOST" "for attempt in \$(seq 1 30); do curl -fsS http://127.0.0.1:3001/api/health >/dev/null && exit 0; sleep 2; done; cd '$REMOTE_DIR' && docker compose logs app --tail=80 && exit 1"

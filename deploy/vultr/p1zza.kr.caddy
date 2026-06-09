@@ -1,7 +1,3 @@
-www.p1zza.kr {
-  redir https://p1zza.kr{uri} 308
-}
-
 p1zza.kr {
   encode zstd gzip
   reverse_proxy p1zza-kr-app-1:3001

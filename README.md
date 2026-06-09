@@ -9,9 +9,9 @@
 
 ## 📖 Overview | 개요
 
-React 18.3.1, TypeScript, Express로 구축된 개인 포트폴리오 서비스입니다. 공개 포트폴리오 페이지와 admin 편집 화면을 함께 제공하며, Vultr 이전을 위해 Docker + PostgreSQL 배포 구조를 준비하고 있습니다.
+React 18.3.1, TypeScript, Express로 구축된 개인 포트폴리오 서비스입니다. 공개 포트폴리오 페이지와 admin 편집 화면을 함께 제공하며, p1zza-2nd의 Docker + PostgreSQL + Caddy 구조로 운영합니다.
 
-A personal portfolio service built with React 18.3.1, TypeScript, and Express. It serves public portfolio pages and an admin editing surface, and is being prepared for Docker + PostgreSQL deployment on Vultr.
+A personal portfolio service built with React 18.3.1, TypeScript, and Express. It serves public portfolio pages and an admin editing surface, and runs on the p1zza-2nd Docker + PostgreSQL + Caddy host.
 
 ## ✨ Features | 주요 기능
 
@@ -232,6 +232,8 @@ docker compose --env-file .env.local up --build
 
 ### Vultr + Caddy
 
+- active SSH host: `p1zza-2nd`
+- previous host: `p1zza-1st` remains a rollback/reference target until cutover is closed
 - compose project name: `p1zza-kr`
 - canonical domain: `https://p1zza.kr`
 - redirect host: `www.p1zza.kr`
