@@ -140,11 +140,11 @@ docker compose --env-file .env.local -f compose.yml stop app
 docker compose --env-file .env.local -f compose.yml up -d --no-deps --no-build db
 # DB17.11 healthy, volume·행 hash·extension/replication inventory를 확인한다.
 docker compose --env-file .env.local -f compose.yml --profile maintenance \
-  run --rm --no-deps migration
+  run -T --interactive=false --rm --no-deps migration < /dev/null
 # 기존 행 hash 보존과 CRUD readiness를 확인한 뒤 app만 교체한다.
 docker compose --env-file .env.local -f compose.yml up -d --no-deps --no-build app
-docker compose --env-file .env.local -f compose.yml exec -T app \
-  wget -qO- http://127.0.0.1:3001/api/health
+docker compose --env-file .env.local -f compose.yml exec -T --interactive=false app \
+  wget -qO- http://127.0.0.1:3001/api/health < /dev/null
 ```
 
 DB가 먼저 존재하고 healthy여야 한다. DB는 검증된
@@ -172,6 +172,15 @@ read-only readiness도 app 교체 전에 확인한다. 동시 사용자 변경�
 자동 복구하지 않고 중단하여 lead가 구분한다. 추가 public 기능 검증은 release gate에 포함한다.
 전체 stack down/up, volume
 삭제, seedforce, shared Caddy restart는 하지 않는다.
+
+SSH의 Bash heredoc은 배포 명령 전체를 stdin으로 전달한다. Compose one-off `run`과
+`exec`는 `-T`로 TTY를 끄고 `--interactive=false`와 `</dev/null`로 stdin도 명시적으로 닫아 뒤 Bash 명령을
+소비하지 않게 한다. `-T`만으로 stdin이 닫히지는 않는다. 두 interactive flag는 실제 운영 Compose에서 지원되는지 확인한다. DB restore 목록 확인의
+`docker exec -i ... < private.dump`와 SQL의 명시적 input은 필요한 전달이므로 유지한다.
+다른 Docker/Compose 명령은 attached interactive mode나 stdin source를 사용하지 않는다.
+Release caller는 SSH exit0만으로 성공을 판단하지 않고 최종 runtime·보존 검증 이후
+출력되는 exact revision의 `P1ZZA_RELEASE_COMPLETE` marker를 확인한다. Marker가 없으면
+private log와 실제 health/image/source를 확인하고 critical phase를 자동 재실행하지 않는다.
 
 ## Read-only app에서 콘텐츠 CLI 실행
 
@@ -209,7 +218,9 @@ provider secret을 이 one-off에 넣지 않는다. 종료 후 임시 credential
 실패 시 private backup 경로를 보고하고 자동 full DB restore를 하지 않는다. 원본 문의와
 동시 사용자 데이터를 덮어쓰지 않는다. 같은 lock에서 보존된 immutable image/source를
 복구하고, 구버전 startup에 필요한 이전 private env를 복구해 app을 recreate하는 rollback을
-lead와 결정한다. 이전 DB image도 private gzip archive와 image ID로 보존한다. DB image
+lead와 결정한다. 구버전 image의 privileged bootstrap에는 최신 CRUD env를 재사용하지 않는다.
+Pre-role backup 또는 첫 보안 stage의 original source-env archive에 보존한 superuser DSN
+env를 이전 working image/config와 묶어 복구한다. 이전 DB image도 private gzip archive와 image ID로 보존한다. DB image
 rollback이 필요하면 app을 멈춘 상태에서 같은 volume을 유지한 private Compose override로
 `db`만 `up -d --no-deps --no-build`하고 healthy/version/mount/행 hash를 확인한다. DB의
 minor version downgrade는 release notes·catalog/extension 변경 여부를 확인해 lead가 결정한다.

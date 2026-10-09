@@ -86,7 +86,7 @@ PREPARE
 scp -q "$LOCAL_STAGE/source.tar" "$LOCAL_STAGE/manifest.json" "$REMOTE_HOST:$REMOTE_STAGE/"
 if [[ -n "$ENV_FILE" ]]; then scp -q "$ENV_FILE" "$REMOTE_HOST:$REMOTE_STAGE/env.candidate"; fi
 
-ssh "$REMOTE_HOST" bash -s -- "$REVISION" "$REMOTE_STAGE" <<'REMOTE'
+ssh "$REMOTE_HOST" bash -s -- "$REVISION" "$REMOTE_STAGE" <<'REMOTE' | tee "$LOCAL_STAGE/remote-release.log"
 set -euo pipefail
 umask 077
 revision="$1"
@@ -218,9 +218,9 @@ docker compose --env-file .env.local -f compose.yml pull db > "$backup/db-pull.l
 db_image_id="$(docker image inspect -f '{{.Id}}' "$db_image")"
 [[ "$(docker run --rm --network none "$db_image" postgres --version)" = 'postgres (PostgreSQL) 17.11' ]]
 printf 'Phase: pre-pause read-only production env/CRUD readiness\n'
-docker compose --env-file .env.local -f compose.yml run --rm --no-deps app \
+docker compose --env-file .env.local -f compose.yml run -T --interactive=false --rm --no-deps app \
   node --input-type=module -e 'await import("./build/server/server/env.js"); const {Pool}=await import("pg"); const {assertDatabaseReady}=await import("./build/server/db/runtime-access.js"); const pool=new Pool({connectionString:process.env.DATABASE_URL}); try { await assertDatabaseReady(pool,true); } finally { await pool.end(); }' \
-  > "$backup/runtime-readiness-before-patch.log" 2>&1
+  < /dev/null > "$backup/runtime-readiness-before-patch.log" 2>&1
 printf 'Phase: app pause and DB minor patch\n'
 date -u +%Y-%m-%dT%H:%M:%SZ > "$backup/critical-window-start.txt"
 critical_start="$(date +%s)"
@@ -246,13 +246,13 @@ check_db_patch_gate > "$backup/db-patch-gate-after.json"
 snapshot_rows > "$backup/rows-after-patch.json"
 cmp -s "$backup/rows-before-patch.json" "$backup/rows-after-patch.json" || { printf 'Existing rows changed during DB patch; app replacement stopped.\n' >&2; exit 1; }
 printf 'Phase: schema-only migration (no seed)\n'
-docker compose --env-file .env.local -f compose.yml --profile maintenance run --rm --no-deps migration > "$backup/migration.log" 2>&1
+docker compose --env-file .env.local -f compose.yml --profile maintenance run -T --interactive=false --rm --no-deps migration < /dev/null > "$backup/migration.log" 2>&1
 snapshot_rows > "$backup/rows-after-migration.json"
 cmp -s "$backup/rows-after-patch.json" "$backup/rows-after-migration.json" || { printf 'Existing rows changed during migration; app replacement stopped.\n' >&2; exit 1; }
 printf 'Phase: read-only production env/CRUD readiness\n'
-docker compose --env-file .env.local -f compose.yml run --rm --no-deps app \
+docker compose --env-file .env.local -f compose.yml run -T --interactive=false --rm --no-deps app \
   node --input-type=module -e 'await import("./build/server/server/env.js"); const {Pool}=await import("pg"); const {assertDatabaseReady}=await import("./build/server/db/runtime-access.js"); const pool=new Pool({connectionString:process.env.DATABASE_URL}); try { await assertDatabaseReady(pool,true); } finally { await pool.end(); }' \
-  > "$backup/runtime-readiness.log" 2>&1
+  < /dev/null > "$backup/runtime-readiness.log" 2>&1
 printf 'Phase: app-only recreate\n'
 docker compose --env-file .env.local -f compose.yml up -d --no-deps --no-build app
 for attempt in $(seq 1 45); do
@@ -261,7 +261,7 @@ for attempt in $(seq 1 45); do
 done
 [[ "$(docker inspect -f '{{.State.Health.Status}}' p1zza-kr-app-1)" = healthy ]]
 [[ "$(docker inspect -f '{{.Image}}' p1zza-kr-app-1)" = "$image_id" ]]
-docker compose --env-file .env.local -f compose.yml exec -T app wget -qO- http://127.0.0.1:3001/api/health
+docker compose --env-file .env.local -f compose.yml exec -T --interactive=false app wget -qO- http://127.0.0.1:3001/api/health < /dev/null
 date -u +%Y-%m-%dT%H:%M:%SZ > "$backup/critical-window-end.txt"
 printf '%s\n' "$(( $(date +%s) - critical_start ))" > "$backup/critical-window-seconds.txt"
 sha256sum "$backup"/*.gz "$backup"/*.dump > "$backup/checksums-final.txt"
@@ -292,4 +292,14 @@ if runtime_env.get('TRUSTED_PROXY_CIDRS')!=ip+'/32':raise SystemExit('Caddy peer
 print('Preservation: other20 services, DB volume/rows, env, source PASS')
 PY
 printf '\nRelease complete. Private evidence: %s\n' "$backup"
+printf 'P1ZZA_RELEASE_COMPLETE:%s\n' "$revision"
 REMOTE
+
+# SSH exit0 alone is insufficient: an interactive child can consume Bash stdin.
+python3 - "$LOCAL_STAGE/remote-release.log" "$REVISION" <<'PY'
+import pathlib,sys
+lines=[line for line in pathlib.Path(sys.argv[1]).read_text().splitlines() if line]
+marker='P1ZZA_RELEASE_COMPLETE:'+sys.argv[2]
+if not lines or lines[-1]!=marker or lines.count(marker)!=1:
+    raise SystemExit('Release completion marker missing; verify runtime gates and private evidence')
+PY
