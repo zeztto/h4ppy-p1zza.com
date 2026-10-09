@@ -38,7 +38,7 @@ Vite 화면은 `http://localhost:5173`, Express API는 port `3001`에서 실행�
 | `src/app/pages/`, `src/app/components/` | 공개·관리자 화면과 편집 컴포넌트              |
 | `src/app/hooks/`, `src/app/lib/`        | 화면 데이터 조회·상태·공개 타입·정렬          |
 | `src/data/`                             | 새 DB 초기 데이터와 공개 repository·자산 참조 |
-| `src/shared/`                           | 화면과 API의 전화번호 검증                    |
+| `src/shared/`                           | 화면과 API의 문의 한도·전화번호 검증          |
 | `server/`                               | 공개·관리자 API, OAuth·session, 문의 검증     |
 | `db/`                                   | PostgreSQL schema·연결·초기화                 |
 | `scripts/`                              | 초기화, legacy 이전, 콘텐츠 갱신, 자산 관리   |
@@ -61,12 +61,14 @@ TypeScript의 기존 strict 설정을 유지하고 API 응답 타입을 실제 �
 ```sh
 npm run type-check
 npm run lint
-npx tsx --test scripts/refresh-portfolio-content.test.ts
+npm test
 npm run build
+npm audit
+npm audit --omit=dev
 git diff --check
 ```
 
-콘텐츠 갱신 자동 테스트는 8개이며 공개 제외·새 공개 항목·반복 적용·무관한 값 보존·잘못된 대상·digest·CLI·seed 동작을 검증합니다. 전체 제품의 브라우저 E2E 검증을 대신하지는 않습니다. 새 행동 테스트는 바뀐 동작과 실제 회귀 위험을 검증하도록 작성합니다.
+콘텐츠 갱신 자동 테스트는 공개 제외·새 공개 항목·반복 적용·무관한 값 보존·잘못된 대상·digest·CLI·seed 동작을 검증합니다. 보안 회귀 테스트는 session 권한 회수, 입력 제한, 외부 검증 실패, logout, URL, secret export와 최소 권한 startup을 검증합니다. Production build는 test 파일을 emit하지 않으며 test 타입 검사는 별도 noEmit config로 유지합니다. 자동 테스트는 전체 제품의 브라우저 E2E 검증을 대신하지 않습니다. 새 테스트는 바뀐 동작과 실제 회귀 위험을 검증하도록 작성합니다.
 
 화면 변경은 `1440×900`, `1024×768`, `390×844`, `360×800`에서 한국어 줄바꿈, 가로 넘침, 키보드 focus, loading·empty·error 상태와 실제 링크를 확인합니다. 문의·관리자 저장은 별도 개발 환경에서 성공·실패 결과와 DB 반영을 확인하고 운영에 시험 데이터를 남기지 않습니다.
 

@@ -54,7 +54,7 @@ function getErrorMessage(status: number, body: unknown): string {
   return `요청에 실패했습니다. (${status})`;
 }
 
-export async function adminRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
+export async function adminRequest<T>(path: string, init: RequestInit = {}, expectedStatus?: number): Promise<T> {
   const headers = new Headers(init.headers);
 
   if (!headers.has('Accept')) {
@@ -73,7 +73,7 @@ export async function adminRequest<T>(path: string, init: RequestInit = {}): Pro
 
   const body = await readResponseBody(response);
 
-  if (!response.ok) {
+  if (!response.ok || (expectedStatus !== undefined && response.status !== expectedStatus)) {
     throw new ApiError(response.status, getErrorMessage(response.status, body), body);
   }
 
@@ -85,7 +85,7 @@ export async function getSession() {
 }
 
 export async function logout() {
-  await adminRequest<void>('/api/auth/logout', { method: 'POST' });
+  await adminRequest<void>('/api/auth/logout', { method: 'POST' }, 204);
 }
 
 export function startLogin() {

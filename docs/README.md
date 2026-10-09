@@ -6,6 +6,7 @@
 | ---------------------------------------------- | -------------------------------------------- |
 | [프로젝트 README](../README.md)                | 공개·관리자 기능, 개발, 콘텐츠 갱신          |
 | [현재 구조와 운영](architecture.md)            | route·API·PostgreSQL·데이터 소유권·연결 범위 |
+| [보안 운영](security.md)                       | 인증·입력 한도·dependency·최소 권한 계약     |
 | [기여 안내](../CONTRIBUTING.md)                | 개발 환경과 변경·검증·PR 절차                |
 | [유지보수 가이드](../guidelines/Guidelines.md) | 공개 콘텐츠와 운영 데이터·원본 보존 기준     |
 | [배포 문서](../deploy/vultr/README.md)         | p1zza-2nd app 교체·백업·검증·rollback        |

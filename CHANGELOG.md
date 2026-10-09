@@ -4,7 +4,27 @@
 
 버전 제목은 문서상의 변경 기록입니다. 2026-10-09 확인 시 GitHub tag와 release는 없습니다. [프로필 갱신 merge 이후 변경 비교](https://github.com/zeztto/p1zza.kr/compare/ab4d31278dd571fff49b41e3f36fe6175f836792...HEAD)는 실제 commit을 기준으로 합니다.
 
-## 미배포 변경
+## 1.1.3 - 2026-10-09
+
+### 보안 수정
+
+- 공개 문의의 이메일·필드·CAPTCHA 입력 한도와 선행 검증, 요청 제한 및 외부 검증 timeout 추가
+- 기존 session의 현재 관리자 role·허용 목록 재확인, 권한 회수 시 무효화와 절대 만료 적용
+- 잘못된 cookie의 안전한 처리와 고정 origin 검증, 인증·관리 API의 cache 제한
+- 로그아웃 실패를 성공처럼 처리하지 않고 오류와 재시도를 제공
+- 공개 문의 유입 URL의 protocol을 검증하고 기존 unsafe 값을 관리자 화면에서 링크로 만들지 않음
+- production과 build dependency의 취약 branch 갱신 및 legacy loader의 범위 제한 override
+- legacy secret export의 private file 생성·권한·출력 경계와 환경 파일 Git ignore 강화
+
+### 운영 개선
+
+- production schema bootstrap과 최소 권한 웹 앱 DB 계정 분리
+- non-root app, capability 제거, no-new-privileges와 read-only filesystem 적용
+- PostgreSQL 17.9 운영 DB를 보안 patch가 포함된 17.11로 갱신하고 정확한 patch 버전 고정
+- production secret 필수 설정과 origin·DB 권한 검증, 정확한 Caddy peer 신뢰 및 HSTS 추가
+- 배포 보조 명령을 p1zza-2nd와 target lock·환경 보존·app 내부 health 검사에 맞게 갱신
+- 보안 회귀 테스트와 인증·입력·DB·배포 계약 문서 추가
+- Node 22 기반 GitHub CI에 test·type·lint·build 및 full/production dependency audit 추가
 
 ## 1.1.2 - 2026-10-09
 

@@ -7,43 +7,9 @@ import { mapInquiry } from '../lib/content.js';
 import { env, isProduction } from '../env.js';
 import { asyncHandler, assert, requireJsonObject } from '../lib/http.js';
 import { verifyTurnstileToken } from '../lib/turnstile.js';
-
-function stringField(value: unknown, field: string, fallback = '') {
-  if (value == null) {
-    return fallback;
-  }
-
-  assert(typeof value === 'string', 400, `${field} must be a string`);
-  return value.trim();
-}
-
-function toOptionalString(value: unknown, field: string) {
-  const next = stringField(value, field);
-  return next || null;
-}
-
-function validateEmail(email: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function getRequestIp(headers: Record<string, string | string[] | undefined>) {
-  const forwardedFor = headers['x-forwarded-for'];
-
-  if (Array.isArray(forwardedFor) && forwardedFor[0]) {
-    return forwardedFor[0].split(',')[0]?.trim() ?? '';
-  }
-
-  if (typeof forwardedFor === 'string' && forwardedFor.trim()) {
-    return forwardedFor.split(',')[0]?.trim() ?? '';
-  }
-
-  const cfConnectingIp = headers['cf-connecting-ip'];
-  if (Array.isArray(cfConnectingIp)) {
-    return cfConnectingIp[0] ?? '';
-  }
-
-  return typeof cfConnectingIp === 'string' ? cfConnectingIp : '';
-}
+import { inquiryString, isValidInquiryEmail, safeHttpSourceUrl } from '../lib/inquiry-input.js';
+import { createInquiryRateLimit } from '../lib/inquiry-rate-limit.js';
+import { INQUIRY_VERIFICATION_UNAVAILABLE_MESSAGE } from '../../src/shared/inquiry-contract.js';
 
 const INQUIRY_STATUSES = ['new', 'contacted', 'closed'] as const;
 
@@ -52,27 +18,42 @@ export function createPublicInquiryRouter() {
 
   router.post(
     '/',
+    createInquiryRateLimit(),
     asyncHandler(async (req, res) => {
       const payload = requireJsonObject(req.body);
-      const name = stringField(payload['name'], 'name');
-      const email = stringField(payload['email'], 'email');
-      const description = stringField(payload['description'], 'description');
-      const turnstileToken = stringField(payload['turnstileToken'], 'turnstileToken');
+      const name = inquiryString(payload['name'], 'name');
+      const email = inquiryString(payload['email'], 'email');
+      const description = inquiryString(payload['description'], 'description');
+      const turnstileToken = inquiryString(payload['turnstileToken'], 'turnstileToken');
+      const phone = inquiryString(payload['phone'], 'phone') || null;
+      const company = inquiryString(payload['company'], 'company') || null;
+      const projectType = inquiryString(payload['projectType'], 'projectType') || null;
+      const budget = inquiryString(payload['budget'], 'budget') || null;
+      const timeline = inquiryString(payload['timeline'], 'timeline') || null;
+      const rawSourceUrl = inquiryString(payload['sourceUrl'], 'sourceUrl');
+      const sourceUrl = safeHttpSourceUrl(rawSourceUrl);
+      assert(!rawSourceUrl || sourceUrl, 400, '유효한 HTTP 또는 HTTPS 출처 URL을 입력해주세요.');
+      const userAgent = req.get('user-agent') ?? null;
+      assert(!userAgent || userAgent.length <= 512, 400, 'User-Agent 값이 너무 깁니다.');
 
       assert(name, 400, '이름은 필수 입력 항목입니다.');
       assert(email, 400, '이메일은 필수 입력 항목입니다.');
       assert(description, 400, '프로젝트 설명은 필수 입력 항목입니다.');
-      assert(validateEmail(email), 400, '유효한 이메일 주소를 입력해주세요.');
-
-      const phone = toOptionalString(payload['phone'], 'phone');
-      if (phone) {
-        assert(isValidKoreanPhoneNumber(phone), 400, PHONE_ERROR_MESSAGE);
-      }
+      assert(isValidInquiryEmail(email), 400, '유효한 이메일 주소를 입력해주세요.');
+      if (phone) assert(isValidKoreanPhoneNumber(phone), 400, PHONE_ERROR_MESSAGE);
 
       if (isProduction || env.turnstileSecretKey) {
         assert(turnstileToken, 400, '보안 인증을 완료해주세요.');
-
-        const verification = await verifyTurnstileToken(turnstileToken, getRequestIp(req.headers));
+        const verification = await verifyTurnstileToken(turnstileToken, req.ip);
+        const unavailable = verification.errorCodes.some((code) =>
+          [
+            'verification-busy',
+            'verification-timeout',
+            'verification-unavailable',
+            'turnstile-not-configured',
+          ].includes(code)
+        );
+        assert(!unavailable, 503, INQUIRY_VERIFICATION_UNAVAILABLE_MESSAGE);
         assert(verification.success, 400, '보안 인증에 실패했습니다. 다시 시도해주세요.');
       }
 
@@ -82,15 +63,15 @@ export function createPublicInquiryRouter() {
         name,
         email,
         phone,
-        company: toOptionalString(payload['company'], 'company'),
-        projectType: toOptionalString(payload['projectType'], 'projectType'),
-        budget: toOptionalString(payload['budget'], 'budget'),
-        timeline: toOptionalString(payload['timeline'], 'timeline'),
+        company,
+        projectType,
+        budget,
+        timeline,
         description,
         status: 'new',
-        sourceUrl: toOptionalString(payload['sourceUrl'], 'sourceUrl') ?? req.get('referer') ?? null,
-        userAgent: req.get('user-agent') ?? null,
-        ipAddress: getRequestIp(req.headers) || req.ip || null,
+        sourceUrl: sourceUrl ?? safeHttpSourceUrl(req.get('referer')),
+        userAgent,
+        ipAddress: req.ip ?? null,
         createdAt: now,
         updatedAt: now,
         resolvedAt: null,
@@ -134,8 +115,17 @@ export function createAdminInquiryRouter() {
       assert(existing, 404, 'Inquiry not found');
 
       const payload = requireJsonObject(req.body);
-      const nextStatus = stringField(payload['status'], 'status');
-      assert(INQUIRY_STATUSES.includes(nextStatus as (typeof INQUIRY_STATUSES)[number]), 400, 'Invalid inquiry status');
+      assert(
+        typeof payload['status'] === 'string' && payload['status'].length <= 32,
+        400,
+        'Invalid inquiry status'
+      );
+      const nextStatus = payload['status'].trim();
+      assert(
+        INQUIRY_STATUSES.includes(nextStatus as (typeof INQUIRY_STATUSES)[number]),
+        400,
+        'Invalid inquiry status'
+      );
 
       const now = new Date();
       await res.locals.db

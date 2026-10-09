@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import express from 'express';
 import { ensureDatabaseSchema } from '../db/bootstrap.js';
 import { createDatabase } from '../db/client.js';
+import { assertDatabaseReady } from '../db/runtime-access.js';
 import { env, isProduction } from './env.js';
 import { HttpError } from './lib/errors.js';
 import { attachSessionUser, requireAdmin, requireSameOrigin } from './middleware/auth.js';
@@ -17,12 +18,13 @@ function normalizeHost(host: string) {
   return host.trim().toLowerCase().replace(/\.$/, '').replace(/:\d+$/, '');
 }
 
-function resolveCanonicalRedirectUrl(req: express.Request) {
+export function resolveCanonicalRedirectUrl(req: express.Request) {
   if (!isProduction) {
     return null;
   }
 
-  const requestHost = normalizeHost(req.get('x-forwarded-host') || req.get('host') || '');
+  // Express only reads forwarded host/protocol fields when the direct peer is trusted.
+  const requestHost = normalizeHost(req.hostname);
   const canonicalHost = normalizeHost(new URL(env.appOrigin).host);
 
   if (!requestHost || requestHost === canonicalHost) {
@@ -34,7 +36,15 @@ function resolveCanonicalRedirectUrl(req: express.Request) {
     return null;
   }
 
-  return new URL(req.originalUrl, env.appOrigin).toString();
+  // Assign the pathname instead of resolving request input against the origin: an input
+  // beginning with // or a backslash must never become an external redirect destination.
+  const destination = new URL(env.appOrigin);
+  const queryStart = req.originalUrl.indexOf('?');
+  destination.pathname = (queryStart < 0 ? req.originalUrl : req.originalUrl.slice(0, queryStart))
+    .replace(/\\/g, '/')
+    .replace(/^\/+/, '/');
+  destination.search = queryStart < 0 ? '' : req.originalUrl.slice(queryStart);
+  return destination.toString();
 }
 
 function resolveDistPath() {
@@ -81,28 +91,33 @@ function readStructuredDataHashes(indexPath?: string) {
     });
 }
 
-export async function createApp() {
+export async function createApp(options: { database?: ReturnType<typeof createDatabase> } = {}) {
   const app = express();
-  const { client, db } = createDatabase(env.databaseUrl);
+  const { client, db } = options.database ?? createDatabase(env.databaseUrl);
   const distPath = resolveDistPath();
   const structuredDataHashes = readStructuredDataHashes(resolveIndexPath(distPath));
 
-  await ensureDatabaseSchema(client);
+  try {
+    if (!isProduction) await ensureDatabaseSchema(client);
+    await assertDatabaseReady(client, isProduction);
+  } catch (error) {
+    await client.end();
+    throw error;
+  }
 
   app.disable('x-powered-by');
+  app.set('trust proxy', env.trustedProxyCidrs);
+  const trustProxyAddress = app.get('trust proxy fn') as (
+    address: string,
+    index: number
+  ) => boolean;
+  app.set(
+    'trust proxy',
+    (address: string, index: number) => index === 0 && trustProxyAddress(address, 0)
+  );
+
+  // These headers must precede redirects and parsers so all error paths receive them.
   app.use((req, res, next) => {
-    const redirectUrl = resolveCanonicalRedirectUrl(req);
-    if (redirectUrl) {
-      res.redirect(308, redirectUrl);
-      return;
-    }
-
-    next();
-  });
-  app.use(express.json({ limit: '2mb' }));
-  app.use(express.urlencoded({ extended: false }));
-
-  app.use((_req, res, next) => {
     res.locals.db = db;
 
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -110,7 +125,14 @@ export async function createApp() {
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
     if (isProduction) {
-      const scriptSrc = ["'self'", 'https://challenges.cloudflare.com', ...structuredDataHashes].join(' ');
+      if (normalizeHost(req.hostname) === normalizeHost(new URL(env.appOrigin).hostname)) {
+        res.setHeader('Strict-Transport-Security', 'max-age=2592000');
+      }
+      const scriptSrc = [
+        "'self'",
+        'https://challenges.cloudflare.com',
+        ...structuredDataHashes,
+      ].join(' ');
 
       res.setHeader(
         'Content-Security-Policy',
@@ -131,6 +153,22 @@ export async function createApp() {
     }
     next();
   });
+
+  app.use(['/api/auth', '/api/admin'], (_req, res, next) => {
+    res.setHeader('Cache-Control', 'private, no-store');
+    res.setHeader('Pragma', 'no-cache');
+    next();
+  });
+  app.use((req, res, next) => {
+    const redirectUrl = resolveCanonicalRedirectUrl(req);
+    if (redirectUrl) {
+      res.redirect(308, redirectUrl);
+      return;
+    }
+    next();
+  });
+  app.use(express.json({ limit: '2mb' }));
+  app.use(express.urlencoded({ extended: false, limit: '2mb' }));
 
   app.use(attachSessionUser);
   app.get('/api/health', (_req, res) => {
@@ -173,6 +211,26 @@ export async function createApp() {
       if (error instanceof HttpError) {
         res.status(error.statusCode).json({ error: error.message });
         return;
+      }
+
+      if (typeof error === 'object' && error !== null && 'type' in error) {
+        const parserType = error.type;
+        if (parserType === 'entity.parse.failed') {
+          res.status(400).json({ error: 'Invalid request body' });
+          return;
+        }
+        if (parserType === 'entity.too.large' || parserType === 'parameters.too.many') {
+          res.status(413).json({ error: 'Request body is too large' });
+          return;
+        }
+        if (parserType === 'charset.unsupported' || parserType === 'encoding.unsupported') {
+          res.status(415).json({ error: 'Unsupported request body encoding' });
+          return;
+        }
+        if (parserType === 'request.aborted' || parserType === 'request.size.invalid') {
+          res.status(400).json({ error: 'Invalid request body' });
+          return;
+        }
       }
 
       console.error(error);

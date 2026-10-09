@@ -2,7 +2,7 @@
 
 [p1zza.kr](https://p1zza.kr/)의 개인 포트폴리오와 관리 CMS입니다. React SPA와 Express API가 PostgreSQL의 프로젝트·프로필·홈 섹션·사이트 설정을 읽습니다. 운영 환경은 p1zza-2nd의 Docker Compose와 Caddy입니다.
 
-소스 저장소는 [zeztto/p1zza.kr](https://github.com/zeztto/p1zza.kr)입니다. 구조·운영·보존 기준은 [문서 목록](docs/README.md), 개발 변경 절차는 [기여 안내](CONTRIBUTING.md)를 참고하세요.
+소스 저장소는 [zeztto/p1zza.kr](https://github.com/zeztto/p1zza.kr)입니다. 구조·운영·보존 기준은 [문서 목록](docs/README.md), 개발 변경 절차는 [기여 안내](CONTRIBUTING.md), 인증·입력·권한 계약은 [보안 운영](docs/security.md)을 참고하세요.
 
 ## 공개 화면과 관리 기능
 
@@ -24,7 +24,7 @@ React 18, TypeScript, Vite 6, Tailwind CSS 4, React Router, Express 5, Drizzle O
 ```text
 src/app/          공개 화면·관리자 화면·공통 컴포넌트
 src/data/         신규 DB 초기 데이터와 공개 repository 링크
-src/shared/       API와 화면에서 함께 쓰는 전화번호 검증
+src/shared/       API와 화면에서 함께 쓰는 문의 한도·전화번호 검증
 server/           API·OAuth·문의 검증·정적 파일 제공
 db/               PostgreSQL schema와 연결
 scripts/          초기화·이전·콘텐츠 갱신·자산 관리
@@ -60,9 +60,13 @@ npm run dev
 ```sh
 npm run type-check
 npm run lint
-npx tsx --test scripts/refresh-portfolio-content.test.ts
+npm test
 npm run build
+npm audit
+npm audit --omit=dev
 ```
+
+[GitHub CI](.github/workflows/ci.yml)에서도 Node.js 22에서 위 검사와 dependency audit를 수행합니다. CI는 배포와 운영 secret을 사용하지 않습니다.
 
 ## 2026-10-09 프로필 본문 수정
 
@@ -85,11 +89,17 @@ npm run content:refresh -- --apply --expected-digest '<beforeDigest>' --output /
 
 ## 배포
 
-운영 경로는 `/opt/p1zza-kr`, Compose project는 `p1zza-kr`입니다. app과 DB의 host port를 공개하지 않고 Caddy가 Docker network의 app port 3001로 연결합니다. PostgreSQL volume과 기존 환경 파일을 보존하고 app만 교체합니다.
+운영 경로는 `/opt/p1zza-kr`, Compose project는 `p1zza-kr`입니다. app과 DB의 host port를 공개하지 않고 Caddy가 Docker network의 app port 3001로 연결합니다. PostgreSQL volume과 기존 콘텐츠·secret을 보존합니다. app은 non-root와 최소 권한 DB 계정으로 실행하며, schema bootstrap은 별도 one-off 명령으로 수행합니다.
+
+`DATABASE_URL`은 웹 앱의 CRUD 계정, `MIGRATION_DATABASE_URL`은 schema 관리 계정입니다. production 앱은 schema를 자동 생성하거나 초기 콘텐츠를 덮어쓰지 않습니다. 배포 전에 `db:bootstrap`을 migration 계정으로 실행하고, schema 준비·최소 권한 확인을 통과한 app을 교체합니다. 기존 운영 DB에 bootstrap을 적용할 때 초기 콘텐츠를 재설정하지 않습니다.
+
+`TRUSTED_PROXY_CIDRS`에는 실제 Caddy peer의 정확한 IP 범위를 지정합니다. 운영에서는 app network의 Caddy 주소 `/32`를 사용하며, 다른 proxy나 임의 방문자 header를 신뢰 대상으로 추가하지 않습니다. Caddy가 재생성돼 주소가 바뀌면 이 값을 함께 갱신합니다.
 
 `VITE_TURNSTILE_SITE_KEY`는 공개 site key이며 Compose가 `PUBLIC_TURNSTILE_SITE_ID` build arg로 전달합니다. `TURNSTILE_SECRET_KEY`는 runtime에만 제공합니다. `APP_REVISION`에는 배포한 Git SHA를 기록합니다. 환경 파일은 Docker build context에서 제외합니다.
 
 백업·전달·app 교체·검증·rollback 절차는 [배포 문서](deploy/vultr/README.md)를 따릅니다. 콘텐츠 rollback에는 변경한 행만 복구하며 새 문의를 덮어쓰는 전체 DB 복원은 자동으로 수행하지 않습니다. 현재 repository에는 자동 push 배포 workflow가 없습니다.
+
+Railway 환경 내보내기는 legacy 보조 도구입니다. `POSTGRES_PASSWORD`를 환경으로 전달하고, private directory에 `--output <새 파일>`로 저장합니다. 파일은 mode 600으로 새로 만들며 기존 파일·symlink는 거부합니다. secret을 stdout에 출력하려면 명시적인 `--stdout`이 필요합니다. 이 명령을 CI log 수집 경로에서 실행하지 않습니다.
 
 ## 문서 보존
 

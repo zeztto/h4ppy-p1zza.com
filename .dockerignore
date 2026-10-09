@@ -10,3 +10,7 @@ dist
 .DS_Store
 coverage
 npm-debug.log*
+**/*.test.*
+**/*.spec.*
+**/__tests__
+tests

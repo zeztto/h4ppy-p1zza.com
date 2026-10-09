@@ -42,13 +42,15 @@ route 근거는 [App.tsx](../src/app/App.tsx), 관리자 메뉴는 [AdminLayout.
 | `/api/auth`                     | GitHub 시작·callback, session 확인과 logout     |
 | `/api/admin`                    | 인증된 관리자용 콘텐츠·설정·문의 API            |
 
-관리자 OAuth는 `ADMIN_GITHUB_LOGINS` 허용 목록과 DB session을 사용합니다. 관리자 API는 session을 확인하고, 변경 요청에 `Origin` header가 있으면 허용 origin과 대조합니다. 공개 문의도 같은 origin middleware를 거치며 production에서는 서버가 Turnstile token을 검증합니다. site key는 공개 웹 build에 들어가며 secret key는 서버 runtime에서만 사용합니다.
+관리자 OAuth와 기존 session 요청은 현재 `ADMIN_GITHUB_LOGINS` 허용 목록과 관리자 role을 확인합니다. 회수된 사용자 session은 연장하지 않으며, session은 idle 7일과 절대 30일 만료를 적용합니다. 변경 요청의 origin은 고정된 앱 origin과 대조하고 인증·관리 JSON은 cache에 저장하지 않습니다. 공개 문의도 origin 검증을 거치며 production에서는 서버가 Turnstile token과 hostname을 검증합니다. site key는 공개 웹 build에 들어가며 secret key는 서버 runtime에서만 사용합니다.
 
-문의는 `name`, `email`, `description`을 필수로 받고 전화번호가 있으면 한국 전화번호 형식을 검사합니다. 성공한 문의는 `inquiries`에 저장되며 처리 상태는 `new`, `contacted`, `closed`입니다. 이메일·Slack 알림 전송은 현재 구현되어 있지 않습니다. 근거는 [공개 API](../server/routes/public.ts), [인증 API](../server/routes/auth.ts), [문의 API](../server/routes/inquiries.ts), [인증 middleware](../server/middleware/auth.ts)입니다.
+문의는 `name`, `email`, `description`을 필수로 받고 외부 검증 전에 필드 길이와 형식을 검사합니다. 전화번호가 있으면 한국 전화번호 형식을 검사하고, 요청 횟수와 CAPTCHA 동시 검증·timeout을 제한합니다. 성공한 문의는 `inquiries`에 저장되며 처리 상태는 `new`, `contacted`, `closed`입니다. 유입 URL은 HTTP(S)만 허용하며 기존 unsafe 값은 관리자 화면에서 링크로 만들지 않습니다. 이메일·Slack 알림 전송은 현재 구현되어 있지 않습니다. 근거는 [공개 API](../server/routes/public.ts), [인증 API](../server/routes/auth.ts), [문의 API](../server/routes/inquiries.ts), [인증 middleware](../server/middleware/auth.ts), [보안 운영](security.md)입니다.
 
 ## PostgreSQL과 콘텐츠 소유권
 
 [DB client](../db/client.ts)는 `pg` pool과 Drizzle을 사용하고 [schema](../db/schema.ts)는 PostgreSQL table을 정의합니다.
+
+Production 앱은 CRUD 전용 `DATABASE_URL`과 준비된 schema로 시작하며 schema DDL을 실행하지 않습니다. 별도 `db:bootstrap`은 `MIGRATION_DATABASE_URL`로 schema를 준비하고 기존 콘텐츠를 초기 데이터로 재설정하지 않습니다. Production startup은 session/current role의 superuser·역할/DB 생성·replication·BYPASSRLS 속성, 다른 role membership, public schema CREATE와 application table ownership을 거부합니다. 실제 배포 계정의 다른 schema·DB grant는 운영 검증에서 별도로 확인합니다. 개발용 신규 DB와 legacy 이전 도구는 해당 작업에 필요한 관리 계정을 명시적으로 사용합니다.
 
 | table                     | 용도                                         |
 | ------------------------- | -------------------------------------------- |
@@ -65,16 +67,16 @@ route 근거는 [App.tsx](../src/app/App.tsx), 관리자 메뉴는 [AdminLayout.
 
 repository 링크는 [project-repositories.ts](../src/data/project-repositories.ts), 초기 자산 참조는 [cloudinary-assets.ts](../src/data/cloudinary-assets.ts)에 있습니다. 공개 화면은 내부 분류 key를 한국어 label로 표시하고 `sortOrder`를 우선합니다. 대표 프로젝트도 설정한 `maxItems`를 적용합니다.
 
-## 현재 운영과 legacy 보조 도구
+## 현재 운영과 보조 도구
 
-현재 배포는 p1zza-2nd의 `/opt/p1zza-kr`, Compose project `p1zza-kr`에서 app을 교체하는 절차입니다. DB는 PostgreSQL 17이며 volume은 `p1zza-kr_postgres_data`입니다. app·DB의 host port를 공개하지 않고 Caddy가 app에 연결합니다. `APP_REVISION`은 production image의 Git revision을 기록합니다. 구체적인 백업·검증·rollback은 [현재 배포 문서](../deploy/vultr/README.md)를 따릅니다.
+현재 배포는 p1zza-2nd의 `/opt/p1zza-kr`, Compose project `p1zza-kr`에서 schema bootstrap을 별도로 실행한 뒤 app을 교체하는 절차입니다. DB image는 PostgreSQL 17.11로 고정하고 volume `p1zza-kr_postgres_data`를 유지합니다. app은 non-root·read-only filesystem으로 실행하고 app·DB의 host port는 공개하지 않습니다. Caddy peer의 정확한 주소를 proxy 신뢰 범위로 사용합니다. `APP_REVISION`은 production image의 Git revision을 기록합니다. 구체적인 백업·검증·rollback은 [현재 배포 문서](../deploy/vultr/README.md)를 따릅니다.
 
-저장소에는 push 자동 배포 workflow가 없습니다. 별도 중앙 배포 workflow와 현재 운영 server의 직접 Compose 절차는 운영 담당자가 선택한 경로에 맞춰 적용합니다. repository 이름을 바꾸어도 기존 서비스 경로·Compose 이름·DB volume·자산 namespace를 함께 rename할 필요는 없습니다.
+저장소의 [CI](../.github/workflows/ci.yml)는 Node 22에서 test·type·lint·build와 dependency audit를 실행합니다. Push 자동 배포는 하지 않습니다. 별도 중앙 배포 workflow와 현재 운영 server의 직접 Compose 절차는 운영 담당자가 선택한 경로에 맞춰 적용합니다. repository 이름을 바꾸어도 기존 서비스 경로·Compose 이름·DB volume·자산 namespace를 함께 rename할 필요는 없습니다.
 
-| 보조 파일·명령                                                                               | 맥락                                                  |
-| -------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| [migrate-turso-to-postgres.ts](../scripts/migrate-turso-to-postgres.ts), `db:migrate:legacy` | 이전 Turso 원천에서 PostgreSQL로 이동하는 legacy 도구 |
-| [railway.json](../railway.json), `env:railway:export`                                        | 이전 Railway 배포·환경 내보내기 설정                  |
-| [stage.sh](../deploy/vultr/stage.sh)                                                         | 과거 host·host port 가정의 legacy 배포 보조 파일      |
+| 보조 파일·명령                                                                               | 맥락                                                                           |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| [migrate-turso-to-postgres.ts](../scripts/migrate-turso-to-postgres.ts), `db:migrate:legacy` | 이전 Turso 원천에서 PostgreSQL로 이동하는 legacy 도구                          |
+| [railway.json](../railway.json), `env:railway:export`                                        | 이전 Railway 배포·환경 내보내기 설정                                           |
+| [stage.sh](../deploy/vultr/stage.sh)                                                         | p1zza-2nd target lock·환경 보존·migration·app health를 적용하는 배포 보조 명령 |
 
-이 도구들은 현재 runtime DB나 현재 운영 배포 절차를 설명하는 근거로 혼용하지 않습니다. 현재 검증 명령과 수동 UI 검증 범위는 [기여 안내](../CONTRIBUTING.md), 역사 문서의 원본 해시는 [문서 archive manifest](../archive/docs-2026-03-25/manifest.json)에서 확인합니다.
+Turso·Railway 보조 도구는 과거 서비스의 이전·환경 추출을 위한 기능이며 현재 runtime과 구분합니다. stage 명령의 실행 범위와 운영 절차는 배포 문서를 따릅니다. 현재 검증 명령과 수동 UI 검증 범위는 [기여 안내](../CONTRIBUTING.md), 역사 문서의 원본 해시는 [문서 archive manifest](../archive/docs-2026-03-25/manifest.json)에서 확인합니다.

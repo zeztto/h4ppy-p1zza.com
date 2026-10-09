@@ -10,26 +10,29 @@ export interface CookieOptions {
 
 export function parseCookies(req: Request) {
   const cookieHeader = req.headers.cookie;
-  if (!cookieHeader) {
+  if (!cookieHeader || cookieHeader.length > 8192) {
     return new Map<string, string>();
   }
-
-  return new Map(
-    cookieHeader
-      .split(';')
-      .map((segment) => segment.trim())
-      .filter(Boolean)
-      .map((segment) => {
-        const separator = segment.indexOf('=');
-        if (separator === -1) {
-          return [segment, ''] as const;
-        }
-
-        const key = decodeURIComponent(segment.slice(0, separator));
-        const value = decodeURIComponent(segment.slice(separator + 1));
-        return [key, value] as const;
-      })
-  );
+  const cookies = new Map<string, string>();
+  const duplicates = new Set<string>();
+  for (const segment of cookieHeader.split(';').slice(0, 100)) {
+    const separator = segment.indexOf('=');
+    if (separator < 1) continue;
+    try {
+      const key = decodeURIComponent(segment.slice(0, separator).trim());
+      const value = decodeURIComponent(segment.slice(separator + 1).trim());
+      if (!/^[!#$%&'*+\-.^_`|~0-9a-z]+$/i.test(key) || value.length > 4096) continue;
+      if (cookies.has(key) || duplicates.has(key)) {
+        cookies.delete(key);
+        duplicates.add(key);
+        continue;
+      }
+      cookies.set(key, value);
+    } catch {
+      // Malformed percent encoding is an invalid cookie, never an application error.
+    }
+  }
+  return cookies;
 }
 
 export function getCookie(req: Request, name: string) {

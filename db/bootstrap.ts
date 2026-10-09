@@ -93,12 +93,15 @@ const statements = [
   'CREATE INDEX IF NOT EXISTS inquiries_created_at_idx ON inquiries (created_at DESC)',
 ];
 
-export async function ensureDatabaseSchema(client: DatabaseClient) {
+export async function ensureDatabaseSchema(
+  client: DatabaseClient,
+  options: { seedDefaults?: boolean } = {}
+) {
   await migrateSections(client);
 
   for (const statement of statements) {
     await client.query(statement);
   }
 
-  await seedDefaults(client);
+  if (options.seedDefaults !== false) await seedDefaults(client);
 }

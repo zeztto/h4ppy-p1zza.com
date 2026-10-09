@@ -5,6 +5,7 @@ import type { AdminInquiry } from '@/app/admin/types';
 import { Badge } from '@/app/components/ui/badge';
 import { Button } from '@/app/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/app/components/ui/card';
+import { getSafeExternalUrl } from '@/app/lib/safe-external-url';
 
 const STATUS_LABELS: Record<AdminInquiry['status'], string> = {
   new: '신규',
@@ -28,6 +29,17 @@ function formatDateTime(value: string) {
     hour: '2-digit',
     minute: '2-digit',
   }).format(new Date(value));
+}
+
+function InquirySourceLink({ sourceUrl }: { sourceUrl: string }) {
+  const href = getSafeExternalUrl(sourceUrl);
+  return href ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
+      {sourceUrl}
+    </a>
+  ) : (
+    <span className="break-all">{sourceUrl}</span>
+  );
 }
 
 export default function InquiriesPage() {
@@ -206,9 +218,7 @@ export default function InquiriesPage() {
                     {inquiry.sourceUrl && (
                       <p>
                         <span className="font-medium text-foreground">유입 페이지:</span>{' '}
-                        <a href={inquiry.sourceUrl} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
-                          {inquiry.sourceUrl}
-                        </a>
+                        <InquirySourceLink sourceUrl={inquiry.sourceUrl} />
                       </p>
                     )}
                     {inquiry.ipAddress && (
