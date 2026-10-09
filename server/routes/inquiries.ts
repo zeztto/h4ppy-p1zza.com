@@ -10,6 +10,7 @@ import { verifyTurnstileToken } from '../lib/turnstile.js';
 import { inquiryString, isValidInquiryEmail, safeHttpSourceUrl } from '../lib/inquiry-input.js';
 import { createInquiryRateLimit } from '../lib/inquiry-rate-limit.js';
 import { INQUIRY_VERIFICATION_UNAVAILABLE_MESSAGE } from '../../src/shared/inquiry-contract.js';
+import { saveInquiryWithMail } from '../lib/inquiry-mail-outbox.js';
 
 const INQUIRY_STATUSES = ['new', 'contacted', 'closed'] as const;
 
@@ -77,7 +78,7 @@ export function createPublicInquiryRouter() {
         resolvedAt: null,
       } as const;
 
-      await res.locals.db.insert(inquiries).values(row);
+      await saveInquiryWithMail(res.locals.db, row, env.inquiryMail !== null, env.appOrigin);
 
       res.status(201).json({
         ok: true,

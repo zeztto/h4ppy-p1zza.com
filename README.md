@@ -9,11 +9,11 @@
 - `/`: 소개, 대표 프로젝트, 기술 목록
 - `/portfolio`, `/portfolio/:id`: 공개 프로젝트 목록·카테고리 필터·상세 소개
 - `/profile`: 프로필과 활동 소개
-- `/inquiry`: Cloudflare Turnstile 검증 후 문의를 DB에 저장
+- `/inquiry`: Cloudflare Turnstile 검증 후 문의를 DB에 저장하고 `cs@lmml.kr`에 메일 알림
 - `/admin/login`: GitHub OAuth와 `ADMIN_GITHUB_LOGINS` 허용 목록으로 관리자 로그인
 - 관리자: 대시보드, 프로젝트 목록·Kanban, 프로필, 홈 섹션, 문의 상태 관리
 
-문의는 DB에 저장하며 별도 이메일 알림은 구현되어 있지 않습니다. 공개 블로그는 제공하지 않습니다. 프로젝트 공개 여부와 대표 프로젝트 순서는 운영 DB가 결정합니다.
+문의 접수는 DB 저장이 성공한 뒤 완료됩니다. 메일 알림을 켜면 문의와 발송 대기를 같은 transaction에 저장하고 background worker가 `cs@lmml.kr`에 전달합니다. SMTP 오류가 나도 접수된 문의는 보존하며 자동으로 재시도합니다. 공개 블로그는 제공하지 않습니다. 프로젝트 공개 여부와 대표 프로젝트 순서는 운영 DB가 결정합니다.
 
 헤더·푸터 설정은 API와 DB를 통해 공개 화면에서 읽습니다. 해당 설정의 관리자 편집 화면은 현재 연결되어 있지 않습니다. 홈 섹션의 편집 도구와 custom section의 Markdown·CSS 편집은 연결되어 있습니다.
 
@@ -68,6 +68,14 @@ npm audit --omit=dev
 
 [GitHub CI](.github/workflows/ci.yml)에서도 Node.js 22에서 위 검사와 dependency audit를 수행합니다. CI는 배포와 운영 secret을 사용하지 않습니다.
 
+## 제작 의뢰 메일 알림
+
+`INQUIRY_MAIL_ENABLED=true`와 `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `INQUIRY_MAIL_FROM`을 runtime에 설정합니다. SMTP port는 STARTTLS의 `587` 또는 implicit TLS의 `465`이며 인증과 인증서 검증을 요구합니다. `SMTP_USER`와 `INQUIRY_MAIL_FROM`은 같은 전용 발송 주소를 사용합니다. 운영에서는 `mail.lmml.kr:587`과 `p1zza-inquiries@lmml.kr`을 사용하며 수신 주소는 코드에서 `cs@lmml.kr`로 고정합니다. 방문자 이메일은 `Reply-To`에만 사용합니다.
+
+메일에는 의뢰 내용·연락처·접수 시각·관리자 문의 화면 링크를 plain text로 담습니다. IP·User-Agent·CAPTCHA token은 담지 않습니다. 발송 전체 시간은 최대 30초이며 실패하면 1분부터 최대 1시간 간격으로 재시도합니다. 발송 대기는 DB에 남으므로 앱이 다시 시작되어도 이어집니다. SMTP가 접수한 뒤 DB에 성공 기록을 남기기 전에 연결이 끊기면 같은 `Message-ID`로 중복 발송될 수 있습니다. SMTP 접수 기록과 실제 수신함 도착은 별도로 확인합니다.
+
+기본값은 `INQUIRY_MAIL_ENABLED=false`입니다. 켜진 상태에서 필요한 설정이 빠지면 앱 시작을 거부합니다. 기능을 켜기 전에 migration 계정으로 `db:bootstrap`을 실행하고 `MIGRATION_APP_ROLE`에 runtime DB role을 지정합니다. 기존 문의는 자동으로 발송 대기에 넣지 않으며, 새로 접수된 문의부터 알립니다. 의뢰 원문과 credential을 Git이나 공개 로그에 남기지 않습니다.
+
 ## 2026-10-09 프로필 본문 수정
 
 lmml.kr과 circlr 작업, 개발·운영 방식, AI 활용을 여섯 문단으로 소개하도록 프로필 본문을 다듬었습니다.
@@ -91,7 +99,7 @@ npm run content:refresh -- --apply --expected-digest '<beforeDigest>' --output /
 
 운영 경로는 `/opt/p1zza-kr`, Compose project는 `p1zza-kr`입니다. app과 DB의 host port를 공개하지 않고 Caddy가 Docker network의 app port 3001로 연결합니다. PostgreSQL volume과 기존 콘텐츠·secret을 보존합니다. app은 non-root와 최소 권한 DB 계정으로 실행하며, schema bootstrap은 별도 one-off 명령으로 수행합니다.
 
-`DATABASE_URL`은 웹 앱의 CRUD 계정, `MIGRATION_DATABASE_URL`은 schema 관리 계정입니다. production 앱은 schema를 자동 생성하거나 초기 콘텐츠를 덮어쓰지 않습니다. 배포 전에 `db:bootstrap`을 migration 계정으로 실행하고, schema 준비·최소 권한 확인을 통과한 app을 교체합니다. 기존 운영 DB에 bootstrap을 적용할 때 초기 콘텐츠를 재설정하지 않습니다.
+`DATABASE_URL`은 웹 앱의 CRUD 계정, `MIGRATION_DATABASE_URL`은 schema 관리 계정입니다. `MIGRATION_APP_ROLE`은 발송 대기 table의 `SELECT`·`INSERT`·`UPDATE` 권한을 받을 runtime role입니다. production 앱은 schema를 자동 생성하거나 초기 콘텐츠를 덮어쓰지 않습니다. 배포 전에 `db:bootstrap`을 migration 계정으로 실행하고, schema 준비·최소 권한 확인을 통과한 app을 교체합니다. 기존 운영 DB에 bootstrap을 적용할 때 초기 콘텐츠를 재설정하지 않습니다.
 
 `TRUSTED_PROXY_CIDRS`에는 실제 Caddy peer의 정확한 IP 범위를 지정합니다. 운영에서는 app network의 Caddy 주소 `/32`를 사용하며, 다른 proxy나 임의 방문자 header를 신뢰 대상으로 추가하지 않습니다. Caddy가 재생성돼 주소가 바뀌면 이 값을 함께 갱신합니다.
 

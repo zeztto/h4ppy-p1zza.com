@@ -6,6 +6,7 @@ export function createDatabaseClient(url: string) {
   const client = new Pool({
     connectionString: url,
     max: 10,
+    connectionTimeoutMillis: 5000,
   });
   return drizzle(client, { schema });
 }
@@ -14,6 +15,7 @@ export function createDatabase(url: string) {
   const client = new Pool({
     connectionString: url,
     max: 10,
+    connectionTimeoutMillis: 5000,
   });
   return {
     client,

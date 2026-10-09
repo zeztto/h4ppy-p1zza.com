@@ -1,4 +1,6 @@
 import { isIP } from 'node:net';
+import { isValidInquiryEmail } from './lib/inquiry-input.js';
+import type { InquiryMailConfig } from './lib/inquiry-mail.js';
 
 type Environment = Record<string, string | undefined>;
 
@@ -23,6 +25,33 @@ function productionValue(key: string, value: string) {
   if (!value || PLACEHOLDER.test(value)) {
     throw new Error(`Production environment variable is missing or a placeholder: ${key}`);
   }
+}
+
+function readInquiryMail(source: Environment): InquiryMailConfig | null {
+  const enabled = source['INQUIRY_MAIL_ENABLED']?.trim() ?? 'false';
+  if (!['true', 'false'].includes(enabled)) {
+    throw new Error('INQUIRY_MAIL_ENABLED must be true or false');
+  }
+  if (enabled === 'false') return null;
+  const host = required(source, 'SMTP_HOST');
+  if (
+    host.length > 253 ||
+    host.split('.').some((label) => !/^[a-z\d](?:[a-z\d-]{0,61}[a-z\d])?$/i.test(label))
+  ) {
+    throw new Error('SMTP_HOST must contain only a SMTP hostname');
+  }
+  const portText = required(source, 'SMTP_PORT');
+  if (!['465', '587'].includes(portText)) throw new Error('SMTP_PORT must be 465 or 587');
+  const user = required(source, 'SMTP_USER');
+  const from = required(source, 'INQUIRY_MAIL_FROM');
+  if (!isValidInquiryEmail(user) || !isValidInquiryEmail(from) || user !== from) {
+    throw new Error('SMTP_USER and INQUIRY_MAIL_FROM must be the same valid sender address');
+  }
+  const pass = source['SMTP_PASS'];
+  if (!pass || !pass.trim() || pass.length > 4096) {
+    throw new Error('SMTP_PASS is required and must not exceed 4096 characters');
+  }
+  return { host, port: Number(portText) as 465 | 587, user, pass, from };
 }
 
 export function parseTrustedProxyCidrs(value: string[]) {
@@ -129,5 +158,6 @@ export function readEnvironment(source: Environment) {
     cloudinaryApiSecret: source['CLOUDINARY_API_SECRET'] ?? '',
     cloudinaryUrl: source['CLOUDINARY_URL'] ?? '',
     turnstileSecretKey,
+    inquiryMail: readInquiryMail(source),
   } as const;
 }

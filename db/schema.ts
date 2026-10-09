@@ -1,5 +1,14 @@
-import { relations } from 'drizzle-orm';
-import { boolean, index, integer, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
+import { relations, sql } from 'drizzle-orm';
+import {
+  boolean,
+  check,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core';
 
 export const adminUsers = pgTable(
   'admin_users',
@@ -89,26 +98,55 @@ export const siteSettings = pgTable('site_settings', {
 export const inquiries = pgTable(
   'inquiries',
   {
-  id: text('id').primaryKey(),
-  name: text('name').notNull(),
-  email: text('email').notNull(),
-  phone: text('phone'),
-  company: text('company'),
-  projectType: text('project_type'),
-  budget: text('budget'),
-  timeline: text('timeline'),
-  description: text('description').notNull(),
-  status: text('status').notNull().default('new'),
-  sourceUrl: text('source_url'),
-  userAgent: text('user_agent'),
-  ipAddress: text('ip_address'),
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull(),
-  resolvedAt: timestamp('resolved_at', { withTimezone: true, mode: 'date' }),
+    id: text('id').primaryKey(),
+    name: text('name').notNull(),
+    email: text('email').notNull(),
+    phone: text('phone'),
+    company: text('company'),
+    projectType: text('project_type'),
+    budget: text('budget'),
+    timeline: text('timeline'),
+    description: text('description').notNull(),
+    status: text('status').notNull().default('new'),
+    sourceUrl: text('source_url'),
+    userAgent: text('user_agent'),
+    ipAddress: text('ip_address'),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull(),
+    resolvedAt: timestamp('resolved_at', { withTimezone: true, mode: 'date' }),
   },
   (table) => ({
     statusIdx: index('inquiries_status_idx').on(table.status),
     createdAtIdx: index('inquiries_created_at_idx').on(table.createdAt.desc()),
+  })
+);
+
+export const inquiryMailOutbox = pgTable(
+  'inquiry_mail_outbox',
+  {
+    inquiryId: text('inquiry_id')
+      .primaryKey()
+      .references(() => inquiries.id),
+    messageId: text('message_id').notNull().unique(),
+    status: text('status').notNull().default('pending'),
+    attempts: integer('attempts').notNull().default(0),
+    nextAttemptAt: timestamp('next_attempt_at', { withTimezone: true, mode: 'date' }).notNull(),
+    leaseToken: text('lease_token'),
+    leaseExpiresAt: timestamp('lease_expires_at', { withTimezone: true, mode: 'date' }),
+    lastErrorCode: text('last_error_code'),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull(),
+    sentAt: timestamp('sent_at', { withTimezone: true, mode: 'date' }),
+  },
+  (table) => ({
+    dueIdx: index('inquiry_mail_outbox_due_idx')
+      .on(table.nextAttemptAt, table.createdAt)
+      .where(sql`${table.sentAt} IS NULL`),
+    statusCheck: check(
+      'inquiry_mail_outbox_status_check',
+      sql`${table.status} IN ('pending', 'processing', 'sent')`
+    ),
+    attemptsCheck: check('inquiry_mail_outbox_attempts_check', sql`${table.attempts} >= 0`),
   })
 );
 

@@ -44,7 +44,7 @@ route 근거는 [App.tsx](../src/app/App.tsx), 관리자 메뉴는 [AdminLayout.
 
 관리자 OAuth와 기존 session 요청은 현재 `ADMIN_GITHUB_LOGINS` 허용 목록과 관리자 role을 확인합니다. 회수된 사용자 session은 연장하지 않으며, session은 idle 7일과 절대 30일 만료를 적용합니다. 변경 요청의 origin은 고정된 앱 origin과 대조하고 인증·관리 JSON은 cache에 저장하지 않습니다. 공개 문의도 origin 검증을 거치며 production에서는 서버가 Turnstile token과 hostname을 검증합니다. site key는 공개 웹 build에 들어가며 secret key는 서버 runtime에서만 사용합니다.
 
-문의는 `name`, `email`, `description`을 필수로 받고 외부 검증 전에 필드 길이와 형식을 검사합니다. 전화번호가 있으면 한국 전화번호 형식을 검사하고, 요청 횟수와 CAPTCHA 동시 검증·timeout을 제한합니다. 성공한 문의는 `inquiries`에 저장되며 처리 상태는 `new`, `contacted`, `closed`입니다. 유입 URL은 HTTP(S)만 허용하며 기존 unsafe 값은 관리자 화면에서 링크로 만들지 않습니다. 이메일·Slack 알림 전송은 현재 구현되어 있지 않습니다. 근거는 [공개 API](../server/routes/public.ts), [인증 API](../server/routes/auth.ts), [문의 API](../server/routes/inquiries.ts), [인증 middleware](../server/middleware/auth.ts), [보안 운영](security.md)입니다.
+문의는 `name`, `email`, `description`을 필수로 받고 외부 검증 전에 필드 길이와 형식을 검사합니다. 전화번호가 있으면 한국 전화번호 형식을 검사하고, 요청 횟수와 CAPTCHA 동시 검증·timeout을 제한합니다. 성공한 문의는 `inquiries`에 저장되며 처리 상태는 `new`, `contacted`, `closed`입니다. 유입 URL은 HTTP(S)만 허용하며 기존 unsafe 값은 관리자 화면에서 링크로 만들지 않습니다. 메일 알림이 켜져 있으면 같은 transaction에서 발송 대기를 저장하고 worker가 `cs@lmml.kr`로 전달합니다. API201은 DB 접수 성공이며 메일은 별도로 재시도합니다. 기존 문의는 자동 발송하지 않습니다. 근거는 [공개 API](../server/routes/public.ts), [인증 API](../server/routes/auth.ts), [문의 API](../server/routes/inquiries.ts), [메일 worker](../server/lib/inquiry-mail-outbox.ts), [인증 middleware](../server/middleware/auth.ts), [보안 운영](security.md)입니다.
 
 ## PostgreSQL과 콘텐츠 소유권
 
@@ -52,16 +52,19 @@ route 근거는 [App.tsx](../src/app/App.tsx), 관리자 메뉴는 [AdminLayout.
 
 Production 앱은 CRUD 전용 `DATABASE_URL`과 준비된 schema로 시작하며 schema DDL을 실행하지 않습니다. 별도 `db:bootstrap`은 `MIGRATION_DATABASE_URL`로 schema를 준비하고 기존 콘텐츠를 초기 데이터로 재설정하지 않습니다. Production startup은 session/current role의 superuser·역할/DB 생성·replication·BYPASSRLS 속성, 다른 role membership, public schema CREATE와 application table ownership을 거부합니다. 실제 배포 계정의 다른 schema·DB grant는 운영 검증에서 별도로 확인합니다. 개발용 신규 DB와 legacy 이전 도구는 해당 작업에 필요한 관리 계정을 명시적으로 사용합니다.
 
-| table                     | 용도                                         |
-| ------------------------- | -------------------------------------------- |
-| `projects`                | 프로젝트 소개·URL·분류·썸네일·공개·대표·순서 |
-| `site_profile`            | 이름·소개·사진·연락처·본문                   |
-| `site_sections`           | 홈 섹션 종류·콘텐츠·순서·활성                |
-| `site_settings`           | 헤더·푸터·grid 등의 설정 값                  |
-| `inquiries`               | 문의 내용과 처리 상태                        |
-| `admin_users`, `sessions` | 관리자 identity와 session                    |
+| table                     | 용도                                             |
+| ------------------------- | ------------------------------------------------ |
+| `projects`                | 프로젝트 소개·URL·분류·썸네일·공개·대표·순서     |
+| `site_profile`            | 이름·소개·사진·연락처·본문                       |
+| `site_sections`           | 홈 섹션 종류·콘텐츠·순서·활성                    |
+| `site_settings`           | 헤더·푸터·grid 등의 설정 값                      |
+| `inquiries`               | 문의 내용과 처리 상태                            |
+| `inquiry_mail_outbox`     | 신규 문의의 메일 발송 대기·재시도·SMTP 접수 기록 |
+| `admin_users`, `sessions` | 관리자 identity와 session                        |
 
 운영 DB와 `src/data/`의 초기 콘텐츠는 별개입니다. 초기화 script는 [seed loader](../scripts/seed-loaders.ts)로 신규 DB 값을 읽고, safe seed는 기존 콘텐츠가 있으면 초기화를 건너뜁니다. force seed는 프로젝트 삭제·덮어쓰기와 프로필·홈 섹션 덮어쓰기를 수행할 수 있습니다. 운영 갱신은 CMS 또는 해당 목적의 검토된 DB 절차를 사용합니다.
+
+발송 대기 table의 runtime 권한은 `SELECT`·`INSERT`·`UPDATE`로 제한합니다. 기존 table의 행을 바꾸지 않는 additive bootstrap을 candidate readiness보다 먼저 수행하며, 알림이 켜진 앱은 해당 table과 세 권한을 모두 확인한 뒤 시작합니다. SMTP는 runtime secret을 사용하고 credential을 image나 browser에 넣지 않습니다. 발송 상태의 `sent`는 SMTP 접수를 뜻하며 실제 수신함 도착과 구분합니다.
 
 2026-10-09 콘텐츠 갱신 CLI는 [refresh-portfolio-content.ts](../scripts/refresh-portfolio-content.ts)에 있습니다. 기본 dry run, reviewed digest 확인, 단일 transaction과 무관한 값 보존 검증을 사용합니다. before/after snapshot과 출력 파일은 접근을 제한한 Git 외부 경로에 보관합니다. 이 script는 해당 기준일의 목록을 위한 명시적 migration으로 사용합니다. 명령과 보존 기준은 [README](../README.md)에 있습니다.
 

@@ -17,8 +17,9 @@ CREATEROLE, REPLICATION, BYPASSRLS, DB/schema CREATE, application table ownershi
 membership을 갖지 않는다. 다른 어떤 role에도 MEMBER가 아니며 직접 grant만 사용한다.
 동명 role이 이미 계약과 다른 경우 자동 권한 제거 없이 baseline을 lead에 보고한다.
 DB CONNECT와 `public` schema USAGE, 기존7개 application table의
-SELECT/INSERT/UPDATE/DELETE만 부여한다. 현재 sequence는0개이며 sequence grant는 하지 않는다. 새 table이 생기는
-migration에서는 필요한 grant와 migration owner의 default privileges도 확인한다.
+SELECT/INSERT/UPDATE/DELETE만 부여한다. `inquiry_mail_outbox`에는 SELECT/INSERT/UPDATE만
+추가한다. DELETE, ownership, PUBLIC/default grant는 추가하지 않는다. 현재 sequence는0개이며
+sequence grant는 하지 않는다. 새 table이 생기는 migration에서는 필요한 직접 grant를 확인한다.
 다른 schema의 CREATE/ownership와 실제 DDL 거부는 별도로 검증한다. Startup guard가
 임의의 모든 ACL을 검사한다고 가정하지 않는다.
 
@@ -26,7 +27,9 @@ Production startup은 schema 준비 여부와 role 권한을 읽기로 확인하
 seed를 실행하지 않는다. `MIGRATION_DATABASE_URL`은 별도 privileged connection이며
 maintenance profile의 일회성 `migration` service에만 전달한다.
 `node build/server/db/bootstrap-entry.js`는 schema-only bootstrap을 실행하고
-seedDefaults를 호출하지 않는다. app environment에 이 credential을 넣지 않는다.
+seedDefaults를 호출하지 않는다. `MIGRATION_APP_ROLE=p1zza_app`으로 기존 제한 role을
+검증한 뒤 outbox 직접 SELECT/INSERT/UPDATE만 grant한다. Migration credential과
+MIGRATION_APP_ROLE은 app environment에 넣지 않는다.
 
 기존 DB에 role을 준비할 때는 먼저 private custom dump와 행 hash baseline을 보존한다.
 새 role 생성·grant와 private env 교체는 lead의 exact release directive 이후 수행한다.
@@ -37,9 +40,11 @@ hash가 같아야 하며 변경이 발견되면 app 교체를 중단하고 lead�
 
 Role/env 준비도 exact release directive 이후 같은 target flock 안에서 수행한다. 먼저 DB
 original ACL, LOGIN role의 CONNECT 가능 여부, owner·membership·grant와 기존 행 hash를
-private snapshot에 기록한다. 현재 owner/superuser LOGIN1개, 다른 non-superuser CONNECT
-consumer0개, `p1zza_app` 없음이다. 직전 재검증에서 동명 role이 예상 밖 상태로 존재하거나
-다른 consumer가 발견되면 자동 role 변경·PUBLIC 권한 제거 없이 중단해 lead에 보고한다.
+private snapshot에 기록한다. 현재 owner/superuser와 준비된 `p1zza_app` LOGIN role이 있으며,
+app role·PUBLIC TEMPORARY 회수·private CRUD env는 이전 보안 release에서 검증됐다.
+기존 role/password/ACL을 재생성하지 않는다. 아래 SQL은 role이 없는 최초 설치에 한정한다.
+직전 재검증에서 동명 role의 계약이 다르거나 다른 consumer가 발견되면 자동 role 변경·
+PUBLIC 권한 제거 없이 중단해 lead에 보고한다.
 
 새 password는 private runner에서 생성하고 private stdin/0600 파일로만 전달한다. 다음
 SQL의 `app_password` psql variable은 그 private 전달 경로로 준비하며 shell argument,
@@ -74,7 +79,7 @@ grant를 복구하려면 같은 target DB에서 `GRANT TEMPORARY ON DATABASE p1z
 ## 필수 환경과 proxy
 
 운영 환경은 `/opt/p1zza-kr/.env.local`에 root 소유0600으로 보존한다. 필수
-DATABASE_URL, MIGRATION_DATABASE_URL, SESSION_SECRET, OAuth/Turnstile,
+DATABASE_URL, MIGRATION_DATABASE_URL, MIGRATION_APP_ROLE, SESSION_SECRET, OAuth/Turnstile,
 POSTGRES_PASSWORD, TRUSTED_PROXY_CIDRS가 없으면 Compose가 실패한다.
 `.env.example`은 설명용 public template이다. Production app은 placeholder를 거부하고
 SESSION_SECRET의 최소 길이와 HTTPS APP_ORIGIN 등을 추가 검증한다.
@@ -96,6 +101,44 @@ includeSubDomains/preload는 사용하지 않으며 이번 release에는 Caddy �
 build한다. TURNSTILE_SECRET_KEY, DB/OAuth/session secret은 runtime에만 전달하고
 `.env`, `.env.*`, `*.env`는 build context/source 전달에서 제외한다. Tracked public
 `.env.example`만 source archive에 포함할 수 있다.
+
+## 제작 의뢰 SMTP 연결
+
+`INQUIRY_MAIL_ENABLED=false`가 기본이다. 활성화한 운영 app에는 `SMTP_HOST`, `SMTP_PORT`,
+`SMTP_USER`, `SMTP_PASS`, `INQUIRY_MAIL_FROM`을 runtime env로만 전달한다. 현재 연결은
+`mail.lmml.kr:587`이며 STARTTLS와 인증서 검증을 필수로 사용한다. SMTP_USER와 From은
+전용 `p1zza-inquiries@lmml.kr` 계정으로 일치시킨다. 수신 `cs@lmml.kr`은 코드와 envelope의
+고정 주소이며 환경변수나 사용자 입력으로 바꾸지 않는다. 사용자 email은 Reply-To에만 사용한다.
+SMTP secret은 build arg/image/source나 command argv/log에 넣지 않는다.
+
+기존 `mail-lmml` Docker Mailserver15.1.0과 CS 계정/password/DKIM/mailbox를 유지한다.
+신규 sender 준비도 lead의 exact target directive와 같은 Compose flock을 요구한다. 먼저
+`/opt/mail-lmml/docker-data/dms/config`와 원본 account/alias/quota/DKIM 설정, app env,
+container identity를 Git 밖700 directory의600 파일로 보존한다. 새 계정과 alias가 모두
+없어야 진행하며 이미 존재하면 credential 재생성 없이 lead에 보고한다.
+
+설치된 `setup email add`는 입력한 password를 내부 `doveadm pw -p` process argv에 넘긴다.
+이번 준비는 [공식 file provisioner 형식](https://docker-mailserver.github.io/docker-mailserver/latest/config/account-management/provisioner/file/)의
+`account|{SHA512-CRYPT}$6$...` 한 줄을 사용한다. Password를 private stdin으로 전달한
+`openssl passwd -6 -stdin`의 hash를 private 파일에만 보존하고, 원본 account bytes를
+prefix로 정확히 유지하는 atomic append를 수행한다. 원래 mode/owner를 유지하고 rename
+직전 원본 hash를 재검증한다. 기존 설치 CLI나 hashing command를 override하지 않는다.
+Running changedetector가 account file 변경을 감지하고 Postfix/Dovecot을 reload하므로 mail
+container를 restart하지 않는다. 기존 계정 line bytes와 alias/quota/DKIM, container ID/start,
+app env가 유지돼야 한다. 기존 mailbox 내용을 열거나 삭제하지 않는다.
+
+계정 준비 검증은 app network에서 verified STARTTLS→SMTP AUTH→QUIT까지만 수행한다.
+MAIL/RCPT/DATA나 실제 이메일 발송은 별도 검토된 test directive 이후 실행한다. Private
+app-candidate.env에는 기존 키/secret을 그대로 보존하고 위 SMTP env와 MIGRATION_APP_ROLE만
+추가하며 exact app release 전 운영 `.env.local`에 설치하지 않는다.
+
+문의와 outbox는 하나의 transaction으로 저장한다.201은 DB 접수 완료이며 SMTP 실패 시
+사용자에게 재접수를 요구하지 않는다. Background worker는 상한이 있는 retry 간격과 lease,
+stable Message-ID를 사용하며 횟수 제한 없이 재시도한다. 중복 전달 가능성이 있는 at-least-once
+계약을 사용한다. 기존 문의를
+startup에서 backfill/enqueue하지 않는다. Mail-disabled 운영으로 rollback하면 접수는
+유지되고 새 notification 발송은 멈춘다. 새 sender account 제거는 lead가 결정하며 그
+계정만 제거하고 mailbox purge나 전체 mail account file 복원은 자동으로 하지 않는다.
 
 ## 승인된 exact source 배포
 
@@ -122,7 +165,8 @@ Compose config와 exact Caddy peer를 검증한 뒤 install0600으로 반영한�
 
 서버는 중앙 generic workflow와 같은 `/run/lock/p1zza-deploy-compose.lock`을 FD9으로
 획득한다. Target identity 확인, private DB/source/env/image backup, source overlay,
-app-only build, DB minor patch, schema-only migration, app-only recreate와 보존 검증을 이 lock에서 수행한다.
+app-only build, additive schema-only migration, DB minor patch, idempotent migration,
+app-only recreate와 보존 검증을 이 lock에서 수행한다.
 Build/migration log는 private backup에 기록한다. 실행 순서는 다음과 같다.
 
 ```sh
@@ -134,14 +178,18 @@ export APP_REVISION="$APPROVED_FULL_SHA"
 docker compose --env-file .env.local -f compose.yml build app
 # image의 revision label, USER node, package/version·bundle·secret 부재를 검증한다.
 docker compose --env-file .env.local -f compose.yml pull db
-# 새 CRUD connection의 readonly readiness를 먼저 확인한다.
+# 첫 candidate readiness 전에 outbox table과 제한된 직접 SIU grant를 준비한다.
+docker compose --env-file .env.local -f compose.yml --profile maintenance \
+  run -T --interactive=false --rm --no-deps migration < /dev/null
+# 원래7개 table의 행 hash 보존·신규 outbox empty·SIU만 허용을 확인한다.
+# 새 CRUD connection의 mail-enabled readonly readiness를 확인한다.
 docker compose --env-file .env.local -f compose.yml stop app
 # App pause 후 fresh dump·행 hash를 보존한 뒤 같은 volume으로 DB만 교체한다.
 docker compose --env-file .env.local -f compose.yml up -d --no-deps --no-build db
 # DB17.11 healthy, volume·행 hash·extension/replication inventory를 확인한다.
 docker compose --env-file .env.local -f compose.yml --profile maintenance \
   run -T --interactive=false --rm --no-deps migration < /dev/null
-# 기존 행 hash 보존과 CRUD readiness를 확인한 뒤 app만 교체한다.
+# 기존7행/outbox hash 보존과 mail-enabled CRUD readiness를 확인한 뒤 app만 교체한다.
 docker compose --env-file .env.local -f compose.yml up -d --no-deps --no-build app
 docker compose --env-file .env.local -f compose.yml exec -T --interactive=false app \
   wget -qO- http://127.0.0.1:3001/api/health < /dev/null
@@ -158,8 +206,11 @@ replication 또는 locale 상태가 발견되면 자동 진행하지 않는다. 
 logical output plugin 설정 변경은 현재 inventory에 적용되지 않는다. 원본 private dump의
 복원 proof는 운영 volume과 분리한 network-none PostgreSQL17.11 fixture에서만 수행한다.
 
-App build와 backup을 먼저 끝내고, 기존 app을 잠시 멈춘 뒤 DB patch→healthy→schema-only
-migration/readiness→새 app으로 진행한다. 정상 문의 write와 구버전 app connection 재시작이
+App build와 backup을 먼저 끝내고, 첫 candidate readiness 전에 privileged additive bootstrap을
+실행해 신규 empty outbox와 p1zza_app의 SIU grant를 준비한다. 원래7개 table의 column/행 hash,
+기존 role/ACL이 유지돼야 한다. Outbox가 이미 존재하는 다음 release는 기존 outbox 행도 보존한다.
+기존 app을 잠시 멈춘 뒤 DB patch→healthy→idempotent schema-only migration/readiness→새 app으로
+진행한다. 정상 문의 write와 구버전 app connection 재시작이
 patch 검증과 경쟁하지 않게 한다. Pause부터 app health까지 UTC timestamp와 초 단위를
 private evidence에 기록한다. Fresh pause 이후 dump도 최종 checksum manifest에 포함한다. Migration
 profile을 app의 depends_on으로 연결하지 않는다. Image에 full Git SHA revision label을
@@ -167,8 +218,9 @@ profile을 app의 depends_on으로 연결하지 않는다. Image에 full Git SHA
 Stage의 최종 검증은 app health/image/hardening, source/env hash, DB volume,
 다른20개 container(Caddy 포함)의 ID/image/start/restart와 Caddy peer 일치를 포함한다.
 App와 DB는 별도 image/version/health/volume 검사로 보호한다. Public HTTPS,
-기존7개 table의 count/row hash는 migration 전후 동일해야 하며 source/runtime role의
-read-only readiness도 app 교체 전에 확인한다. 동시 사용자 변경으로 hash가 달라도
+기존7개 table의 count/row hash는 각 migration 전후 동일해야 하며 새 outbox는 최초 생성 시
+empty이고 직접 SELECT/INSERT/UPDATE만 허용돼야 한다. DELETE/PUBLIC grant를 추가하지 않는다.
+Mail-enabled readiness는8번째 table의 필수 column과 SIU를 app 교체 전에 확인한다. 동시 사용자 변경으로 hash가 달라도
 자동 복구하지 않고 중단하여 lead가 구분한다. 추가 public 기능 검증은 release gate에 포함한다.
 전체 stack down/up, volume
 삭제, seedforce, shared Caddy restart는 하지 않는다.

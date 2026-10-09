@@ -52,6 +52,28 @@ test('runtime startup checks schema with read-only queries and rejects elevated 
   }
 });
 
+test('enabled mail requires eighth table and outbox write grants while disabled remains legacy ready', async () => {
+  const queries: string[] = [];
+  let privileges = true;
+  const client = {
+    query: async (query: string) => {
+      queries.push(query);
+      if (query.includes('has_table_privilege')) return { rows: [{ ready: privileges }] };
+      return { rows: [] };
+    },
+  } as unknown as DatabaseClient;
+  await assertDatabaseReady(client, false, true);
+  assert.equal(queries.length, 9);
+  assert.match(queries[7]!, /FROM public.inquiry_mail_outbox LIMIT 0/);
+  assert.match(queries[8]!, /'INSERT'/);
+  assert.match(queries[8]!, /'UPDATE'/);
+  privileges = false;
+  await assert.rejects(assertDatabaseReady(client, false, true), /schema is not ready/);
+  queries.length = 0;
+  await assertDatabaseReady(client, false, false);
+  assert.equal(queries.length, 7);
+});
+
 test('missing schema stops startup with a sanitized bootstrap instruction', async () => {
   const missing = databaseFixture(
     { elevated: false, role_memberships: false, schema_create: false, owns_tables: false },
