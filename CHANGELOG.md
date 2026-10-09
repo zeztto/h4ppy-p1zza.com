@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-09
+
+### Added
+
+- lmml.kr, circlr, NMA Records, p1zza-agent의 실제 서비스·공개 release에 기반한 프로젝트 소개
+- 갱신 전 콘텐츠 원본과 SHA-256 manifest, 공개 제외 프로젝트의 DB 행 보존
+- dry run, digest 검토, 단일 transaction, 무관한 콘텐츠 보존 검증을 갖춘 scoped 콘텐츠 갱신 CLI와 행동 검증
+- production image의 Git revision label과 공개 Turnstile site key build 전달
+
+### Changed
+
+- PRD AI, ONKURA, PEDALS, SRBBRS를 공개에서 제외하고 기존 설명과 기록 보존
+- 서비스의 현재 기능·기술 목록·실제 화면 이미지로 콘텐츠 갱신하고 근거 없는 성능·인증 주장 제거
+- 3W 소속 문구 제거, 개인 개발 문의와 현재 활동에 맞게 프로필·SEO 수정
+- 한국어 카테고리·화면 문구, 대표 프로젝트 우선순위와 표시 개수 설정 일치
+- 미완성 관리자 메뉴 숨김, 이미지 fallback을 중립 배경으로 변경
+- 운영 topology와 일치하도록 app host port 비공개 유지, 환경 파일의 Docker build context 전달 차단
+- README와 배포 절차를 PostgreSQL·현재 CMS·운영 경로에 맞게 갱신
+
+## 이전 배포 준비 기록
+
 ### Changed
 
 - Switched runtime/database configuration toward PostgreSQL via `DATABASE_URL`

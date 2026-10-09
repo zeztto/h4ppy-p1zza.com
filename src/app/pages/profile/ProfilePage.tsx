@@ -59,16 +59,11 @@ export function ProfilePage() {
             className="w-32 h-32 rounded-full mx-auto object-cover"
           />
         ) : (
-          <div className="w-32 h-32 rounded-full mx-auto bg-gradient-to-br from-primary/30 to-primary/5" />
+          <div className="w-32 h-32 rounded-full mx-auto bg-muted" />
         )}
         <h1 className="text-3xl font-bold text-center mt-6">{p.displayName}</h1>
         <p className="text-lg text-muted-foreground text-center mt-2">
           {p.headline}
-        </p>
-        <p className="text-center mt-2">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted text-xs font-medium text-muted-foreground">
-            쓰리더블유(3W) 소속
-          </span>
         </p>
         <div className="flex justify-center gap-4 mt-4">
           {p.githubUrl && (
@@ -97,7 +92,7 @@ export function ProfilePage() {
             <a
               href={`mailto:${p.email}`}
               className="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Email"
+              aria-label="이메일"
             >
               <Mail className="w-5 h-5" />
             </a>

@@ -27,11 +27,6 @@ export function HeroSection({ profile, content }: HeroSectionProps) {
           <p className="text-xl text-muted-foreground mt-4">
             {profile.headline}
           </p>
-          <p className="text-sm text-muted-foreground mt-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted text-xs font-medium">
-              쓰리더블유(3W) 소속
-            </span>
-          </p>
           <p className="text-muted-foreground mt-6 max-w-lg">
             {profile.bioShort}
           </p>
@@ -53,7 +48,7 @@ export function HeroSection({ profile, content }: HeroSectionProps) {
                 className="rounded-2xl w-80 h-80 object-cover shadow-lg"
               />
             ) : (
-              <div className="w-80 h-80 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/5" />
+              <div className="w-80 h-80 rounded-2xl bg-muted" />
             )}
           </div>
         )}

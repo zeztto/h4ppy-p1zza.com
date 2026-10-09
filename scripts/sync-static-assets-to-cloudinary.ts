@@ -15,7 +15,6 @@ const rootDir = path.resolve(scriptDir, '..');
 const generatedFilePath = path.join(rootDir, 'src', 'data', 'cloudinary-assets.ts');
 const reportDir = path.join(rootDir, 'output', 'cloudinary');
 const reportPath = path.join(reportDir, 'static-assets.json');
-const adminProjectsPath = path.join(rootDir, 'src', 'data', 'admin', 'projects.json');
 
 interface UploadTarget {
   assetPath: string;
@@ -161,9 +160,8 @@ async function uploadAll() {
   await mkdir(reportDir, { recursive: true });
   await writeFile(generatedFilePath, toGeneratedModule(assetMap), 'utf8');
   await writeFile(reportPath, JSON.stringify(assetMap, null, 2), 'utf8');
-  await syncAdminProjects(assetMap);
 
-  console.log(
+  process.stdout.write(
     JSON.stringify(
         {
           ok: true,
@@ -174,35 +172,8 @@ async function uploadAll() {
         },
       null,
       2
-    )
+    ) + '\n'
   );
-}
-
-async function syncAdminProjects(assetMap: Record<string, string>) {
-  const raw = await readFile(adminProjectsPath, 'utf8');
-  const projects = JSON.parse(raw);
-
-  if (!Array.isArray(projects)) {
-    throw new Error('admin projects JSON must be an array');
-  }
-
-  const nextProjects = projects.map((project) => {
-    if (
-      project &&
-      typeof project === 'object' &&
-      typeof project['thumbnail'] === 'string' &&
-      assetMap[project['thumbnail']]
-    ) {
-      return {
-        ...project,
-        thumbnail: assetMap[project['thumbnail']],
-      };
-    }
-
-    return project;
-  });
-
-  await writeFile(adminProjectsPath, `${JSON.stringify(nextProjects, null, 2)}\n`, 'utf8');
 }
 
 void uploadAll();

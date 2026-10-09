@@ -8,6 +8,7 @@ import type { PublicProject } from '@/app/lib/types';
 import { ProjectCard } from '@/app/components/ProjectCard';
 import { Button } from '@/app/components/ui/button';
 import { sortPortfolioProjects } from '@/app/lib/project-order';
+import { getProjectCategoryLabel } from '@/app/lib/project-category';
 
 const gridColsClass: Record<number, string> = {
   1: 'grid-cols-1',
@@ -65,7 +66,7 @@ export function PortfolioPage() {
   if (allProjects.length === 0) {
     return (
       <div className="max-w-6xl mx-auto px-6 py-24">
-        <h1 className="text-4xl font-bold">Projects</h1>
+        <h1 className="text-4xl font-bold">포트폴리오</h1>
         <p className="text-muted-foreground text-center mt-16">
           아직 프로젝트가 없습니다.
         </p>
@@ -75,20 +76,21 @@ export function PortfolioPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-24">
-      <h1 className="text-4xl font-bold">Projects</h1>
+      <h1 className="text-4xl font-bold">포트폴리오</h1>
 
       <div className="flex flex-wrap gap-2 mt-6">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveFilter(cat)}
+            aria-pressed={activeFilter === cat}
             className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
               activeFilter === cat
                 ? 'bg-primary text-primary-foreground'
                 : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
             }`}
           >
-            {cat}
+            {getProjectCategoryLabel(cat)}
           </button>
         ))}
       </div>

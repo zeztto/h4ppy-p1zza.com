@@ -1,0 +1,56 @@
+{
+  "capturedAt": "2026-10-09",
+  "purpose": "공개 콘텐츠 최신화 이전의 원본을 byte-for-byte 보존합니다.",
+  "files": [
+    {
+      "path": "admin-projects.json.original",
+      "sha256": "6983d3073646da2a2045e803f92a1db69f556f21dd58dd6a8fd896d6a8bdf7f6",
+      "bytes": 60975
+    },
+    {
+      "path": "project-repositories.ts.original",
+      "sha256": "5cdce64d0296dad79a44862e56b060b10661914b993cad7c51d9c3ee7103683c",
+      "bytes": 3377
+    },
+    {
+      "path": "projects.ts.original",
+      "sha256": "d5e04fe77b021ba63c8fb88cbddfcd0ab32b13e2a4e8200d6faba0b36730be2e",
+      "bytes": 59954
+    },
+    {
+      "path": "public-profile.json",
+      "sha256": "79df34159af641600cdd0bb90f8ad3b4794a02437315a1b31f6ddd1529bd09e8",
+      "bytes": 6507
+    },
+    {
+      "path": "public-projects.json",
+      "sha256": "99f50f417529fe21f1a991c402e6dbb33a835d1076051eed027b9b7e00471d74",
+      "bytes": 47729
+    },
+    {
+      "path": "public-sections.json",
+      "sha256": "6f84454551ae61b2b3e380c48b04d19a94a40e012ad5202419f2cdf0459cb1b3",
+      "bytes": 3197
+    },
+    {
+      "path": "public-settings-footer.json",
+      "sha256": "c6d32e482381c92dd7e9e312dcccbdf1380a74b2c0b9d8e67ea8e967e7de5256",
+      "bytes": 312
+    },
+    {
+      "path": "public-settings-header.json",
+      "sha256": "0b4c490b63e8f9c154c1b1f327e8bd5b1c801b0a937bf4d5f17b280b7082c208",
+      "bytes": 296
+    },
+    {
+      "path": "public-settings-portfolio_grid.json",
+      "sha256": "0e85de93c8f98285531878a2e401aa3ad768353da95317a4080b93c66cda50a3",
+      "bytes": 136
+    },
+    {
+      "path": "site-content.ts.original",
+      "sha256": "bbb6c1cd38187a2772e00a459089c4180976b00e40b6b0eeaa5b36f8982752cc",
+      "bytes": 10796
+    }
+  ]
+}

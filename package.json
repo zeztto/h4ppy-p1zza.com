@@ -1,12 +1,13 @@
 {
   "name": "@figma/my-make-file",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "build": "npm run build:web && npm run build:server",
     "build:server": "tsc -p tsconfig.server.json",
     "build:web": "vite build",
+    "content:refresh": "sh -c 'if command -v tsx >/dev/null 2>&1; then exec tsx scripts/refresh-portfolio-content.ts \"$@\"; else exec node build/server/scripts/refresh-portfolio-content.js \"$@\"; fi' --",
     "assets:cloudinary:sync": "tsx scripts/sync-static-assets-to-cloudinary.ts",
     "db:migrate:legacy": "sh -c 'if command -v tsx >/dev/null 2>&1; then tsx scripts/migrate-turso-to-postgres.ts; else node build/server/scripts/migrate-turso-to-postgres.js; fi'",
     "db:seed": "sh -c 'if command -v tsx >/dev/null 2>&1; then tsx scripts/seed.ts; else node build/server/scripts/seed.js; fi'",

@@ -6,7 +6,6 @@ import { ThemeToggle } from '@/app/components/ThemeToggle';
 import { Footer } from '@/app/components/Footer';
 import { EditModeProvider } from '@/app/components/inline-edit/EditModeProvider';
 import { EditModeFAB } from '@/app/components/inline-edit/EditModeFAB';
-import { EditableWrapper } from '@/app/components/inline-edit/EditableWrapper';
 import { usePublicData } from '@/app/hooks/usePublicData';
 import { useSettings } from '@/app/hooks/useSettings';
 import type { PublicProfile } from '@/app/lib/types';
@@ -86,30 +85,26 @@ export function PublicLayout() {
         <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
           <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             {/* Left: Site name */}
-            <EditableWrapper onEdit={() => { /* placeholder: open header editor */ }}>
-              <Link to="/" className="text-lg font-bold tracking-tight text-foreground hover:text-primary transition-colors">
-                {headerSettings.siteName}
-              </Link>
-            </EditableWrapper>
+            <Link to="/" className="text-lg font-bold tracking-tight text-foreground hover:text-primary transition-colors">
+              {headerSettings.siteName}
+            </Link>
 
             {/* Right: Desktop nav */}
-            <EditableWrapper onEdit={() => { /* placeholder: open header editor */ }}>
-              <nav className="hidden md:flex items-center gap-8">
-                {navLinks.map((link) => (
-                  <NavLink
-                    key={link.to}
-                    to={link.to}
-                    label={link.label}
-                    isActive={isLinkActive(link.to)}
-                  />
-                ))}
-                {headerSettings.showThemeToggle && (
-                  <div className="ml-2">
-                    <ThemeToggle />
-                  </div>
-                )}
-              </nav>
-            </EditableWrapper>
+            <nav className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  label={link.label}
+                  isActive={isLinkActive(link.to)}
+                />
+              ))}
+              {headerSettings.showThemeToggle && (
+                <div className="ml-2">
+                  <ThemeToggle />
+                </div>
+              )}
+            </nav>
 
             {/* Right: Mobile hamburger + theme toggle */}
             <div className="flex items-center gap-2 md:hidden">
@@ -117,7 +112,7 @@ export function PublicLayout() {
               <button
                 className="text-foreground p-1.5 rounded-md hover:bg-muted transition-colors"
                 onClick={() => setIsMenuOpen((prev) => !prev)}
-                aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
               >
                 {isMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
               </button>
@@ -158,9 +153,7 @@ export function PublicLayout() {
           <Outlet />
         </main>
 
-        <EditableWrapper onEdit={() => { /* placeholder: open footer editor */ }}>
-          {profile ? <Footer profile={profile} /> : <Footer />}
-        </EditableWrapper>
+        {profile ? <Footer profile={profile} /> : <Footer />}
       </div>
 
       <EditModeFAB />
