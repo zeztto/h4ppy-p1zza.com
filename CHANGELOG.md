@@ -25,6 +25,7 @@
 - 배포 보조 명령을 p1zza-2nd와 target lock·환경 보존·app 내부 health 검사에 맞게 갱신
 - 보안 회귀 테스트와 인증·입력·DB·배포 계약 문서 추가
 - Node 22 기반 GitHub CI에 test·type·lint·build 및 full/production dependency audit 추가
+- SSH 배포의 one-off·health 명령이 뒤따르는 Bash stdin을 소비하지 않도록 분리하고 회귀 검사 추가
 
 ## 1.1.2 - 2026-10-09
 
