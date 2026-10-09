@@ -1,4 +1,4 @@
-import { and, eq, gt } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { adminUsers, sessions, type AdminUserRow } from '../../db/schema.js';
 import type { Database } from '../../db/client.js';
 import { env, isProduction } from '../env.js';
@@ -10,7 +10,22 @@ import type { Request, Response } from 'express';
 const SESSION_COOKIE = 'sid';
 const OAUTH_STATE_COOKIE = 'oauth_state';
 const SESSION_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7;
+export const SESSION_ABSOLUTE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 30;
 const OAUTH_STATE_MAX_AGE_MS = 1000 * 60 * 10;
+
+export function isAllowedAdmin(
+  user: Pick<AdminUserRow, 'githubLogin' | 'role'> | null | undefined
+) {
+  return Boolean(
+    user &&
+    user.role === 'admin' &&
+    env.adminGithubLogins.some((login) => login.toLowerCase() === user.githubLogin.toLowerCase())
+  );
+}
+
+function validSessionToken(value: string | null): value is string {
+  return value !== null && /^[A-Za-z0-9_-]{43}$/.test(value);
+}
 
 export function createOAuthState(res: Response) {
   const value = randomToken(24);
@@ -30,8 +45,17 @@ export function verifyOAuthState(req: Request, state: string) {
   const stored = getCookie(req, OAUTH_STATE_COOKIE);
   assert(stored, 400, 'OAuth state missing');
 
-  const [value, signature] = stored.split('.');
-  assert(value && signature, 400, 'OAuth state invalid');
+  const parts = stored.split('.');
+  const [value, signature] = parts;
+  assert(
+    parts.length === 2 &&
+      value &&
+      signature &&
+      /^[A-Za-z0-9_-]{32}$/.test(value) &&
+      /^[A-Za-z0-9_-]{43}$/.test(signature),
+    400,
+    'OAuth state invalid'
+  );
   assert(value === state, 400, 'OAuth state mismatch');
   assert(secureEquals(signature, signValue(value, env.sessionSecret)), 400, 'OAuth state invalid');
 }
@@ -88,6 +112,8 @@ export async function upsertAdminUser(
 }
 
 export async function createSession(db: Database, res: Response, userId: string) {
+  const user = await db.query.adminUsers.findFirst({ where: eq(adminUsers.id, userId) });
+  assert(isAllowedAdmin(user), 403, 'Unauthorized');
   const rawSessionId = randomToken(32);
   const now = new Date();
   const sessionRow = {
@@ -112,7 +138,7 @@ export async function createSession(db: Database, res: Response, userId: string)
 export async function invalidateSession(db: Database, req: Request, res: Response) {
   const rawSessionId = getCookie(req, SESSION_COOKIE);
 
-  if (rawSessionId) {
+  if (validSessionToken(rawSessionId)) {
     await db.delete(sessions).where(eq(sessions.sessionHash, sha256(rawSessionId)));
   }
 
@@ -125,7 +151,7 @@ export async function invalidateSession(db: Database, req: Request, res: Respons
 
 export async function readSessionUser(db: Database, req: Request) {
   const rawSessionId = getCookie(req, SESSION_COOKIE);
-  if (!rawSessionId) {
+  if (!validSessionToken(rawSessionId)) {
     return null;
   }
 
@@ -133,7 +159,7 @@ export async function readSessionUser(db: Database, req: Request) {
   const now = new Date();
 
   const row = await db.query.sessions.findFirst({
-    where: and(eq(sessions.sessionHash, sessionHash), gt(sessions.expiresAt, now)),
+    where: eq(sessions.sessionHash, sessionHash),
     with: {
       user: true,
     },
@@ -143,11 +169,21 @@ export async function readSessionUser(db: Database, req: Request) {
     return null;
   }
 
+  if (!isAllowedAdmin(row.user)) {
+    await db.delete(sessions).where(eq(sessions.userId, row.userId));
+    return null;
+  }
+  const absoluteExpiry = row.createdAt.getTime() + SESSION_ABSOLUTE_MAX_AGE_MS;
+  if (row.expiresAt.getTime() <= now.getTime() || absoluteExpiry <= now.getTime()) {
+    await db.delete(sessions).where(eq(sessions.id, row.id));
+    return null;
+  }
+
   await db
     .update(sessions)
     .set({
       updatedAt: now,
-      expiresAt: new Date(now.getTime() + SESSION_MAX_AGE_MS),
+      expiresAt: new Date(Math.min(now.getTime() + SESSION_MAX_AGE_MS, absoluteExpiry)),
     })
     .where(eq(sessions.id, row.id));
 

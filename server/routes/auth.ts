@@ -2,11 +2,14 @@ import { Router } from 'express';
 import { env } from '../env.js';
 import { buildGitHubAuthorizeUrl, exchangeGitHubCode, fetchGitHubUser } from '../lib/github.js';
 import { asyncHandler, assert } from '../lib/http.js';
+import { HttpError } from '../lib/errors.js';
+import { requireSameOrigin } from '../middleware/auth.js';
 import {
   clearOAuthState,
   createOAuthState,
   createSession,
   invalidateSession,
+  isAllowedAdmin,
   upsertAdminUser,
   verifyOAuthState,
 } from '../lib/session.js';
@@ -38,6 +41,7 @@ export function createAuthRouter() {
 
       assert(code, 400, 'GitHub code missing');
       assert(state, 400, 'GitHub state missing');
+      assert(code.length <= 2048 && state.length <= 256, 400, 'OAuth parameters are too long');
 
       verifyOAuthState(req, state);
       clearOAuthState(res);
@@ -51,7 +55,11 @@ export function createAuthRouter() {
       });
 
       const githubUser = await fetchGitHubUser(accessToken);
-      if (!env.adminGithubLogins.includes(githubUser.login)) {
+      if (
+        !env.adminGithubLogins.some(
+          (login) => login.toLowerCase() === githubUser.login.toLowerCase()
+        )
+      ) {
         res.redirect(302, '/admin/login?error=unauthorized');
         return;
       }
@@ -62,6 +70,11 @@ export function createAuthRouter() {
         avatarUrl: githubUser.avatar_url,
         displayName: githubUser.name ?? null,
       });
+
+      if (!isAllowedAdmin(adminUser)) {
+        res.redirect(302, '/admin/login?error=unauthorized');
+        return;
+      }
 
       await createSession(res.locals.db, res, adminUser.id);
       res.redirect(302, '/admin');
@@ -93,8 +106,13 @@ export function createAuthRouter() {
 
   router.post(
     '/logout',
+    requireSameOrigin,
     asyncHandler(async (req, res) => {
-      await invalidateSession(res.locals.db, req, res);
+      try {
+        await invalidateSession(res.locals.db, req, res);
+      } catch {
+        throw new HttpError(500, '로그아웃을 완료하지 못했습니다. 다시 시도해주세요.');
+      }
       res.status(204).send();
     })
   );

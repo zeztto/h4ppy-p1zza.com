@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Send, CheckCircle, AlertCircle, Building2, Mail, Phone, User, FileText, Clock, Wallet } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { hasPhoneInput, isValidKoreanPhoneNumber, PHONE_ERROR_MESSAGE } from '@/shared/phone';
+import { INQUIRY_FIELD_LIMITS, getInquiryOverflowMessage, type InquiryField } from '@/shared/inquiry-contract';
 
 const TURNSTILE_SITE_KEY = import.meta.env['VITE_TURNSTILE_SITE_KEY'] ?? '';
 
@@ -142,6 +143,18 @@ export function InquiryPage() {
     setErrorMsg('');
 
     const resolvedTurnstileToken = turnstileToken || readTurnstileResponse();
+    const payload = {
+      ...form,
+      sourceUrl: window.location.href,
+      turnstileToken: resolvedTurnstileToken,
+    };
+
+    for (const field of Object.keys(INQUIRY_FIELD_LIMITS) as InquiryField[]) {
+      if (payload[field].length > INQUIRY_FIELD_LIMITS[field]) {
+        setErrorMsg(getInquiryOverflowMessage(field));
+        return;
+      }
+    }
 
     if (!form.name.trim() || !form.email.trim() || !form.description.trim()) {
       setErrorMsg('이름, 이메일, 프로젝트 설명은 필수 입력 항목입니다.');
@@ -164,11 +177,7 @@ export function InquiryPage() {
       const res = await fetch('/api/inquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          sourceUrl: window.location.href,
-          turnstileToken: resolvedTurnstileToken,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -184,7 +193,9 @@ export function InquiryPage() {
       }
     } catch (err) {
       setStatus('error');
-      setErrorMsg(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
+      setErrorMsg(err instanceof TypeError
+        ? '의뢰를 제출하지 못했습니다. 연결을 확인하고 다시 시도해주세요.'
+        : err instanceof Error ? err.message : '의뢰를 제출하지 못했습니다. 다시 시도해주세요.');
       if (widgetIdRef.current && window.turnstile) {
         window.turnstile.reset(widgetIdRef.current);
       }
@@ -249,6 +260,7 @@ export function InquiryPage() {
               value={form.name}
               onChange={handleChange}
               required
+              maxLength={INQUIRY_FIELD_LIMITS.name}
               placeholder="홍길동"
             />
             <InputField
@@ -259,6 +271,7 @@ export function InquiryPage() {
               value={form.email}
               onChange={handleChange}
               required
+              maxLength={INQUIRY_FIELD_LIMITS.email}
               placeholder="email@example.com"
             />
             <InputField
@@ -268,6 +281,7 @@ export function InquiryPage() {
               type="tel"
               value={form.phone}
               onChange={handleChange}
+              maxLength={INQUIRY_FIELD_LIMITS.phone}
               placeholder="010-0000-0000 (선택)"
             />
             <InputField
@@ -276,6 +290,7 @@ export function InquiryPage() {
               name="company"
               value={form.company}
               onChange={handleChange}
+              maxLength={INQUIRY_FIELD_LIMITS.company}
               placeholder="회사명 (선택)"
             />
           </div>
@@ -326,10 +341,15 @@ export function InquiryPage() {
               value={form.description}
               onChange={handleChange}
               required
+              maxLength={INQUIRY_FIELD_LIMITS.description}
+              aria-describedby="description-limit"
               rows={6}
               placeholder="만들고 싶은 서비스, 주요 기능, 참고 사이트 등을 자유롭게 설명해주세요."
               className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors resize-y min-h-[120px]"
             />
+            <p id="description-limit" className="text-xs text-muted-foreground">
+              최대 {INQUIRY_FIELD_LIMITS.description.toLocaleString('ko-KR')}자까지 입력할 수 있습니다.
+            </p>
           </div>
         </fieldset>
 
@@ -342,7 +362,7 @@ export function InquiryPage() {
 
         {/* Error message */}
         {errorMsg && (
-          <div className="flex items-center gap-2 text-sm text-destructive">
+          <div role="alert" className="flex items-center gap-2 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" />
             {errorMsg}
           </div>
@@ -384,6 +404,7 @@ function InputField({
   value,
   onChange,
   required,
+  maxLength,
   placeholder,
 }: {
   icon: React.ReactNode;
@@ -393,6 +414,7 @@ function InputField({
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
+  maxLength: number;
   placeholder?: string;
 }) {
   return (
@@ -411,6 +433,7 @@ function InputField({
           value={value}
           onChange={onChange}
           required={required}
+          maxLength={maxLength}
           placeholder={placeholder}
           className="w-full rounded-lg border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
         />

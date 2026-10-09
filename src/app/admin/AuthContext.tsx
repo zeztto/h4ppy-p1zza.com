@@ -5,6 +5,8 @@ import type { AdminUser } from './types';
 interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
+  isLoggingOut: boolean;
+  logoutError: string | null;
   user: AdminUser | null;
   login: () => void;
   logout: () => Promise<void>;
@@ -16,6 +18,8 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<AdminUser | null>(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState<string | null>(null);
 
   const refreshSession = useCallback(async () => {
     setIsLoading(true);
@@ -39,22 +43,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    setLogoutError(null);
     try {
       await requestLogout();
-    } catch {
-      // Ignore logout errors and continue clearing local state.
-    } finally {
       setUser(null);
       setIsLoading(false);
       window.location.assign('/admin/login');
+    } catch {
+      setLogoutError('로그아웃을 완료하지 못했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsLoggingOut(false);
     }
-  }, []);
+  }, [isLoggingOut]);
 
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated: !!user,
         isLoading,
+        isLoggingOut,
+        logoutError,
         user,
         login,
         logout,

@@ -55,11 +55,15 @@ function SidebarContent({
   pathname,
   user,
   logout,
+  isLoggingOut,
+  logoutError,
   onNavClick,
 }: {
   pathname: string;
   user: { avatarUrl: string | null; displayName: string | null; githubLogin: string } | null;
   logout: () => Promise<void>;
+  isLoggingOut: boolean;
+  logoutError: string | null;
   onNavClick?: () => void;
 }) {
   return (
@@ -110,13 +114,17 @@ function SidebarContent({
                 {user.displayName || user.githubLogin}
               </p>
               <button
-                onClick={logout}
-                className="text-xs text-muted-foreground hover:text-foreground"
+                type="button"
+                onClick={() => void logout()}
+                disabled={isLoggingOut}
+                aria-busy={isLoggingOut}
+                className="text-xs text-muted-foreground hover:text-foreground disabled:opacity-50"
               >
-                로그아웃
+                {isLoggingOut ? '로그아웃 중...' : logoutError ? '로그아웃 다시 시도' : '로그아웃'}
               </button>
             </div>
           </div>
+          {logoutError && <p role="alert" className="mt-3 text-xs text-destructive">{logoutError}</p>}
         </div>
       )}
     </>
@@ -125,7 +133,7 @@ function SidebarContent({
 
 export function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout, isLoggingOut, logoutError } = useAuth();
   const { pathname } = useLocation();
 
   // Close sidebar on route change
@@ -136,7 +144,7 @@ export function AdminLayout() {
     <div className="min-h-screen">
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex lg:w-[260px] lg:flex-col lg:fixed lg:inset-y-0 bg-sidebar border-r border-sidebar-border">
-        <SidebarContent pathname={pathname} user={user} logout={logout} />
+        <SidebarContent pathname={pathname} user={user} logout={logout} isLoggingOut={isLoggingOut} logoutError={logoutError} />
       </aside>
 
       {/* Mobile header */}
@@ -165,6 +173,8 @@ export function AdminLayout() {
               pathname={pathname}
               user={user}
               logout={logout}
+              isLoggingOut={isLoggingOut}
+              logoutError={logoutError}
               onNavClick={() => setSidebarOpen(false)}
             />
           </aside>

@@ -1,7 +1,7 @@
 {
   "name": "p1zza.kr",
   "private": true,
-  "version": "1.1.2",
+  "version": "1.1.3",
   "type": "module",
   "repository": {
     "type": "git",
@@ -13,10 +13,11 @@
   },
   "scripts": {
     "build": "npm run build:web && npm run build:server",
-    "build:server": "tsc -p tsconfig.server.json",
+    "build:server": "node -e \"require('node:fs').rmSync('build/server', { recursive: true, force: true })\" && tsc -p tsconfig.server.json",
     "build:web": "vite build",
     "content:refresh": "sh -c 'if command -v tsx >/dev/null 2>&1; then exec tsx scripts/refresh-portfolio-content.ts \"$@\"; else exec node build/server/scripts/refresh-portfolio-content.js \"$@\"; fi' --",
     "assets:cloudinary:sync": "tsx scripts/sync-static-assets-to-cloudinary.ts",
+    "db:bootstrap": "sh -c 'if command -v tsx >/dev/null 2>&1; then exec tsx db/bootstrap-entry.ts; else exec node build/server/db/bootstrap-entry.js; fi'",
     "db:migrate:legacy": "sh -c 'if command -v tsx >/dev/null 2>&1; then tsx scripts/migrate-turso-to-postgres.ts; else node build/server/scripts/migrate-turso-to-postgres.js; fi'",
     "db:seed": "sh -c 'if command -v tsx >/dev/null 2>&1; then tsx scripts/seed.ts; else node build/server/scripts/seed.js; fi'",
     "db:seed:force": "sh -c 'if command -v tsx >/dev/null 2>&1; then tsx scripts/seed.ts --force; else node build/server/scripts/seed.js --force; fi'",
@@ -31,7 +32,8 @@
     "preview": "vite preview",
     "start": "node build/server/server/index.js",
     "thumbnails:apps": "tsx scripts/generate-app-thumbnails.ts",
-    "type-check": "tsc --noEmit && tsc -p tsconfig.server.json --noEmit"
+    "test": "find scripts server db src -type f \\( -name '*.test.ts' -o -name '*.test.tsx' \\) -print0 | xargs -0 node --import tsx --test",
+    "type-check": "tsc --noEmit && tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.tests.json"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -45,24 +47,24 @@
     "clsx": "2.1.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
-    "drizzle-orm": "^0.44.7",
+    "drizzle-orm": "^0.45.4",
     "express": "^5.1.0",
     "input-otp": "1.4.2",
     "lucide-react": "0.487.0",
     "motion": "12.23.24",
-    "nanoid": "^5.1.7",
+    "nanoid": "^5.1.16",
     "pg": "^8.16.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-markdown": "^10.1.0",
     "react-resizable-panels": "2.1.7",
-    "react-router-dom": "^7.13.0",
+    "react-router-dom": "^7.18.4",
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "3.2.0",
     "tw-animate-css": "1.3.8"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^9.39.5",
     "@tailwindcss/vite": "4.1.12",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.3",
@@ -71,9 +73,9 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "4.7.0",
-    "concurrently": "^9.2.1",
-    "drizzle-kit": "^0.31.10",
-    "eslint": "^9.39.2",
+    "concurrently": "^9.2.5",
+    "drizzle-kit": "^0.31.11",
+    "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
@@ -83,13 +85,20 @@
     "prettier": "^3.7.4",
     "tailwindcss": "4.1.12",
     "terser": "^5.44.1",
-    "tsx": "^4.20.6",
-    "typescript-eslint": "^8.50.1",
-    "vite": "6.4.1"
+    "tsx": "^4.23.15",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.71.1",
+    "vite": "6.4.4"
+  },
+  "overrides": {
+    "@esbuild-kit/core-utils": {
+      "esbuild": "0.25.12"
+    }
   },
   "pnpm": {
     "overrides": {
-      "vite": "6.4.1"
+      "vite": "6.4.4",
+      "@esbuild-kit/core-utils>esbuild": "0.25.12"
     }
   }
 }

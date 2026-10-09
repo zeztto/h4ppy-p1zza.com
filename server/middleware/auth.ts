@@ -4,7 +4,7 @@ import type { Database } from '../../db/client.js';
 import type { AdminUserRow } from '../../db/schema.js';
 import { env, isProduction } from '../env.js';
 import { HttpError } from '../lib/errors.js';
-import { readSessionUser } from '../lib/session.js';
+import { isAllowedAdmin, readSessionUser } from '../lib/session.js';
 
 declare global {
   namespace Express {
@@ -25,7 +25,7 @@ export async function attachSessionUser(req: Request, res: Response, next: NextF
 }
 
 export function requireAdmin(_req: Request, res: Response, next: NextFunction) {
-  if (!res.locals.adminUser) {
+  if (!isAllowedAdmin(res.locals.adminUser)) {
     next(new HttpError(401, 'Unauthorized'));
     return;
   }
@@ -33,52 +33,62 @@ export function requireAdmin(_req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-export function requireSameOrigin(req: Request, _res: Response, next: NextFunction) {
-  if (req.method === 'GET' || req.method === 'HEAD' || req.method === 'OPTIONS') {
-    next();
-    return;
-  }
+export function createSameOriginGuard(appOrigin = env.appOrigin, production = isProduction) {
+  return (req: Request, _res: Response, next: NextFunction) => {
+    if (req.method === 'GET' || req.method === 'HEAD' || req.method === 'OPTIONS') {
+      next();
+      return;
+    }
 
-  const origin = req.headers.origin;
-  if (!origin) {
-    next();
-    return;
-  }
-
-  const allowedOrigins = new Set<string>([env.appOrigin]);
-  const forwardedHost = req.get('x-forwarded-host');
-  const host = forwardedHost || req.get('host');
-  const forwardedProto = req.get('x-forwarded-proto');
-
-  if (host) {
-    const normalizedHosts = new Set([
-      host,
-      host.replace('127.0.0.1', 'localhost'),
-      host.replace('localhost', '127.0.0.1'),
-    ]);
-
-    const protocols = new Set([
-      req.protocol,
-      forwardedProto || req.protocol,
-      'https',
-      !isProduction ? 'http' : '',
-    ]);
-
-    for (const normalizedHost of normalizedHosts) {
-      for (const protocol of protocols) {
-        if (!protocol) {
-          continue;
+    const origin = req.headers.origin;
+    if (!origin) {
+      if (production) {
+        const referer = req.get('referer');
+        try {
+          if (referer && new URL(referer).origin === new URL(appOrigin).origin) {
+            next();
+            return;
+          }
+        } catch {
+          /* Invalid Referer cannot establish same origin. */
         }
+        next(new HttpError(403, 'Cross-origin request rejected'));
+        return;
+      }
+      next();
+      return;
+    }
 
-        allowedOrigins.add(`${protocol}://${normalizedHost}`);
+    const allowedOrigins = new Set<string>([new URL(appOrigin).origin]);
+    const host = req.get('host');
+
+    if (!production && host) {
+      const normalizedHosts = new Set([
+        host,
+        host.replace('127.0.0.1', 'localhost'),
+        host.replace('localhost', '127.0.0.1'),
+      ]);
+
+      const protocols = new Set([req.protocol, 'https', !production ? 'http' : '']);
+
+      for (const normalizedHost of normalizedHosts) {
+        for (const protocol of protocols) {
+          if (!protocol) {
+            continue;
+          }
+
+          allowedOrigins.add(`${protocol}://${normalizedHost}`);
+        }
       }
     }
-  }
 
-  if (allowedOrigins.has(origin)) {
-    next();
-    return;
-  }
+    if (allowedOrigins.has(origin)) {
+      next();
+      return;
+    }
 
-  next(new HttpError(403, 'Cross-origin request rejected'));
+    next(new HttpError(403, 'Cross-origin request rejected'));
+  };
 }
+
+export const requireSameOrigin = createSameOriginGuard();
