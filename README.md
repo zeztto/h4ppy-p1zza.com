@@ -2,6 +2,8 @@
 
 [p1zza.kr](https://p1zza.kr/)의 개인 포트폴리오와 관리 CMS입니다. React SPA와 Express API가 PostgreSQL의 프로젝트·프로필·홈 섹션·사이트 설정을 읽습니다. 운영 환경은 p1zza-2nd의 Docker Compose와 Caddy입니다.
 
+소스 저장소는 [zeztto/p1zza.kr](https://github.com/zeztto/p1zza.kr)입니다. 구조·운영·보존 기준은 [문서 목록](docs/README.md), 개발 변경 절차는 [기여 안내](CONTRIBUTING.md)를 참고하세요.
+
 ## 공개 화면과 관리 기능
 
 - `/`: 소개, 대표 프로젝트, 기술 목록
@@ -9,9 +11,11 @@
 - `/profile`: 프로필과 활동 소개
 - `/inquiry`: Cloudflare Turnstile 검증 후 문의를 DB에 저장
 - `/admin/login`: GitHub OAuth와 `ADMIN_GITHUB_LOGINS` 허용 목록으로 관리자 로그인
-- 관리자: 프로젝트·프로필·홈 섹션·헤더·푸터·문의 관리
+- 관리자: 대시보드, 프로젝트 목록·Kanban, 프로필, 홈 섹션, 문의 상태 관리
 
 문의는 DB에 저장하며 별도 이메일 알림은 구현되어 있지 않습니다. 공개 블로그는 제공하지 않습니다. 프로젝트 공개 여부와 대표 프로젝트 순서는 운영 DB가 결정합니다.
+
+헤더·푸터 설정은 API와 DB를 통해 공개 화면에서 읽습니다. 해당 설정의 관리자 편집 화면은 현재 연결되어 있지 않습니다. 홈 섹션의 편집 도구와 custom section의 Markdown·CSS 편집은 연결되어 있습니다.
 
 ## 기술과 구조
 
@@ -20,12 +24,13 @@ React 18, TypeScript, Vite 6, Tailwind CSS 4, React Router, Express 5, Drizzle O
 ```text
 src/app/          공개 화면·관리자 화면·공통 컴포넌트
 src/data/         신규 DB 초기 데이터와 공개 repository 링크
-src/shared/       API와 화면의 공통 타입
+src/shared/       API와 화면에서 함께 쓰는 전화번호 검증
 server/           API·OAuth·문의 검증·정적 파일 제공
 db/               PostgreSQL schema와 연결
 scripts/          초기화·이전·콘텐츠 갱신·자산 관리
 public/           favicon·manifest·robots·sitemap
 archive/          갱신 전 콘텐츠의 원본과 해시 manifest
+docs/             현재 구조·운영 문서와 문서 목록
 deploy/vultr/     배포 절차와 Caddy 설정
 ```
 
@@ -36,6 +41,8 @@ deploy/vultr/     배포 절차와 Caddy 설정
 Node.js 22와 npm, 접근 가능한 PostgreSQL이 필요합니다.
 
 ```sh
+git clone https://github.com/zeztto/p1zza.kr.git
+cd p1zza.kr
 npm ci
 cp .env.example .env.local
 ```
@@ -48,7 +55,7 @@ npm run db:seed
 npm run dev
 ```
 
-기존 운영 DB의 콘텐츠 갱신에 `db:seed:force`를 사용하지 않습니다. 이 명령은 초기 데이터에 없는 프로젝트를 삭제하고 프로필·설정을 덮어쓸 수 있습니다.
+기존 운영 DB의 콘텐츠 갱신에 `db:seed:force`를 사용하지 않습니다. 이 명령은 초기 데이터에 없는 프로젝트를 삭제하고 프로젝트·프로필·홈 섹션을 덮어쓸 수 있습니다.
 
 ```sh
 npm run type-check
@@ -84,6 +91,10 @@ npm run content:refresh -- --apply --expected-digest '<beforeDigest>' --output /
 
 백업·전달·app 교체·검증·rollback 절차는 [배포 문서](deploy/vultr/README.md)를 따릅니다. 콘텐츠 rollback에는 변경한 행만 복구하며 새 문의를 덮어쓰는 전체 DB 복원은 자동으로 수행하지 않습니다. 현재 repository에는 자동 push 배포 workflow가 없습니다.
 
+## 문서 보존
+
+2026-03-25의 초기 설계·구현 계획 4개는 [역사 문서 archive](archive/docs-2026-03-25/README.md)에 원본 그대로 보존했습니다. 현재 구현 계약은 [현재 구조와 운영](docs/architecture.md)에 정리했습니다. 갱신 전 콘텐츠는 별도의 `archive/content-2026-10-09/`에 보존합니다.
+
 ## 라이선스와 연락처
 
-[MIT License](LICENSE). 운영 홈페이지는 [p1zza.kr](https://p1zza.kr/), repository는 [zeztto/h4ppy-p1zza.com](https://github.com/zeztto/h4ppy-p1zza.com)입니다.
+[MIT License](LICENSE). 외부 구성 요소와 자산 출처는 [출처와 라이선스](ATTRIBUTIONS.md)에 기록합니다. 운영 홈페이지는 [p1zza.kr](https://p1zza.kr/), repository는 [zeztto/p1zza.kr](https://github.com/zeztto/p1zza.kr)입니다.

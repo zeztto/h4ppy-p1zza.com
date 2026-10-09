@@ -1,28 +1,40 @@
-# Changelog
+# 변경 이력
 
-All notable changes to this project will be documented in this file.
+사용자에게 보이는 변경과 운영·문서 변경을 기록합니다. 형식은 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), 버전 표기는 [Semantic Versioning](https://semver.org/spec/v2.0.0.html)을 참고합니다.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+버전 제목은 문서상의 변경 기록입니다. 2026-10-09 확인 시 GitHub tag와 release는 없습니다. [프로필 갱신 merge 이후 변경 비교](https://github.com/zeztto/p1zza.kr/compare/ab4d31278dd571fff49b41e3f36fe6175f836792...HEAD)는 실제 commit을 기준으로 합니다.
 
-## [Unreleased]
+## 미배포 변경
 
-## [1.1.1] - 2026-10-09
+## 1.1.2 - 2026-10-09
 
-### Changed
+### 변경
+
+- GitHub repository 이름과 active 문서의 clone·repository 링크를 `zeztto/p1zza.kr`로 정리
+- private npm package 이름·repository·homepage·bugs metadata와 package-lock root 정보 갱신
+- web manifest를 현재 개인 포트폴리오 소개에 맞추고 고정 프로젝트 개수와 오래된 문구 제거
+- 기여 안내·유지보수 가이드·출처 문서를 한국어로 갱신하고 현행 구조·운영 문서 index 추가
+- 연결된 CMS 기능과 헤더·푸터 편집 미연결 범위, PostgreSQL·현재 Compose 배포·legacy 보조 도구를 구분
+- 2026-03-25 설계·계획 원문 4개를 `archive/docs-2026-03-25/`로 byte 보존 이동하고 SHA-256·byte·Git blob manifest 기록
+- formatter의 `archive/` 제외 규칙으로 기존 콘텐츠와 역사 문서 원본 보존
+- 존재하지 않는 release tag 링크를 실제 merge commit 기준 비교 링크로 교체
+
+## 1.1.1 - 2026-10-09
+
+### 변경
 
 - 프로필 본문을 최근 작업과 개발·운영 방식을 소개하는 여섯 문단으로 수정하고 과장된 표현과 반복을 정리
 
-## [1.1.0] - 2026-10-09
+## 1.1.0 - 2026-10-09
 
-### Added
+### 추가
 
 - lmml.kr, circlr, NMA Records, p1zza-agent의 실제 서비스·공개 release에 기반한 프로젝트 소개
 - 갱신 전 콘텐츠 원본과 SHA-256 manifest, 공개 제외 프로젝트의 DB 행 보존
 - dry run, digest 검토, 단일 transaction, 무관한 콘텐츠 보존 검증을 갖춘 scoped 콘텐츠 갱신 CLI와 행동 검증
 - production image의 Git revision label과 공개 Turnstile site key build 전달
 
-### Changed
+### 변경
 
 - PRD AI, ONKURA, PEDALS, SRBBRS를 공개에서 제외하고 기존 설명과 기록 보존
 - 서비스의 현재 기능·기술 목록·실제 화면 이미지로 콘텐츠 갱신하고 근거 없는 성능·인증 주장 제거
@@ -34,109 +46,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 이전 배포 준비 기록
 
-### Changed
+### 변경
 
-- Switched runtime/database configuration toward PostgreSQL via `DATABASE_URL`
-- Added Dockerfile, `.dockerignore`, and `compose.yml` for containerized deployment
-- Added Vultr deployment notes and `p1zza.kr` Caddy site template
-- Added `scripts/migrate-turso-to-postgres.ts` for legacy Turso data migration
-- Updated canonical domain defaults to `p1zza.kr` and removed `h4ppy-p1zza.com` from service defaults
-- Added new portfolio service entries for `h4ppy`, `LMML.KR`, `Wyz`, `deafroom.com code chat`, and `row.kr`
-- Added generated thumbnails for `h4ppy`, `LMML.KR`, `Wyz`, `deafroom.com code chat`, and `row.kr`
-- Moved portfolio thumbnails, profile image, and OG image from the repo into Cloudinary-managed static asset URLs
+- `DATABASE_URL`을 사용하도록 runtime과 DB 구성을 PostgreSQL로 이전
+- 컨테이너 배포를 위한 Dockerfile, `.dockerignore`, `compose.yml` 추가
+- Vultr 배포 안내와 `p1zza.kr` Caddy site template 추가
+- legacy Turso 이전용 `scripts/migrate-turso-to-postgres.ts` 추가
+- 기본 도메인을 `p1zza.kr`로 정리하고 `h4ppy-p1zza.com`을 서비스 기본값에서 제거
+- `h4ppy`, `LMML.KR`, `Wyz`, `deafroom.com code chat`, `row.kr` 서비스 항목 추가
+- 해당 서비스 항목의 생성 썸네일 추가
+- 포트폴리오 썸네일·프로필·OG 이미지를 repository 파일에서 Cloudinary 정적 자산 URL로 이전
 
-## [1.0.0] - 2025-12-24
+## 1.0.0 - 2025-12-24
 
-### Added
+아래 항목은 당시 작성한 변경 기록입니다. 현재 기능, bundle 크기와 보안 검사 결과는 현재 source와 별도 검증 결과를 기준으로 확인합니다.
 
-#### Phase 0: Initial Release
-- Initial portfolio website with React 18.3.1 and Vite 6.4.1
-- 16 project showcases with live iframe previews
-- Portfolio page with category filtering
-- Blog page with 12 blog post previews
-- Responsive navigation with mobile support
-- shadcn/ui component library integration (5 core components)
-- Footer with social links (GitHub, Instagram)
-- Korean language content throughout
+### 초기 공개
 
-#### Phase 1: Security Hardening
-- Environment variable configuration with type-safe access
-  - `.env.example` template
-  - `src/config/env.ts` for type-safe access
-- TypeScript strict mode enabled
-  - `tsconfig.json` with comprehensive type checking
-  - `tsconfig.node.json` for build tools
-- Content Security Policy (CSP) implementation
-  - `src/security/csp.ts` with CSP directives
-  - Security headers in Vite configuration
-- Improved iframe sandbox restrictions
-  - Removed unsafe `iframeDoc.write()` usage
-  - Minimal sandbox permissions (removed `allow-modals`)
-  - Added `referrerPolicy`, `loading="lazy"`, device permissions
-- ESLint configuration (eslint.config.js)
-  - React hooks rules
-  - Security rules (no-eval, no-implied-eval)
-  - TypeScript recommended rules
-- Prettier code formatting
-  - `.prettierrc.json` configuration
-  - `.prettierignore` file
-- Vite updated to 6.4.1 (security patches)
+- React 18.3.1과 Vite 6.4.1 기반 포트폴리오 화면 추가
+- live iframe preview를 포함한 프로젝트 16개 소개
+- 분류 필터가 있는 포트폴리오 페이지 추가
+- 블로그 preview 12개를 표시하는 페이지 추가
+- 모바일을 지원하는 responsive navigation 추가
+- shadcn/ui 기반 공통 컴포넌트 5개와 GitHub·Instagram footer 링크 추가
+- 화면 전반에 한국어 콘텐츠 적용
 
-#### Phase 2: Performance Optimization
-- Removed 105 unused npm packages (~500KB reduction)
-  - @emotion/react, @emotion/styled
-  - @mui/icons-material, @mui/material
-  - recharts, react-slick, react-dnd
-  - react-hook-form, embla-carousel
-  - cmdk, date-fns, next-themes
-  - sonner, vaul, react-responsive-masonry
-- Deleted 41 unused UI components
-  - Kept only: badge, button, card, dropdown-menu, utils
-- SEO optimizations
-  - Comprehensive meta tags in index.html
-  - Open Graph tags for social media
-  - Twitter Card meta tags
-  - Korean locale (ko_KR) settings
-  - robots.txt for search engine crawling
-  - sitemap.xml with main pages
-  - Performance hints (preconnect, dns-prefetch)
+### 당시 보안 관련 변경
 
-#### Phase 3: Documentation
-- Enhanced README.md
-  - Bilingual content (Korean/English)
-  - Complete tech stack with versions
-  - 16 showcased projects with descriptions
-  - Installation and deployment guides
-  - Project structure overview
-  - Contact information
-- LICENSE file (MIT License)
-- CHANGELOG.md (this file)
-- Updated ATTRIBUTIONS.md
+- `src/config/env.ts`의 type-safe 환경 설정 추가
+- strict TypeScript 설정과 build tool용 tsconfig 추가
+- `src/security/csp.ts`의 CSP와 Vite 보안 header 설정 추가
+- 직접적인 `iframeDoc.write()` 사용과 불필요한 `allow-modals` 권한 제거
+- iframe의 `referrerPolicy`, `loading="lazy"`, device permission 설정 추가
+- ESLint의 React hooks·TypeScript·no-eval·no-implied-eval 규칙 추가
+- Prettier 설정과 ignore 파일 추가
+- Vite 6.4.1로 갱신
 
-### Technical Stack
-- React 18.3.1
-- TypeScript 5.x
-- Vite 6.4.1
-- Tailwind CSS 4.1.12
-- shadcn/ui with Radix UI primitives
-- Motion (Framer Motion) 12.23.24
-- ESLint 9.x
-- Prettier 3.x
+### 당시 성능 관련 변경
 
-### Performance Metrics
-- Bundle size reduced by 60-70%
-- Initial JS: <150KB gzipped (from ~400KB+)
-- 105 dependencies removed
-- 41 unused components deleted
+- 사용하지 않는 npm package 105개 제거, 약 500KB 감소로 기록
+- 제거 대상에 @emotion/react, @emotion/styled, @mui/icons-material, @mui/material, recharts, react-slick, react-dnd 포함
+- react-hook-form, embla-carousel, cmdk, date-fns, next-themes, sonner, vaul, react-responsive-masonry 제거
+- 사용하지 않는 UI 컴포넌트 41개 제거하고 badge·button·card·dropdown-menu·utils 유지
+- index metadata·Open Graph·Twitter Card·한국어 locale·robots·sitemap·연결 사전 준비 설정 추가
+- bundle 크기 60~70% 감소, 초기 JS gzip 150KB 미만으로 당시 기록
 
-### Security Enhancements
-- Content Security Policy (CSP)
-- Security headers (X-Frame-Options, X-Content-Type-Options, etc.)
-- TypeScript strict mode
-- ESLint security rules
-- Iframe sandboxing with minimal permissions
-- Environment variable validation
-- No security vulnerabilities (npm audit)
+### 당시 문서와 기술 구성
 
-[Unreleased]: https://github.com/zeztto/h4ppy-p1zza.com/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/zeztto/h4ppy-p1zza.com/releases/tag/v1.0.0
+- 한국어·영어 README에 기술 목록·프로젝트 16개 소개·설치·배포·구조·연락처 기록
+- MIT LICENSE, CHANGELOG, ATTRIBUTIONS 추가·갱신
+- React 18.3.1, TypeScript 5.x, Vite 6.4.1, Tailwind CSS 4.1.12 사용
+- Radix UI 기반 shadcn/ui, Motion 12.23.24, ESLint 9.x, Prettier 3.x 사용
+- CSP, X-Frame-Options, X-Content-Type-Options, 환경 변수와 입력 검증, iframe 제한 기록
+- 당시 npm audit에서 발견된 취약점이 없다고 기록

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "historical-documents-archive-v1",
+  "archivedOn": "2026-10-09",
+  "originalDocumentDate": "2026-03-25",
+  "sourceRevision": "ab4d31278dd571fff49b41e3f36fe6175f836792",
+  "archiveRoot": "archive/docs-2026-03-25",
+  "originalPathRoot": "docs/superpowers",
+  "method": "byte-identical move with Git HEAD blob parity",
+  "files": [
+    {
+      "sourcePath": "docs/superpowers/plans/2026-03-25-admin-page-redesign.md",
+      "archivePath": "archive/docs-2026-03-25/plans/2026-03-25-admin-page-redesign.md",
+      "bytes": 55260,
+      "sha256": "3845ddf158246fa80ad1084d131ad1276607c9f0558097270c49e4bf0f292d70",
+      "gitBlob": "d471099d401fe2301e8409ac0a58bcad0249a634"
+    },
+    {
+      "sourcePath": "docs/superpowers/plans/2026-03-25-frontend-v2-redesign.md",
+      "archivePath": "archive/docs-2026-03-25/plans/2026-03-25-frontend-v2-redesign.md",
+      "bytes": 31012,
+      "sha256": "87f7bcd713c02e816a497df658ca2310e537d3d9b345d09d6745535093dfefef",
+      "gitBlob": "dec95cbd9570e88732674a1971e3b60d4c0882fb"
+    },
+    {
+      "sourcePath": "docs/superpowers/specs/2026-03-25-admin-page-redesign.md",
+      "archivePath": "archive/docs-2026-03-25/specs/2026-03-25-admin-page-redesign.md",
+      "bytes": 19774,
+      "sha256": "40d478884754eb908fd69ce389601be4dd31d334fd3d6c01fa13bf67a0d968b8",
+      "gitBlob": "5271e2281c6549452ec8d530dbeef20bea5708cb"
+    },
+    {
+      "sourcePath": "docs/superpowers/specs/2026-03-25-frontend-v2-redesign.md",
+      "archivePath": "archive/docs-2026-03-25/specs/2026-03-25-frontend-v2-redesign.md",
+      "bytes": 26039,
+      "sha256": "eb4d1107714f3e6aec60174b90d2db2904009a57c76544679e798d1fd27c029b",
+      "gitBlob": "e9aeaafd847b59e630432291a57a4e5c2a8ab019"
+    }
+  ]
+}

@@ -1,8 +1,16 @@
 {
-  "name": "@figma/my-make-file",
+  "name": "p1zza.kr",
   "private": true,
-  "version": "1.1.1",
+  "version": "1.1.2",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeztto/p1zza.kr.git"
+  },
+  "homepage": "https://p1zza.kr",
+  "bugs": {
+    "url": "https://github.com/zeztto/p1zza.kr/issues"
+  },
   "scripts": {
     "build": "npm run build:web && npm run build:server",
     "build:server": "tsc -p tsconfig.server.json",
