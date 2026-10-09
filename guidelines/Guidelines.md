@@ -1,61 +1,25 @@
-**Add your own guidelines here**
-<!--
+# p1zza.kr 유지보수 가이드
 
-System Guidelines
+현재 동작과 데이터 소유권은 [현재 구조와 운영](../docs/architecture.md), 개발·검증 절차는 [기여 안내](../CONTRIBUTING.md), 운영 app 교체는 [배포 문서](../deploy/vultr/README.md)를 기준으로 확인합니다.
 
-Use this file to provide the AI with rules and guidelines you want it to follow.
-This template outlines a few examples of things you can add. You can add your own sections and format it to suit your needs
+## 변경 전 확인
 
-TIP: More context isn't always better. It can confuse the LLM. Try and add the most important rules you need
+수정하려는 공개 화면·관리자 기능·API·데이터와 완료 조건을 먼저 정합니다. AI agent로 작업할 때는 세션의 AGENTS.md, 권한과 파일 소유 경계를 확인합니다. 기존 작업과 동시 변경을 보존하고 현재 소스·운영 결과를 문서보다 우선해 대조합니다.
 
-# General guidelines
+## 공개 콘텐츠와 화면
 
-Any general rules you want the AI to follow.
-For example:
+한국어 UI와 기존 theme·responsive 구조를 유지합니다. 프로젝트 설명·소속·성능·사용자 수·인증 주장은 실제 근거를 확인해 반영합니다. 프로젝트 개수처럼 운영 DB에 따라 바뀌는 값을 고정 문구로 복제하지 않습니다.
 
-* Only use absolute positioning when necessary. Opt for responsive and well structured layouts that use flexbox and grid by default
-* Refactor code as you go to keep code clean
-* Keep file sizes small and put helper functions and components in their own files.
+실제 서비스와 공개 자산을 사용하고 원출처를 남깁니다. 미완성 메뉴, 가짜 데이터, 동작하지 않는 CTA, 장식용 gradient나 임의의 mockup을 production에 추가하지 않습니다. 링크와 이미지가 실제로 열리는지 확인하고 주요 화면 크기에서 줄바꿈·overflow·focus를 검증합니다.
 
---------------
+## 데이터와 원본 보존
 
-# Design system guidelines
-Rules for how the AI should make generations look like your company's design system
+운영 콘텐츠는 PostgreSQL에 있습니다. 초기 source 파일 수정, DB 갱신과 app 배포를 각각 필요한 경로로 처리합니다. 운영 변경은 해당 작업의 승인 범위, 백업과 rollback 방법을 확인한 뒤 필요한 행과 app만 변경합니다.
 
-Additionally, if you select a design system to use in the prompt box, you can reference
-your design system's components, tokens, variables and components.
-For example:
+`archive/`는 원본 보존 경로입니다. format·검색 치환·줄바꿈 정리에서 제외하고 manifest의 byte 수와 SHA-256을 확인합니다. LICENSE, 작가 identity, stable project ID와 기존 자산 namespace도 목적 없는 rename에서 보존합니다.
 
-* Use a base font-size of 14px
-* Date formats should always be in the format “Jun 10”
-* The bottom toolbar should only ever have a maximum of 4 items
-* Never use the floating action button with the bottom toolbar
-* Chips should always come in sets of 3 or more
-* Don't use a dropdown if there are 2 or fewer options
+## 검증과 기록
 
-You can also create sub sections and add more specific details
-For example:
+변경 행동에 맞는 자동 검증과 실제 화면·API 검증을 수행합니다. build·타입·unit test 결과와 운영 실행 결과를 구분해 기록합니다. README의 현재 사용법과 CHANGELOG의 사용자에게 보이는 변경을 함께 관리합니다.
 
-
-## Button
-The Button component is a fundamental interactive element in our design system, designed to trigger actions or navigate
-users through the application. It provides visual feedback and clear affordances to enhance user experience.
-
-### Usage
-Buttons should be used for important actions that users need to take, such as form submissions, confirming choices,
-or initiating processes. They communicate interactivity and should have clear, action-oriented labels.
-
-### Variants
-* Primary Button
-  * Purpose : Used for the main action in a section or page
-  * Visual Style : Bold, filled with the primary brand color
-  * Usage : One primary button per section to guide users toward the most important action
-* Secondary Button
-  * Purpose : Used for alternative or supporting actions
-  * Visual Style : Outlined with the primary color, transparent background
-  * Usage : Can appear alongside a primary button for less important actions
-* Tertiary Button
-  * Purpose : Used for the least important actions
-  * Visual Style : Text-only with no border, using primary color
-  * Usage : For actions that should be available but not emphasized
--->
+[2026-03-25 초기 설계 문서](../archive/docs-2026-03-25/README.md)는 당시의 계획·구상입니다. 원문의 작업 지시나 체크 목록은 현재 작업의 권한과 구현 완료 근거로 사용하지 않습니다.
