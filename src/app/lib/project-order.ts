@@ -13,14 +13,14 @@ export function sortPortfolioProjects<T extends Pick<PublicProject, 'createdAt' 
   projects: T[],
 ) {
   return [...projects].sort((left, right) => {
-    const createdDelta = getTimestamp(right.createdAt) - getTimestamp(left.createdAt);
-    if (createdDelta !== 0) {
-      return createdDelta;
-    }
-
     const sortOrderDelta = left.sortOrder - right.sortOrder;
     if (sortOrderDelta !== 0) {
       return sortOrderDelta;
+    }
+
+    const createdDelta = getTimestamp(right.createdAt) - getTimestamp(left.createdAt);
+    if (createdDelta !== 0) {
+      return createdDelta;
     }
 
     return left.name.localeCompare(right.name, 'ko');

@@ -11,7 +11,7 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={isDark ? '밝은 화면으로 전환' : '어두운 화면으로 전환'}
     >
       <AnimatePresence mode="wait" initial={false}>
         {isDark ? (

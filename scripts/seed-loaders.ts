@@ -16,6 +16,9 @@ export interface SeedProject {
   tags: string[];
   features: string[];
   techStack: string[];
+  sortOrder: number;
+  isFeatured: boolean;
+  isPublished: boolean;
 }
 
 export interface SeedProfile {
@@ -35,6 +38,9 @@ export interface SeedSection {
   description: string;
   enabled: boolean;
   sortOrder: number;
+  sectionType: string;
+  templateKey: string | null;
+  contentJson: string;
 }
 
 function resolveThumbnail(projectId: string, thumbnail: string | undefined) {
@@ -70,7 +76,7 @@ function resolveThumbnail(projectId: string, thumbnail: string | undefined) {
 }
 
 export async function loadSeedProjects(): Promise<SeedProject[]> {
-  return projects.map((project) => ({
+  return projects.map((project, index) => ({
     id: project.id,
     name: project.name,
     description: project.description,
@@ -82,6 +88,9 @@ export async function loadSeedProjects(): Promise<SeedProject[]> {
     tags: project.tags,
     features: project.features ?? [],
     techStack: project.techStack ?? [],
+    sortOrder: project.sortOrder ?? index,
+    isFeatured: project.isFeatured ?? false,
+    isPublished: project.isPublished ?? true,
   }));
 }
 
@@ -92,6 +101,9 @@ export async function loadSeedSections(): Promise<SeedSection[]> {
     description: section.description,
     enabled: section.enabled,
     sortOrder: section.sortOrder,
+    sectionType: section.sectionType,
+    templateKey: section.templateKey,
+    contentJson: section.contentJson,
   }));
 }
 

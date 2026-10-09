@@ -6,6 +6,7 @@ import { useSettings } from '@/app/hooks/useSettings';
 import type { PublicProject } from '@/app/lib/types';
 import type { ProjectsSectionContent } from '@/app/lib/section-content-types';
 import { DEFAULT_PROJECTS_CONTENT } from '@/data/site-content';
+import { sortPortfolioProjects } from '@/app/lib/project-order';
 
 const gridColsClass: Record<number, string> = {
   1: 'grid-cols-1',
@@ -28,13 +29,12 @@ export function ProjectsSection({ projects, content }: ProjectsSectionProps) {
   const columns = gridSettings.landingColumns;
   const gridClass = gridColsClass[columns] ?? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
 
+  const ordered = sortPortfolioProjects(projects);
   const filtered = data.showFeaturedOnly
-    ? projects.filter((p) => p.isFeatured)
-    : projects;
+    ? ordered.filter((p) => p.isFeatured)
+    : ordered;
 
-  const displayed = data.showFeaturedOnly
-    ? filtered
-    : filtered.slice(0, data.maxItems);
+  const displayed = filtered.slice(0, data.maxItems);
 
   if (displayed.length === 0) return null;
 

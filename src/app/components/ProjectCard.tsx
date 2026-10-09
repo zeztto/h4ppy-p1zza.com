@@ -1,6 +1,7 @@
 import type { PublicProject } from '@/app/lib/types';
 import { Badge } from '@/app/components/ui/badge';
 import { motion } from 'motion/react';
+import { getProjectCategoryLabel } from '@/app/lib/project-category';
 
 interface ProjectCardProps {
   project: PublicProject;
@@ -15,7 +16,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     >
       <div className="relative rounded-t-xl overflow-hidden bg-muted" style={{ paddingBottom: '52%' }}>
         {project.thumbnailUrl === '' ? (
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+          <div className="absolute inset-0 bg-muted flex items-center justify-center">
             <span className="text-lg font-medium text-foreground/60">
               {project.name}
             </span>
@@ -30,7 +31,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         )}
       </div>
       <div className="p-4 flex flex-col flex-1">
-        <Badge variant="secondary" className="w-fit">{project.category}</Badge>
+        <Badge variant="secondary" className="w-fit">{getProjectCategoryLabel(project.category)}</Badge>
         <h3 className="font-semibold text-foreground mt-2 line-clamp-1">
           {project.name}
         </h3>

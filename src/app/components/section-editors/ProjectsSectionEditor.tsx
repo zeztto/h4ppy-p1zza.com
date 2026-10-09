@@ -13,7 +13,7 @@ interface ProjectsSectionEditorProps {
   onClose: () => void;
 }
 
-export function ProjectsSectionEditor({ content, onSave, onClose }: ProjectsSectionEditorProps) {
+export function ProjectsSectionEditor({ content, sectionId, onSave, onClose }: ProjectsSectionEditorProps) {
   const [title, setTitle] = useState(content.title);
   const [maxItems, setMaxItems] = useState(content.maxItems);
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(content.showFeaturedOnly);
@@ -28,32 +28,34 @@ export function ProjectsSectionEditor({ content, onSave, onClose }: ProjectsSect
       <div className="fixed inset-y-0 right-0 w-full max-w-lg bg-background border-l border-border shadow-xl z-50 flex flex-col">
         <div className="flex items-center justify-between p-4 border-b border-border">
           <h2 className="text-lg font-semibold">프로젝트 섹션 편집</h2>
-          <Button variant="ghost" size="icon" onClick={onClose}>
+          <Button variant="ghost" size="icon" onClick={onClose} aria-label="프로젝트 섹션 편집 닫기">
             <X className="h-4 w-4" />
           </Button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">섹션 제목</label>
+            <label htmlFor={`${sectionId}-projects-title`} className="block text-sm font-medium mb-1">섹션 제목</label>
             <input
+              id={`${sectionId}-projects-title`}
               type="text"
               className={inputClass}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Featured Projects"
+              placeholder="대표 프로젝트"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label htmlFor={`${sectionId}-projects-max-items`} className="block text-sm font-medium mb-1">
               최대 표시 수
             </label>
             <input
+              id={`${sectionId}-projects-max-items`}
+              aria-describedby={`${sectionId}-projects-max-items-help`}
               type="number"
               className={inputClass}
               value={maxItems}
-              disabled={showFeaturedOnly}
               onChange={(e) => {
                 const v = parseInt(e.target.value, 10);
                 if (!isNaN(v) && v >= 1 && v <= 20) setMaxItems(v);
@@ -61,8 +63,8 @@ export function ProjectsSectionEditor({ content, onSave, onClose }: ProjectsSect
               min={1}
               max={20}
             />
-            <p className="text-xs text-muted-foreground mt-1">
-              추천 프로젝트만 표시가 켜져 있으면 최대 표시 수 제한은 적용되지 않습니다.
+            <p id={`${sectionId}-projects-max-items-help`} className="text-xs text-muted-foreground mt-1">
+              대표 프로젝트만 표시할 때도 최대 표시 수가 적용됩니다.
             </p>
           </div>
 
@@ -74,7 +76,7 @@ export function ProjectsSectionEditor({ content, onSave, onClose }: ProjectsSect
                 onChange={(e) => setShowFeaturedOnly(e.target.checked)}
                 className="rounded"
               />
-              <span className="text-sm font-medium">추천 프로젝트만 표시</span>
+              <span className="text-sm font-medium">대표 프로젝트만 표시</span>
             </label>
           </div>
         </div>

@@ -5,7 +5,6 @@ import {
   FolderKanban,
   User,
   Layers,
-  FileText,
   Inbox,
   Menu,
   X,
@@ -13,12 +12,11 @@ import {
 import { useAuth } from '@/app/admin/AuthContext';
 
 const navItems = [
-  { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
-  { label: 'Projects', path: '/admin/projects', icon: FolderKanban },
-  { label: 'Profile', path: '/admin/profile', icon: User },
-  { label: 'Sections', path: '/admin/sections', icon: Layers },
-  { label: 'Inquiries', path: '/admin/inquiries', icon: Inbox },
-  { label: 'Blog', path: '/admin/blog', icon: FileText, disabled: true },
+  { label: '대시보드', path: '/admin', icon: LayoutDashboard },
+  { label: '프로젝트', path: '/admin/projects', icon: FolderKanban },
+  { label: '프로필', path: '/admin/profile', icon: User },
+  { label: '홈 섹션', path: '/admin/sections', icon: Layers },
+  { label: '문의 관리', path: '/admin/inquiries', icon: Inbox },
 ];
 
 function isActive(itemPath: string, pathname: string) {
@@ -75,7 +73,7 @@ function SidebarContent({
         >
           h4ppy p1zza
         </Link>
-        <span className="ml-2 text-xs text-muted-foreground">Admin</span>
+        <span className="ml-2 text-xs text-muted-foreground">관리자</span>
       </div>
 
       {/* Navigation */}
@@ -83,22 +81,6 @@ function SidebarContent({
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item.path, pathname);
-          const disabled = item.disabled === true;
-
-          if (disabled) {
-            return (
-              <span
-                key={item.path}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium opacity-50 cursor-not-allowed pointer-events-none text-sidebar-foreground/70"
-              >
-                <Icon className="h-5 w-5" />
-                <span>
-                  {item.label}
-                  <span className="ml-1 text-xs">({'준비 중'})</span>
-                </span>
-              </span>
-            );
-          }
 
           return (
             <Link
@@ -161,12 +143,12 @@ export function AdminLayout() {
       <div className="lg:hidden sticky top-0 z-50 flex items-center gap-4 border-b border-border bg-background px-4 h-14">
         <button
           onClick={() => setSidebarOpen((prev) => !prev)}
-          aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+          aria-label={sidebarOpen ? '사이드바 닫기' : '사이드바 열기'}
           className="text-foreground"
         >
           {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
-        <span className="text-sm font-semibold text-foreground">h4ppy p1zza Admin</span>
+        <span className="text-sm font-semibold text-foreground">h4ppy p1zza 관리자</span>
       </div>
 
       {/* Mobile sidebar overlay */}
@@ -176,7 +158,7 @@ export function AdminLayout() {
             type="button"
             className="fixed inset-0 z-40 bg-black/50 lg:hidden cursor-default"
             onClick={() => setSidebarOpen(false)}
-            aria-label="Close sidebar"
+            aria-label="사이드바 닫기"
           />
           <aside className="fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col bg-sidebar border-r border-sidebar-border lg:hidden animate-in slide-in-from-left duration-200">
             <SidebarContent

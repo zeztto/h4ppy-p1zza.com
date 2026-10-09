@@ -4,6 +4,9 @@ services:
   app:
     build:
       context: .
+      args:
+        APP_REVISION: ${APP_REVISION:-local}
+        PUBLIC_TURNSTILE_SITE_ID: ${VITE_TURNSTILE_SITE_KEY:?VITE_TURNSTILE_SITE_KEY is required for the production image}
     restart: unless-stopped
     environment:
       ADMIN_GITHUB_LOGINS: ${ADMIN_GITHUB_LOGINS:-zeztto}
@@ -30,9 +33,6 @@ services:
       timeout: 5s
       retries: 10
       start_period: 20s
-    ports:
-      - "3001:3001"
-
   db:
     image: postgres:17-alpine
     restart: unless-stopped

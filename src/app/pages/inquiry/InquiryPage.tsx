@@ -207,7 +207,7 @@ export function InquiryPage() {
         <h1 className="text-3xl font-bold text-foreground">제출 완료</h1>
         <p className="text-muted-foreground mt-4 leading-relaxed">
           제작 의뢰가 성공적으로 접수되었습니다.<br />
-          확인 후 빠른 시일 내에 연락드리겠습니다.
+          내용을 확인한 뒤 작성하신 연락처로 답변드리겠습니다.
         </p>
         <Button
           className="mt-8"
@@ -230,25 +230,9 @@ export function InquiryPage() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold text-foreground">제작 의뢰</h1>
         <p className="text-muted-foreground mt-3 text-lg leading-relaxed">
-          웹사이트, 앱, 솔루션 개발을 의뢰해주세요.<br className="hidden sm:block" />
-          AI 퍼스트 원칙으로 효율적이고 혁신적인 결과물을 제공합니다.
+          웹사이트와 앱의 개발·개선에 관한 문의를 받습니다.
+          원하는 기능과 현재 상황, 일정, 예산을 알려주시면 검토 후 연락드리겠습니다.
         </p>
-      </div>
-
-      {/* Company info card */}
-      <div className="rounded-xl border border-border/50 bg-muted/30 p-6 mb-10">
-        <div className="flex items-start gap-4">
-          <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-            <Building2 className="size-5 text-primary" />
-          </div>
-          <div>
-            <h2 className="font-semibold text-foreground">쓰리더블유 (3W)</h2>
-            <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-              20년 이상 경력의 시니어 개발자가 CTO로 이끄는 웹, 솔루션, 앱 전문 개발사입니다.
-              AI 퍼스트 원칙으로 제품을 개발합니다.
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Form */}

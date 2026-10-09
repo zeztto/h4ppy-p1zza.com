@@ -18,7 +18,7 @@ interface FooterSettings {
 
 const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
   siteName: 'p1zza.kr',
-  copyright: '\u00A9 2026 p1zza.kr. All rights reserved.',
+  copyright: '\u00A9 2026 p1zza.kr. 모든 권리 보유.',
   socialLinks: [],
 };
 
@@ -53,32 +53,32 @@ export function Footer({ profile }: FooterProps) {
               {footerSettings.siteName}
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              {profile?.bioShort ?? 'Web Developer & Creative Maker'}
+              {profile?.bioShort ?? '직접 만든 웹사이트와 서비스를 소개합니다.'}
             </p>
           </div>
 
           {/* Navigation column */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-foreground">Pages</h3>
+            <h3 className="text-sm font-semibold text-foreground">둘러보기</h3>
             <nav className="flex flex-col gap-2">
               <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">
-                Home
+                홈
               </Link>
               <Link to="/portfolio" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">
-                Portfolio
+                포트폴리오
               </Link>
               <Link to="/profile" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">
-                Profile
+                프로필
               </Link>
               <Link to="/inquiry" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">
-                Inquiry
+                제작 의뢰
               </Link>
             </nav>
           </div>
 
           {/* Social column */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-foreground">Connect</h3>
+            <h3 className="text-sm font-semibold text-foreground">연락처</h3>
             <div className="flex gap-3">
               {socialLinks.map((link) => {
                 const Icon = SOCIAL_ICON_MAP[link.type];
@@ -121,7 +121,7 @@ function buildProfileSocialLinks(profile?: PublicProfile): SocialLink[] {
     links.push({ type: 'instagram', url: profile.instagramUrl, label: 'Instagram' });
   }
   if (profile?.email) {
-    links.push({ type: 'email', url: profile.email, label: 'Email' });
+    links.push({ type: 'email', url: profile.email, label: '이메일' });
   }
   return links;
 }

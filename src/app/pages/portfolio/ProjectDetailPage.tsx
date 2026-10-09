@@ -6,6 +6,7 @@ import type { PublicProject } from '@/app/lib/types';
 import { Badge } from '@/app/components/ui/badge';
 import { Button } from '@/app/components/ui/button';
 import { sortPortfolioProjects } from '@/app/lib/project-order';
+import { getProjectCategoryLabel } from '@/app/lib/project-category';
 
 export function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -65,7 +66,7 @@ export function ProjectDetailPage() {
 
       <div className="aspect-video w-full rounded-xl overflow-hidden mt-6 bg-muted">
         {project.thumbnailUrl === '' ? (
-          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+          <div className="w-full h-full bg-muted flex items-center justify-center">
             <span className="text-2xl font-medium text-foreground/40">
               {project.name}
             </span>
@@ -82,7 +83,7 @@ export function ProjectDetailPage() {
       <h1 className="text-4xl font-bold mt-8">{project.name}</h1>
 
       <div className="flex items-center gap-3 mt-4">
-        {project.category && <Badge variant="secondary">{project.category}</Badge>}
+        {project.category && <Badge variant="secondary">{getProjectCategoryLabel(project.category)}</Badge>}
         {project.year && (
           <span className="text-sm text-muted-foreground">{project.year}</span>
         )}
@@ -116,7 +117,7 @@ export function ProjectDetailPage() {
 
       {project.techStack.length > 0 && (
         <div className="mt-8">
-          <h3 className="text-lg font-semibold">Tech Stack</h3>
+          <h2 className="text-lg font-semibold">사용 기술</h2>
           <div className="flex flex-wrap gap-2 mt-3">
             {project.techStack.map((tech) => (
               <Badge key={tech} variant="outline">
@@ -129,7 +130,7 @@ export function ProjectDetailPage() {
 
       {project.features.length > 0 && (
         <div className="mt-8">
-          <h3 className="text-lg font-semibold">Features</h3>
+          <h2 className="text-lg font-semibold">주요 기능</h2>
           <ul className="list-disc list-inside mt-3 space-y-1 text-muted-foreground">
             {project.features.map((feature) => (
               <li key={feature}>{feature}</li>
