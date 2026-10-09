@@ -57,6 +57,10 @@ npx tsx --test scripts/refresh-portfolio-content.test.ts
 npm run build
 ```
 
+## 2026-10-09 프로필 본문 수정
+
+lmml.kr과 circlr 작업, 개발·운영 방식, AI 활용을 여섯 문단으로 소개하도록 프로필 본문을 다듬었습니다.
+
 ## 2026-10-09 콘텐츠 갱신
 
 lmml.kr, circlr, NMA Records, p1zza-agent를 공개 목록에 반영하고 기존 서비스의 설명·기술 목록·썸네일을 현재 구현에 맞췄습니다. PRD AI, ONKURA, PEDALS, SRBBRS는 공개에서 제외하며 기존 DB 행을 보존합니다. 소속이 종료된 3W 문구는 공개 화면에서 제거했습니다.

@@ -106,16 +106,13 @@ test('repeat refresh has no timestamp churn and yields an identical digest', () 
   assert.equal(second.beforeDigest, second.afterDigest);
 });
 
-test('identity, historical biography, footer social/custom options, unrelated sections/settings survive', () => {
+test('profile identity, footer social/custom options, unrelated sections/settings survive', () => {
   const snapshot = fixture();
   const plan = buildRefreshPlan(snapshot);
   const beforeProfile = snapshot.site_profile[0]!;
   const afterProfile = plan.after.site_profile[0]!;
   for (const key of ['display_name', 'avatar_url', 'github_url', 'instagram_url', 'email'])
     assert.equal(afterProfile[key], beforeProfile[key]);
-  assert.ok(String(afterProfile['essay_markdown']).includes('20대에는 기자로 일했습니다.'));
-  assert.ok(String(afterProfile['essay_markdown']).includes('금융의 세계로 들어갔습니다.'));
-  assert.ok(!String(afterProfile['essay_markdown']).includes('23개'));
   const oldFooter = JSON.parse(String(snapshot.site_settings[0]?.['value'])) as ContentRow;
   const newFooter = JSON.parse(String(plan.after.site_settings[0]?.['value'])) as ContentRow;
   assert.deepEqual(newFooter, { ...oldFooter, copyright: '© 2026 p1zza.kr' });
