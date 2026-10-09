@@ -116,6 +116,34 @@ print(json.dumps(result,sort_keys=True))
 PY
 }
 
+snapshot_outbox() {
+  python3 - <<'PY'
+import json,subprocess
+command=['docker','exec','-i','p1zza-kr-db-1','sh','-c','psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -qAt -v ON_ERROR_STOP=1']
+def query(sql):
+    return json.loads(subprocess.check_output(command,input='BEGIN READ ONLY;\n'+sql+'\nCOMMIT;\n',text=True))
+exists=query("SELECT to_json(to_regclass('public.inquiry_mail_outbox') IS NOT NULL);")
+if not exists:
+    print(json.dumps({'exists':False},sort_keys=True))
+else:
+    rows=query("SELECT json_build_object('count',count(*),'hash',md5(coalesce(string_agg(row_hash,'' ORDER BY row_hash),''))) FROM (SELECT md5(row_to_json(t)::text) row_hash FROM public.inquiry_mail_outbox t) h;")
+    access=query("SELECT json_build_object('select',has_table_privilege('p1zza_app','public.inquiry_mail_outbox','SELECT'),'insert',has_table_privilege('p1zza_app','public.inquiry_mail_outbox','INSERT'),'update',has_table_privilege('p1zza_app','public.inquiry_mail_outbox','UPDATE'),'delete',has_table_privilege('p1zza_app','public.inquiry_mail_outbox','DELETE'),'publicGrant',EXISTS(SELECT 1 FROM pg_class c CROSS JOIN LATERAL aclexplode(coalesce(c.relacl,acldefault('r',c.relowner))) a WHERE c.oid='public.inquiry_mail_outbox'::regclass AND a.grantee=0));")
+    print(json.dumps({'exists':True,'rows':rows,'access':access},sort_keys=True))
+PY
+}
+
+verify_outbox_migration() {
+  python3 - "$1" "$2" <<'PY'
+import json,pathlib,sys
+before=json.loads(pathlib.Path(sys.argv[1]).read_text());after=json.loads(pathlib.Path(sys.argv[2]).read_text())
+expected={'select':True,'insert':True,'update':True,'delete':False,'publicGrant':False}
+if not after.get('exists') or after.get('access')!=expected:raise SystemExit('Outbox migration privilege gate failed')
+if before.get('exists'):
+    if before['rows']!=after['rows']:raise SystemExit('Existing outbox rows changed during schema bootstrap')
+elif after['rows']['count']!=0:raise SystemExit('New outbox must be empty; historical backfill is forbidden')
+PY
+}
+
 check_db_patch_gate() {
   python3 - <<'PY'
 import json,subprocess
@@ -217,15 +245,24 @@ db_image=postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7
 docker compose --env-file .env.local -f compose.yml pull db > "$backup/db-pull.log" 2>&1
 db_image_id="$(docker image inspect -f '{{.Id}}' "$db_image")"
 [[ "$(docker run --rm --network none "$db_image" postgres --version)" = 'postgres (PostgreSQL) 17.11' ]]
+printf 'Phase: additive schema-only bootstrap before candidate readiness\n'
+snapshot_rows > "$backup/rows-before-additive-migration.json"
+snapshot_outbox > "$backup/outbox-before-additive-migration.json"
+docker compose --env-file .env.local -f compose.yml --profile maintenance run -T --interactive=false --rm --no-deps migration < /dev/null > "$backup/additive-migration.log" 2>&1
+snapshot_rows > "$backup/rows-after-additive-migration.json"
+snapshot_outbox > "$backup/outbox-after-additive-migration.json"
+cmp -s "$backup/rows-before-additive-migration.json" "$backup/rows-after-additive-migration.json" || { printf 'Existing rows changed during additive migration; app pause stopped.\n' >&2; exit 1; }
+verify_outbox_migration "$backup/outbox-before-additive-migration.json" "$backup/outbox-after-additive-migration.json"
 printf 'Phase: pre-pause read-only production env/CRUD readiness\n'
 docker compose --env-file .env.local -f compose.yml run -T --interactive=false --rm --no-deps app \
-  node --input-type=module -e 'await import("./build/server/server/env.js"); const {Pool}=await import("pg"); const {assertDatabaseReady}=await import("./build/server/db/runtime-access.js"); const pool=new Pool({connectionString:process.env.DATABASE_URL}); try { await assertDatabaseReady(pool,true); } finally { await pool.end(); }' \
+  node --input-type=module -e 'const {env}=await import("./build/server/server/env.js"); const {Pool}=await import("pg"); const {assertDatabaseReady}=await import("./build/server/db/runtime-access.js"); const pool=new Pool({connectionString:process.env.DATABASE_URL}); try { await assertDatabaseReady(pool,true,env.inquiryMail!==null); } finally { await pool.end(); }' \
   < /dev/null > "$backup/runtime-readiness-before-patch.log" 2>&1
 printf 'Phase: app pause and DB minor patch\n'
 date -u +%Y-%m-%dT%H:%M:%SZ > "$backup/critical-window-start.txt"
 critical_start="$(date +%s)"
 docker compose --env-file .env.local -f compose.yml stop app
 snapshot_rows > "$backup/rows-before-patch.json"
+snapshot_outbox > "$backup/outbox-before-patch.json"
 docker exec p1zza-kr-db-1 sh -c 'pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc' > "$backup/database-before-patch.dump"
 docker exec -i p1zza-kr-db-1 pg_restore --list < "$backup/database-before-patch.dump" >/dev/null
 docker compose --env-file .env.local -f compose.yml up -d --no-deps --no-build db
@@ -244,14 +281,18 @@ if any(v for v in d['NetworkSettings']['Ports'].values()):raise SystemExit('DB h
 PY
 check_db_patch_gate > "$backup/db-patch-gate-after.json"
 snapshot_rows > "$backup/rows-after-patch.json"
+snapshot_outbox > "$backup/outbox-after-patch.json"
 cmp -s "$backup/rows-before-patch.json" "$backup/rows-after-patch.json" || { printf 'Existing rows changed during DB patch; app replacement stopped.\n' >&2; exit 1; }
+cmp -s "$backup/outbox-before-patch.json" "$backup/outbox-after-patch.json" || { printf 'Outbox changed during DB patch; app replacement stopped.\n' >&2; exit 1; }
 printf 'Phase: schema-only migration (no seed)\n'
 docker compose --env-file .env.local -f compose.yml --profile maintenance run -T --interactive=false --rm --no-deps migration < /dev/null > "$backup/migration.log" 2>&1
 snapshot_rows > "$backup/rows-after-migration.json"
+snapshot_outbox > "$backup/outbox-after-migration.json"
 cmp -s "$backup/rows-after-patch.json" "$backup/rows-after-migration.json" || { printf 'Existing rows changed during migration; app replacement stopped.\n' >&2; exit 1; }
+verify_outbox_migration "$backup/outbox-after-patch.json" "$backup/outbox-after-migration.json"
 printf 'Phase: read-only production env/CRUD readiness\n'
 docker compose --env-file .env.local -f compose.yml run -T --interactive=false --rm --no-deps app \
-  node --input-type=module -e 'await import("./build/server/server/env.js"); const {Pool}=await import("pg"); const {assertDatabaseReady}=await import("./build/server/db/runtime-access.js"); const pool=new Pool({connectionString:process.env.DATABASE_URL}); try { await assertDatabaseReady(pool,true); } finally { await pool.end(); }' \
+  node --input-type=module -e 'const {env}=await import("./build/server/server/env.js"); const {Pool}=await import("pg"); const {assertDatabaseReady}=await import("./build/server/db/runtime-access.js"); const pool=new Pool({connectionString:process.env.DATABASE_URL}); try { await assertDatabaseReady(pool,true,env.inquiryMail!==null); } finally { await pool.end(); }' \
   < /dev/null > "$backup/runtime-readiness.log" 2>&1
 printf 'Phase: app-only recreate\n'
 docker compose --env-file .env.local -f compose.yml up -d --no-deps --no-build app
@@ -285,7 +326,7 @@ if not a['HostConfig']['ReadonlyRootfs'] or 'ALL' not in a['HostConfig']['CapDro
 if not any(v.startswith('no-new-privileges') for v in a['HostConfig'].get('SecurityOpt',[])):raise SystemExit('App privilege guard missing')
 if a['Config']['User']!='node':raise SystemExit('App is not non-root')
 runtime_env=dict(v.split('=',1) for v in a['Config']['Env'] if '=' in v)
-if 'MIGRATION_DATABASE_URL' in runtime_env:raise SystemExit('Privileged credential leaked into app env')
+if any(k in runtime_env for k in ['MIGRATION_DATABASE_URL','MIGRATION_APP_ROLE']):raise SystemExit('Migration-only env leaked into app env')
 c=json.loads(subprocess.check_output(['docker','inspect','caddy-gateway'],text=True))[0]
 ip=c['NetworkSettings']['Networks']['p1zza-kr_default']['IPAddress']
 if runtime_env.get('TRUSTED_PROXY_CIDRS')!=ip+'/32':raise SystemExit('Caddy peer changed during release')

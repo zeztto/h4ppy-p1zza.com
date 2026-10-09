@@ -15,7 +15,14 @@ const requiredColumns = {
     'id, name, email, phone, company, project_type, budget, timeline, description, status, source_url, user_agent, ip_address, created_at, updated_at, resolved_at',
 } as const;
 
-export async function assertDatabaseReady(client: DatabaseClient, requireRestrictedRole = false) {
+const inquiryMailColumns =
+  'inquiry_id, message_id, status, attempts, next_attempt_at, lease_token, lease_expires_at, last_error_code, created_at, updated_at, sent_at';
+
+export async function assertDatabaseReady(
+  client: DatabaseClient,
+  requireRestrictedRole = false,
+  requireMailOutbox = false
+) {
   if (requireRestrictedRole) {
     const access = await client.query<{
       elevated: boolean;
@@ -45,7 +52,7 @@ export async function assertDatabaseReady(client: DatabaseClient, requireRestric
         ) AS owns_tables
        WHERE EXISTS (SELECT 1 FROM pg_roles WHERE rolname = current_user)
          AND EXISTS (SELECT 1 FROM pg_roles WHERE rolname = session_user)`,
-      [Object.keys(requiredColumns)]
+      [[...Object.keys(requiredColumns), 'inquiry_mail_outbox']]
     );
     const role = access.rows[0];
     if (
@@ -65,6 +72,14 @@ export async function assertDatabaseReady(client: DatabaseClient, requireRestric
     for (const [table, columns] of Object.entries(requiredColumns)) {
       // Identifiers come exclusively from the application schema above, never from a request.
       await client.query(`SELECT ${columns} FROM public.${table} LIMIT 0`);
+    }
+    if (requireMailOutbox) {
+      await client.query(`SELECT ${inquiryMailColumns} FROM public.inquiry_mail_outbox LIMIT 0`);
+      const access = await client.query<{ ready: boolean }>(`SELECT
+        has_table_privilege(current_user, 'public.inquiry_mail_outbox', 'SELECT') AND
+        has_table_privilege(current_user, 'public.inquiry_mail_outbox', 'INSERT') AND
+        has_table_privilege(current_user, 'public.inquiry_mail_outbox', 'UPDATE') AS ready`);
+      if (access.rows[0]?.ready !== true) throw new Error('Outbox privileges are not ready');
     }
   } catch {
     throw new Error('Database schema is not ready; run db:bootstrap with migration credentials');

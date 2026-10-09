@@ -99,13 +99,14 @@ export async function createApp(options: { database?: ReturnType<typeof createDa
 
   try {
     if (!isProduction) await ensureDatabaseSchema(client);
-    await assertDatabaseReady(client, isProduction);
+    await assertDatabaseReady(client, isProduction, env.inquiryMail !== null);
   } catch (error) {
     await client.end();
     throw error;
   }
 
   app.disable('x-powered-by');
+  app.locals['database'] = { client, db };
   app.set('trust proxy', env.trustedProxyCidrs);
   const trustProxyAddress = app.get('trust proxy fn') as (
     address: string,

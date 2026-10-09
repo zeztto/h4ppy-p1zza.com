@@ -31,6 +31,12 @@ services:
       TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:?TURNSTILE_SECRET_KEY is required}
       VITE_TURNSTILE_SITE_KEY: ${VITE_TURNSTILE_SITE_KEY:?VITE_TURNSTILE_SITE_KEY is required}
       TRUSTED_PROXY_CIDRS: ${TRUSTED_PROXY_CIDRS:?TRUSTED_PROXY_CIDRS must identify the exact Caddy peer}
+      INQUIRY_MAIL_ENABLED: ${INQUIRY_MAIL_ENABLED:-false}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      INQUIRY_MAIL_FROM: ${INQUIRY_MAIL_FROM:-}
     depends_on:
       db:
         condition: service_healthy
@@ -52,6 +58,7 @@ services:
     environment:
       NODE_ENV: production
       MIGRATION_DATABASE_URL: ${MIGRATION_DATABASE_URL:?MIGRATION_DATABASE_URL is required for schema bootstrap}
+      MIGRATION_APP_ROLE: ${MIGRATION_APP_ROLE:?MIGRATION_APP_ROLE must identify the existing restricted app role}
     command: [node, build/server/db/bootstrap-entry.js]
   db:
     image: postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24

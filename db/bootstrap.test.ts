@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { ensureDatabaseSchema } from './bootstrap.js';
+import { ensureDatabaseSchema, grantInquiryMailOutboxAccess } from './bootstrap.js';
 import type { DatabaseClient } from './client.js';
 
 function currentDatabaseFixture() {
@@ -37,7 +37,31 @@ test('production schema bootstrap leaves existing sections and settings byte-pre
   );
   assert.equal(
     fixture.queries.filter((query) => query.startsWith('CREATE TABLE IF NOT EXISTS')).length,
-    7
+    8
+  );
+});
+
+test('outbox grant is explicitly scoped to a verified restricted role and rejects unsafe identities', async () => {
+  const calls: { query: string; values?: unknown[] }[] = [];
+  const client = {
+    query: async (query: string, values?: unknown[]) => {
+      calls.push({ query, ...(values ? { values } : {}) });
+      return { rows: [{ safe: true }] };
+    },
+  } as unknown as DatabaseClient;
+  await grantInquiryMailOutboxAccess(client, 'fixture_runtime');
+  assert.deepEqual(calls[0]?.values, ['fixture_runtime']);
+  assert.equal(
+    calls[1]?.query,
+    'GRANT SELECT, INSERT, UPDATE ON TABLE public.inquiry_mail_outbox TO "fixture_runtime"'
+  );
+  for (const name of ['PUBLIC', 'postgres', 'x"; GRANT ALL TO PUBLIC;--', '', 'a'.repeat(64)]) {
+    await assert.rejects(grantInquiryMailOutboxAccess(client, name), /MIGRATION_APP_ROLE/);
+  }
+  const unsafe = { query: async () => ({ rows: [{ safe: false }] }) } as unknown as DatabaseClient;
+  await assert.rejects(
+    grantInquiryMailOutboxAccess(unsafe, 'fixture_runtime'),
+    /non-owner restricted/
   );
 });
 
