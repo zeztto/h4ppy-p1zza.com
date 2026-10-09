@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-10-09
+
+### Changed
+
+- 프로필 본문을 최근 작업과 개발·운영 방식을 소개하는 여섯 문단으로 수정하고 과장된 표현과 반복을 정리
+
 ## [1.1.0] - 2026-10-09
 
 ### Added
