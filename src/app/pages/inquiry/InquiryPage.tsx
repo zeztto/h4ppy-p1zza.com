@@ -10,6 +10,7 @@ const TURNSTILE_SITE_KEY = import.meta.env['VITE_TURNSTILE_SITE_KEY'] ?? '';
 interface TurnstileApi {
   render: (container: HTMLElement, options: Record<string, unknown>) => string;
   reset: (widgetId?: string) => void;
+  remove: (widgetId: string) => void;
 }
 
 declare global {
@@ -77,20 +78,7 @@ export function InquiryPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
-
-  const renderTurnstile = useCallback(() => {
-    if (!TURNSTILE_SITE_KEY || !turnstileRef.current || widgetIdRef.current || !window.turnstile) {
-      return;
-    }
-
-    widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
-      sitekey: TURNSTILE_SITE_KEY,
-      callback: (token: string) => setTurnstileToken(token),
-      'expired-callback': () => setTurnstileToken(''),
-      'error-callback': () => setTurnstileToken(''),
-      theme: 'auto',
-    });
-  }, []);
+  const isFormVisible = status !== 'success';
 
   const readTurnstileResponse = useCallback(() => {
     if (!turnstileRef.current) {
@@ -104,32 +92,41 @@ export function InquiryPage() {
     return responseInput?.value?.trim() ?? '';
   }, []);
 
-  // Load Turnstile script
+  // Each mounted form owns its widget, including when the shared script loads later.
   useEffect(() => {
-    if (!TURNSTILE_SITE_KEY) return;
+    if (!TURNSTILE_SITE_KEY || !isFormVisible) return;
+    let disposed = false;
+    const renderTurnstile = () => {
+      if (disposed || !turnstileRef.current || widgetIdRef.current || !window.turnstile) return;
+      widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        callback: (token: string) => { if (!disposed) setTurnstileToken(token); },
+        'expired-callback': () => { if (!disposed) setTurnstileToken(''); },
+        'error-callback': () => { if (!disposed) setTurnstileToken(''); },
+        theme: 'auto',
+      });
+    };
+
+    window.onTurnstileLoad = renderTurnstile;
     if (window.turnstile) {
       renderTurnstile();
-      return;
+    } else if (!document.getElementById('cf-turnstile-script')) {
+      const script = document.createElement('script');
+      script.id = 'cf-turnstile-script';
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
     }
 
-    if (document.getElementById('cf-turnstile-script')) return;
-
-    const script = document.createElement('script');
-    script.id = 'cf-turnstile-script';
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit';
-    script.async = true;
-    script.defer = true;
-
-    window.onTurnstileLoad = () => {
-      renderTurnstile();
-    };
-
-    document.head.appendChild(script);
-
     return () => {
-      delete window.onTurnstileLoad;
+      disposed = true;
+      if (window.onTurnstileLoad === renderTurnstile) delete window.onTurnstileLoad;
+      const widgetId = widgetIdRef.current;
+      widgetIdRef.current = null;
+      if (widgetId && window.turnstile) window.turnstile.remove(widgetId);
     };
-  }, [renderTurnstile]);
+  }, [isFormVisible]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -188,9 +185,6 @@ export function InquiryPage() {
       setStatus('success');
       setForm(initialForm);
       setTurnstileToken('');
-      if (widgetIdRef.current && window.turnstile) {
-        window.turnstile.reset(widgetIdRef.current);
-      }
     } catch (err) {
       setStatus('error');
       setErrorMsg(err instanceof TypeError
